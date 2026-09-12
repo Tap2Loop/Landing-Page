@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Rate your visit — Yolkshire</title>
+  <meta name="description" content="Enjoyed your meal? Leave a quick Google review for Yolkshire, Pune." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-dark:  #2d5a1b;
+      --green:       #3d7a25;
+      --green-mid:   #4e9a30;
+      --green-light: #eef6e8;
+      --yellow:      #f5c800;
+      --yellow-deep: #d4a800;
+      --yellow-pale: #fffbe6;
+      --white:       #ffffff;
+      --off:         #f8f6f0;
+      --border:      #d8edcc;
+      --muted:       #6b8c5a;
+      --text:        #1e3a10;
+      --success:     #3a9e6a;
+      --radius:      14px;
+      --font-body:   'Inter', -apple-system, sans-serif;
+      --font-brand:  'Lobster', cursive;
+    }
+    html, body { min-height: 100%; background: var(--off); font-family: var(--font-body); color: var(--text); -webkit-font-smoothing: antialiased; }
+    .page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-bottom: 56px; }
+
+    /* ── Hero ── */
+    .hero {
+      width: 100%;
+      background: var(--green-dark);
+      padding: 32px 24px 28px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(245,200,0,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--green-dark);
+      font-family: var(--font-brand);
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 3px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .hero-logo {
+      font-family: var(--font-brand);
+      font-size: 42px;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 8px rgba(0,0,0,.25);
+    }
+    .hero-logo span { color: var(--yellow); }
+    .hero-tagline {
+      font-size: 12px;
+      color: rgba(255,255,255,.6);
+      letter-spacing: .5px;
+      margin-bottom: 16px;
+    }
+    .hero-stars { font-size: 20px; letter-spacing: 4px; color: var(--yellow); }
+
+    /* ── Body ── */
+    .body { width: 100%; max-width: 420px; padding: 22px 16px 0; display: flex; flex-direction: column; gap: 16px; }
+    .prompt { font-size: 14px; color: var(--muted); text-align: center; line-height: 1.6; }
+
+    /* ── Sentiment box ── */
+    .sentiment-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 14px 14px;
+    }
+    .sentiment-title {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--muted);
+      margin-bottom: 16px; text-align: center;
+    }
+    .slider-wrap { position: relative; padding: 0 4px; margin-bottom: 4px; }
+    .slider-track {
+      height: 6px; border-radius: 3px;
+      background: linear-gradient(to right, #3d7a25, #f5c800, #c0392b);
+      margin-bottom: 10px;
+    }
+    .slider-input {
+      position: absolute; top: 0; left: 0; width: 100%;
+      transform: translateY(-50%) translateY(3px);
+      -webkit-appearance: none; appearance: none;
+      background: transparent; cursor: pointer; margin: 0;
+    }
+    .slider-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--white);
+      border: 3px solid var(--green);
+      box-shadow: 0 1px 6px rgba(0,0,0,.2);
+      transition: border-color .2s;
+    }
+    .slider-input::-moz-range-thumb {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--white); border: 3px solid var(--green);
+      box-shadow: 0 1px 6px rgba(0,0,0,.2); cursor: pointer;
+    }
+    .slider-labels { display: flex; justify-content: space-between; margin-top: 12px; }
+    .slider-labels span { font-size: 12px; color: var(--muted); }
+    .sentiment-badge { text-align: center; margin-top: 10px; min-height: 24px; }
+    .sentiment-badge span {
+      display: inline-block; font-size: 12px; font-weight: 600;
+      padding: 3px 14px; border-radius: 20px;
+      transition: background .2s, color .2s;
+    }
+
+    /* ── AI box ── */
+    .ai-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .ai-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--green-light);
+    }
+    .ai-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; transition: background .3s; }
+    .ai-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--green); }
+    .ai-body { padding: 14px; }
+    .ai-text { font-size: 14px; line-height: 1.7; color: var(--text); min-height: 64px; }
+    .ai-text.loading { color: var(--muted); font-style: italic; }
+    .ai-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .btn-regen {
+      flex: 1; padding: 10px; border-radius: 10px;
+      border: 1.5px solid var(--border); background: var(--off);
+      color: var(--muted); font-family: var(--font-body); font-size: 13px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+      -webkit-tap-highlight-color: transparent; transition: border-color .15s, color .15s;
+    }
+    .btn-regen:active { border-color: var(--green); color: var(--green); }
+    .btn-regen:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-copy-ai {
+      flex: 2; padding: 10px; border-radius: 10px;
+      border: 1.5px solid var(--green); background: var(--green-light);
+      color: var(--green-dark); font-family: var(--font-body); font-size: 13px; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+      -webkit-tap-highlight-color: transparent; transition: background .15s, border-color .15s;
+    }
+    .btn-copy-ai:active { background: #d4edca; }
+    .btn-copy-ai.copied { border-color: var(--success); color: var(--success); background: rgba(58,158,106,.1); }
+
+    /* ── Divider ── */
+    .divider { display: flex; align-items: center; gap: 10px; }
+    .divider-line { flex: 1; height: .5px; background: var(--border); }
+    .divider-text { font-size: 11px; color: #b0c4a8; white-space: nowrap; }
+
+    /* ── Own review ── */
+    .own-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .own-wrap { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color .15s; }
+    .own-wrap:focus-within { border-color: var(--green); }
+    .own-textarea { width: 100%; min-height: 90px; border: none; outline: none; resize: none; font-family: var(--font-body); font-size: 14px; line-height: 1.65; color: var(--text); background: transparent; padding: 14px; }
+    .own-textarea::placeholder { color: #b0c4a8; }
+    .own-char { font-size: 11px; color: var(--muted); padding: 0 14px 10px; text-align: right; }
+
+    /* ── CTA ── */
+    .btn-google {
+      width: 100%; padding: 16px; border-radius: var(--radius);
+      border: none; background: var(--green);
+      font-family: var(--font-body); font-size: 15px; font-weight: 600;
+      color: var(--white); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      text-decoration: none; -webkit-tap-highlight-color: transparent;
+      transition: background .15s;
+      box-shadow: 0 2px 8px rgba(61,122,37,.3);
+    }
+    .btn-google:active { background: var(--green-dark); }
+    .g-svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ── Footer ── */
+    .footer { margin-top: 8px; font-size: 11px; color: #b0c4a8; text-align: center; }
+    .footer-egg { font-size: 14px; }
+
+    /* ── Toast ── */
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--green-dark); color: var(--white); font-size: 13px; padding: 10px 20px; border-radius: 24px; white-space: nowrap; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 100; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-badge">my eggular hangout · since 2010</div>
+    <div class="hero-logo"><span>Y</span>olkshire</div>
+    <div class="hero-tagline">Egg specialty restaurant · Pune</div>
+    <div class="hero-stars">★★★★★</div>
+  </div>
+
+  <div class="body">
+    <p class="prompt">Hope you enjoyed your visit.<br>Tell us how it was — we'll write the review for you.</p>
+
+    <!-- Sentiment selector -->
+    <div class="sentiment-box">
+      <p class="sentiment-title">How was your egg-sperience?</p>
+      <div class="slider-wrap">
+        <div class="slider-track"></div>
+        <input type="range" min="0" max="100" value="0" class="slider-input" id="sentiment-slider"
+          oninput="onSliderMove(this.value)"
+          onchange="onSliderSettle(this.value)"
+          aria-label="Sentiment from positive to critical" />
+      </div>
+      <div class="slider-labels">
+        <span>😊 Positive</span>
+        <span>😐 Neutral</span>
+        <span>😞 Critical</span>
+      </div>
+      <div class="sentiment-badge"><span id="sbadge"></span></div>
+    </div>
+
+    <!-- AI review box -->
+    <div class="ai-box">
+      <div class="ai-header">
+        <div class="ai-dot" id="ai-dot"></div>
+        <span class="ai-label">Generated Review</span>
+      </div>
+      <div class="ai-body">
+        <div class="ai-text loading" id="ai-text">Cracking open your review…</div>
+        <div class="ai-actions">
+          <button class="btn-regen" id="regen-btn" onclick="generateReview()" disabled>
+            <span id="regen-icon">↻</span><span>New one</span>
+          </button>
+          <button class="btn-copy-ai" id="copy-ai-btn" onclick="copyAI()" disabled>
+            <span>Copy review</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-text">or write your own</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- Own review -->
+    <span class="own-label">Write your own</span>
+    <div class="own-wrap">
+      <textarea class="own-textarea" id="own-review"
+        placeholder="Tell us about your egg-sperience in your own words…"
+        maxlength="500" oninput="onOwnInput(this)"></textarea>
+      <div class="own-char" id="char-count">0 / 500</div>
+    </div>
+
+    <!-- ↓ Replace REPLACE_WITH_PLACE_ID with Yolkshire's ChIJ... Place ID ↓ -->
+    <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJN9euszy_wjsRlXF4rxXnmpo" target="_blank" rel="noopener">
+      <svg class="g-svg" viewBox="0 0 24 24">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57C21.36 18.01 22.56 15.36 22.56 12.25z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Open Google Reviews
+    </a>
+
+    <p class="footer"><span class="footer-egg">🥚</span> Powered by TapReview &nbsp;·&nbsp; takes 10 seconds</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const WORKER_URL = 'PASTE_YOUR_WORKER_URL_HERE';
+
+  const RESTAURANT_CONTEXT = `
+    Yolkshire — India's first egg specialty restaurant, Pune.
+    Established: 2010. Tagline: "my eggular hangout".
+    Type: Breakfast and brunch cafe specialising in creative egg dishes.
+    Known for: Innovative egg preparations, healthy ingredients, French-inspired recipes, affordable prices.
+    Vibe: Fun, casual, community-feel neighbourhood cafe. Young and friendly crowd.
+    Menu highlights: Variety of egg dishes — omelettes, egg bowls, egg benedicts, healthy egg breakfasts.
+    Also serves: Vegetarian options, chicken and non-veg dishes, all cooked separately.
+    Open: 7:30am to 11pm every day.
+    Values: Health-focused, fresh ingredients, clean and hygienic, innovative.
+    Tone note: Yolkshire loves egg puns — "egg-citing", "egg-sperience", "eggular" — light humour is welcome.
+  `;
+
+  const SENTIMENT_RULES = {
+    positive: `- Write a genuinely positive review about the egg dishes and cafe experience\n- Mention something specific: a dish, the freshness, the vibe, or the value\n- Light egg pun is welcome but not mandatory — keep it natural\n- Enthusiastic but genuine, 2-3 sentences`,
+    neutral:  `- Write a balanced review — decent experience, nothing extraordinary\n- Acknowledge what worked and what was just okay\n- Honest and measured tone, 2-3 sentences`,
+    critical: `- Write constructive critical feedback — fair, not harsh\n- Point out a specific issue: wait time, portion size, or inconsistency\n- Acknowledge something positive too — balanced, 2-3 sentences`
+  };
+
+  const FALLBACK = {
+    positive: [
+      "Yolkshire is genuinely one of a kind — egg dishes done with real creativity and care. The food is fresh, portions are good, and the vibe is relaxed and friendly. My go-to breakfast spot in Pune.",
+      "Had a wonderful brunch here — the egg preparations are inventive and everything tasted really fresh. Great value for what you get, and the staff are warm and welcoming.",
+      "Eggactly what a neighbourhood breakfast cafe should be. Fresh food, friendly service, and a menu that keeps surprising you. Been coming here for a while and it never disappoints.",
+      "The variety at Yolkshire is impressive — they've taken egg dishes to a whole new level. Healthy, tasty, and affordable. Perfect way to start the day."
+    ],
+    neutral: [
+      "Yolkshire is a decent breakfast spot with an interesting egg-focused menu. Food was consistent and fresh, though nothing particularly stood out on this visit. Worth a try if you're in the area.",
+      "Had a fairly standard experience — the food came out well and the place was clean and comfortable. Good option for a healthy breakfast without too much fuss.",
+      "The concept is unique and the menu is creative, though our visit was fairly straightforward. Reasonable prices and decent portions. Would consider coming back.",
+      "Solid breakfast cafe with a clear identity. The egg dishes are freshly made and the ambience is casual. A reliable choice for a healthy morning meal."
+    ],
+    critical: [
+      "The food at Yolkshire is genuinely good but the wait was longer than expected on our visit. Once it arrived though, the egg dishes were fresh and well-made. Could work on the pace during busy hours.",
+      "Had a mixed experience — some dishes were excellent but others felt a bit underwhelming for the price. The concept is great and the place has potential, just needs more consistency.",
+      "Visited during a busy morning and the service felt a little stretched. The food quality was there but the experience could be smoother. The menu itself is creative and worth exploring.",
+      "Good food but our order had a small mix-up that took a while to sort. Staff were apologetic and the eventual dishes were fresh and tasty — just a few rough edges to iron out."
+    ]
+  };
+
+  const COLORS = {
+    positive: { dot: '#3d7a25', badge: 'rgba(61,122,37,.12)', text: '#3d7a25', label: '😊 Positive' },
+    neutral:  { dot: '#c9951a', badge: 'rgba(201,149,26,.12)', text: '#b8860b', label: '😐 Neutral'  },
+    critical: { dot: '#c0392b', badge: 'rgba(192,57,43,.12)',  text: '#c0392b', label: '😞 Critical' }
+  };
+
+  let currentText = '', currentSentiment = 'positive', genCount = 0, debounce = null;
+  const MAX_GEN = 8;
+
+  function getSentiment(v) { return v <= 33 ? 'positive' : v <= 66 ? 'neutral' : 'critical'; }
+
+  function onSliderMove(v) {
+    const s = getSentiment(v);
+    const c = COLORS[s];
+    const badge = document.getElementById('sbadge');
+    badge.textContent = c.label;
+    badge.style.cssText = `color:${c.text};background:${c.badge}`;
+    document.getElementById('ai-dot').style.background = c.dot;
+  }
+
+  function onSliderSettle(v) {
+    const s = getSentiment(v);
+    if (s === currentSentiment) return;
+    currentSentiment = s;
+    clearTimeout(debounce);
+    debounce = setTimeout(generateReview, 300);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    onSliderMove(0);
+    generateReview();
+  });
+
+  async function generateReview() {
+    if (genCount >= MAX_GEN) { useFallback(); return; }
+    genCount++;
+    setLoading(true);
+
+    if (!WORKER_URL || WORKER_URL === 'PASTE_YOUR_WORKER_URL_HERE') {
+      await new Promise(r => setTimeout(r, 800));
+      useFallback(); return;
+    }
+
+    try {
+      const rules = `${SENTIMENT_RULES[currentSentiment]}\n- Sound like a real customer, not marketing copy\n- No hashtags\n- Do not start with "I visited" or "We visited"\n- Return ONLY the review text`;
+      const res = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules })
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (!data.review) throw new Error();
+      currentText = data.review;
+      setAIText(data.review);
+    } catch(e) { useFallback(); }
+    setLoading(false);
+  }
+
+  function useFallback() {
+    const pool = FALLBACK[currentSentiment];
+    const t = pool[Math.floor(Math.random() * pool.length)];
+    currentText = t; setAIText(t); setLoading(false);
+  }
+
+  function setLoading(on) {
+    const el = document.getElementById('ai-text');
+    const rb = document.getElementById('regen-btn');
+    const cb = document.getElementById('copy-ai-btn');
+    if (on) {
+      el.textContent = 'Cracking open your review…';
+      el.classList.add('loading');
+      rb.disabled = true; cb.disabled = true;
+      const ic = document.getElementById('regen-icon');
+      if (ic) ic.outerHTML = '<span class="spinner" id="regen-icon"></span>';
+    } else {
+      el.classList.remove('loading');
+      rb.disabled = false; cb.disabled = false;
+      const ic = document.getElementById('regen-icon');
+      if (ic && ic.classList.contains('spinner')) ic.outerHTML = '<span id="regen-icon">↻</span>';
+    }
+  }
+
+  function setAIText(t) {
+    const el = document.getElementById('ai-text');
+    el.textContent = t; el.classList.remove('loading');
+  }
+
+  function copyAI() {
+    const own = document.getElementById('own-review').value.trim();
+    copyText(own || currentText, document.getElementById('copy-ai-btn'));
+  }
+
+  function onOwnInput(el) {
+    document.getElementById('char-count').textContent = el.value.length + ' / 500';
+  }
+
+  function copyText(text, btn) {
+    const orig = btn.innerHTML;
+    const done = () => {
+      btn.classList.add('copied'); btn.innerHTML = '<span>Copied!</span>';
+      showToast('Copied — tap Open Google Reviews and paste');
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 3000);
+    };
+    navigator.clipboard ? navigator.clipboard.writeText(text).then(done).catch(() => fbCopy(text, done)) : fbCopy(text, done);
+  }
+
+  function fbCopy(text, cb) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta); cb();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>
