@@ -12,15 +12,15 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --green-dark:  #2d5a1b;
-      --green:       #3d7a25;
+      --green-dark:  #4a8f3f;
+      --green:       #2d5a1b;
       --green-mid:   #4e9a30;
       --green-light: #eef6e8;
       --yellow:      #f5c800;
       --yellow-deep: #d4a800;
       --yellow-pale: #fffbe6;
       --white:       #ffffff;
-      --off:         #f8f6f0;
+      --off:         #fdf9e7;
       --border:      #d8edcc;
       --muted:       #6b8c5a;
       --text:        #1e3a10;
@@ -36,7 +36,7 @@
     .hero {
       width: 100%;
       background: var(--green-dark);
-      padding: 32px 24px 28px;
+      padding: 18px 24px 16px;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -44,7 +44,7 @@
     .hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(245,200,0,.18) 0%, transparent 70%);
+      background: radial-gradient(ellipse at 50% 0%, rgba(245,200,0,.12) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero-badge {
@@ -52,32 +52,32 @@
       background: var(--yellow);
       color: var(--green-dark);
       font-family: var(--font-brand);
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 1px;
-      padding: 3px 14px;
+      padding: 2px 12px;
       border-radius: 20px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .hero-logo {
       font-family: var(--font-brand);
-      font-size: 42px;
+      font-size: 34px;
       color: var(--white);
       line-height: 1;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       text-shadow: 0 2px 8px rgba(0,0,0,.25);
     }
     .hero-logo span { color: var(--yellow); }
     .hero-tagline {
-      font-size: 12px;
-      color: rgba(255,255,255,.6);
+      font-size: 11px;
+      color: rgba(255,255,255,.5);
       letter-spacing: .5px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
-    .hero-stars { font-size: 20px; letter-spacing: 4px; color: var(--yellow); }
+    .hero-stars { font-size: 17px; letter-spacing: 4px; color: var(--yellow); }
 
     /* ── Body ── */
-    .body { width: 100%; max-width: 420px; padding: 22px 16px 0; display: flex; flex-direction: column; gap: 16px; }
-    .prompt { font-size: 14px; color: var(--muted); text-align: center; line-height: 1.6; }
+    .body { width: 100%; max-width: 420px; padding: 14px 16px 0; display: flex; flex-direction: column; gap: 14px; }
+    .prompt { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.5; }
 
     /* ── Sentiment box ── */
     .sentiment-box {
@@ -172,7 +172,7 @@
     .own-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
     .own-wrap { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color .15s; }
     .own-wrap:focus-within { border-color: var(--green); }
-    .own-textarea { width: 100%; min-height: 90px; border: none; outline: none; resize: none; font-family: var(--font-body); font-size: 14px; line-height: 1.65; color: var(--text); background: transparent; padding: 14px; }
+    .own-textarea { width: 100%; min-height: 40px; border: none; outline: none; resize: none; font-family: var(--font-body); font-size: 14px; line-height: 1.65; color: var(--text); background: transparent; padding: 8px 14px; }
     .own-textarea::placeholder { color: #b0c4a8; }
     .own-char { font-size: 11px; color: var(--muted); padding: 0 14px 10px; text-align: right; }
 
@@ -191,13 +191,28 @@
     .g-svg { width: 18px; height: 18px; flex-shrink: 0; }
 
     /* ── Footer ── */
-    .footer { margin-top: 8px; font-size: 11px; color: #b0c4a8; text-align: center; }
+    .footer { margin-top: 8px; font-size: 12px; font-weight: 500; color: var(--green-dark); text-align: center; opacity: .85; }
     .footer-egg { font-size: 14px; }
 
     /* ── Toast ── */
     .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--green-dark); color: var(--white); font-size: 13px; padding: 10px 20px; border-radius: 24px; white-space: nowrap; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 100; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    /* ── Burst layer ── */
+    .burst-layer { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+    .burst-item {
+      position: absolute;
+      opacity: 0;
+      will-change: transform, opacity;
+      animation-name: burstFall;
+      animation-timing-function: cubic-bezier(.33,.05,.4,1);
+      animation-fill-mode: forwards;
+    }
+    @keyframes burstFall {
+      0%   { transform: translate(0,0) scale(var(--s0)) rotate(0deg); opacity: 0; animation-timing-function: cubic-bezier(.34,1.35,.64,1); }
+      10%  { transform: translate(var(--x1),var(--y1)) scale(var(--s1)) rotate(var(--spin1)); opacity: 1; animation-timing-function: cubic-bezier(.37,0,.63,1); }
+      100% { transform: translate(var(--x2),var(--fall-dist)) scale(var(--s2)) rotate(var(--spin2)); opacity: 0; }
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
@@ -206,11 +221,12 @@
 <body>
 <div class="page">
 
+<div class="burst-layer" id="burst-layer" aria-hidden="true"></div>
+
   <div class="hero">
     <div class="hero-badge">my eggular hangout · since 2010</div>
     <div class="hero-logo"><span>Y</span>olkshire</div>
-    <div class="hero-tagline">Egg specialty restaurant · Pune</div>
-    <div class="hero-stars">★★★★★</div>
+    <div class="hero-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span id="last-star">★</span></div>
   </div>
 
   <div class="body">
@@ -270,7 +286,7 @@
     </div>
 
     <!-- ↓ Replace REPLACE_WITH_PLACE_ID with Yolkshire's ChIJ... Place ID ↓ -->
-    <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJN9euszy_wjsRlXF4rxXnmpo" target="_blank" rel="noopener">
+    <a class="btn-google" href="https://search.google.com/local/writereview?placeid=REPLACE_WITH_PLACE_ID" target="_blank" rel="noopener">
       <svg class="g-svg" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57C21.36 18.01 22.56 15.36 22.56 12.25z" fill="#4285F4"/>
         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -448,6 +464,90 @@
     t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
+
+  /* ── Burst animation — stars & eggs fall from the 5th star ── */
+  function runBurst() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const layer = document.getElementById('burst-layer');
+    const lastStar = document.getElementById('last-star');
+    if (!layer || !lastStar) return;
+
+    const rect = lastStar.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height * 0.5;
+    const vh = window.innerHeight;
+
+    const items = [
+      { ch: '★', color: '#f5c800' },
+      { ch: '★', color: '#f5c800' },
+      { ch: '★', color: '#d4a800' },
+      { ch: '🥚', color: null },
+      { ch: '🥚', color: null },
+      { ch: '★', color: '#f5c800' },
+      { ch: '🥚', color: null },
+      { ch: '★', color: '#d4a800' },
+      { ch: '🥚', color: null },
+      { ch: '★', color: '#f5c800' },
+      { ch: '🥚', color: null },
+      { ch: '★', color: '#f5c800' },
+      { ch: '🥚', color: null },
+      { ch: '★', color: '#d4a800' },
+      { ch: '🥚', color: null },
+      { ch: '★', color: '#f5c800' },
+      { ch: '🥚', color: null },
+      { ch: '★', color: '#f5c800' },
+      { ch: '🥚', color: null },
+      { ch: '★', color: '#d4a800' },
+    ];
+
+    const emitWindow = 1.0;
+
+    items.forEach((item) => {
+      const el = document.createElement('div');
+      el.className = 'burst-item';
+
+      const size = Math.random() < 0.5
+        ? 9 + Math.random() * 8
+        : 20 + Math.random() * 16;
+
+      const startX = originX + (Math.random() * 14 - 7);
+      const startY = originY + (Math.random() * 5 - 2.5);
+      const duration = 3 + Math.random() * 1;
+      const delay = Math.random() * emitWindow;
+      const x1 = Math.random() * 70 - 35;
+      const x2 = x1 + (Math.random() * 170 - 70);
+      const fallDist = (vh - startY) + 40 + Math.random() * 60;
+      const spin1 = Math.random() * 40 - 20;
+      const spin2 = spin1 + (Math.random() * 140 - 70);
+      const s0 = 0.15 + Math.random() * 0.1;
+      const s1 = 1.05 + Math.random() * 0.15;
+      const s2 = 0.8 + Math.random() * 0.15;
+
+      el.textContent = item.ch;
+      el.style.left = startX + 'px';
+      el.style.top = startY + 'px';
+      el.style.fontSize = size + 'px';
+      if (item.color) el.style.color = item.color;
+      el.style.setProperty('--x1', x1 + 'px');
+      el.style.setProperty('--x2', x2 + 'px');
+      el.style.setProperty('--y1', (16 + Math.random() * 12) + 'px');
+      el.style.setProperty('--fall-dist', fallDist + 'px');
+      el.style.setProperty('--spin1', spin1 + 'deg');
+      el.style.setProperty('--spin2', spin2 + 'deg');
+      el.style.setProperty('--s0', s0);
+      el.style.setProperty('--s1', s1);
+      el.style.setProperty('--s2', s2);
+      el.style.animationDuration = duration + 's';
+      el.style.animationDelay = delay + 's';
+
+      layer.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    });
+
+    setTimeout(() => { layer.innerHTML = ''; }, (emitWindow + 4.5) * 1000);
+  }
+
+  requestAnimationFrame(() => requestAnimationFrame(runBurst));
 </script>
 </body>
 </html>
