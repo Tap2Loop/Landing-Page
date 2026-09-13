@@ -232,7 +232,6 @@
   <div class="body">
     <p class="prompt">Hope you enjoyed your visit.<br>Tell us how it was — we'll write the review for you.</p>
 
-    <!-- Sentiment selector -->
     <div class="sentiment-box">
       <p class="sentiment-title">How was your egg-sperience?</p>
       <div class="slider-wrap">
@@ -250,7 +249,6 @@
       <div class="sentiment-badge"><span id="sbadge"></span></div>
     </div>
 
-    <!-- AI review box -->
     <div class="ai-box">
       <div class="ai-header">
         <div class="ai-dot" id="ai-dot"></div>
@@ -269,14 +267,12 @@
       </div>
     </div>
 
-    <!-- Divider -->
     <div class="divider">
       <div class="divider-line"></div>
       <span class="divider-text">or write your own</span>
       <div class="divider-line"></div>
     </div>
 
-    <!-- Own review -->
     <span class="own-label">Write your own</span>
     <div class="own-wrap">
       <textarea class="own-textarea" id="own-review"
@@ -285,7 +281,6 @@
       <div class="own-char" id="char-count">0 / 500</div>
     </div>
 
-    <!-- ↓ Replace REPLACE_WITH_PLACE_ID with Yolkshire's ChIJ... Place ID ↓ -->
     <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJN9euszy_wjsRlXF4rxXnmpo" target="_blank" rel="noopener">
       <svg class="g-svg" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57C21.36 18.01 22.56 15.36 22.56 12.25z" fill="#4285F4"/>
@@ -309,39 +304,40 @@
     Yolkshire — India's first egg specialty restaurant, Pune.
     Established: 2010. Tagline: "my eggular hangout".
     Type: Breakfast and brunch cafe specialising in creative egg dishes.
-    Known for: Innovative egg preparations, healthy ingredients, French-inspired recipes, affordable prices.
+    Known for: Innovative egg preparations, healthy high-protein ingredients, French-inspired recipes, affordable prices.
     Vibe: Fun, casual, community-feel neighbourhood cafe. Young and friendly crowd.
-    Menu highlights: Variety of egg dishes — omelettes, egg bowls, egg benedicts, healthy egg breakfasts.
+    Menu highlights: Variety of egg dishes — omelettes, egg bowls, egg benedicts, healthy high-protein egg breakfasts.
     Also serves: Vegetarian options, chicken and non-veg dishes, all cooked separately.
     Open: 7:30am to 11pm every day.
-    Values: Health-focused, fresh ingredients, clean and hygienic, innovative.
+    Values: Health-focused, high-protein meals, fresh ingredients, clean and hygienic, innovative.
+    Key selling point: Eggs are one of nature's best protein sources — Yolkshire makes eating healthy and high-protein genuinely enjoyable and delicious.
     Tone note: Yolkshire loves egg puns — "egg-citing", "egg-sperience", "eggular" — light humour is welcome.
   `;
 
   const SENTIMENT_RULES = {
-    positive: `- Write a genuinely positive review about the egg dishes and cafe experience\n- Mention something specific: a dish, the freshness, the vibe, or the value\n- Light egg pun is welcome but not mandatory — keep it natural\n- Enthusiastic but genuine, 2-3 sentences`,
-    neutral:  `- Write a balanced review — decent experience, nothing extraordinary\n- Acknowledge what worked and what was just okay\n- Honest and measured tone, 2-3 sentences`,
-    critical: `- Write constructive critical feedback — fair, not harsh\n- Point out a specific issue: wait time, portion size, or inconsistency\n- Acknowledge something positive too — balanced, 2-3 sentences`
+    positive: `Write a genuinely positive review about the egg dishes and cafe experience. Emphasise the high protein content, healthy fresh ingredients, and how the food is both nutritious and delicious. Mention something specific like a dish, the freshness, the vibe, or the value. A light egg pun is welcome but not mandatory. Keep it enthusiastic but natural. 2-3 sentences. Do not use any dash or hyphen characters anywhere in the review.`,
+    neutral:  `Write a balanced review about the experience. Acknowledge the healthy food and protein-rich egg menu but note what was just okay. Keep an honest measured tone. 2-3 sentences. Do not use any dash or hyphen characters anywhere in the review.`,
+    critical: `Write constructive critical feedback that is fair and not harsh. You can still acknowledge the healthy high-protein concept positively while pointing out a specific issue like wait time, portion size, or inconsistency. Keep it balanced. 2-3 sentences. Do not use any dash or hyphen characters anywhere in the review.`
   };
 
   const FALLBACK = {
     positive: [
-      "Yolkshire is genuinely one of a kind — egg dishes done with real creativity and care. The food is fresh, portions are good, and the vibe is relaxed and friendly. My go-to breakfast spot in Pune.",
-      "Had a wonderful brunch here — the egg preparations are inventive and everything tasted really fresh. Great value for what you get, and the staff are warm and welcoming.",
-      "Eggactly what a neighbourhood breakfast cafe should be. Fresh food, friendly service, and a menu that keeps surprising you. Been coming here for a while and it never disappoints.",
-      "The variety at Yolkshire is impressive — they've taken egg dishes to a whole new level. Healthy, tasty, and affordable. Perfect way to start the day."
+      "Yolkshire is genuinely one of a kind. Egg dishes done with real creativity and the protein content keeps you full for hours. My go-to breakfast spot in Pune.",
+      "Had a wonderful brunch here. The egg preparations are inventive, everything tasted really fresh, and you can feel how much care goes into the ingredients. Great value too.",
+      "Eggactly what a neighbourhood breakfast cafe should be. Fresh high-protein food, friendly service, and a menu that keeps surprising you. Been coming here for a while and it never disappoints.",
+      "The variety at Yolkshire is impressive and everything is so wholesome. High protein, fresh ingredients, and genuinely tasty. Perfect way to start the day."
     ],
     neutral: [
-      "Yolkshire is a decent breakfast spot with an interesting egg-focused menu. Food was consistent and fresh, though nothing particularly stood out on this visit. Worth a try if you're in the area.",
-      "Had a fairly standard experience — the food came out well and the place was clean and comfortable. Good option for a healthy breakfast without too much fuss.",
-      "The concept is unique and the menu is creative, though our visit was fairly straightforward. Reasonable prices and decent portions. Would consider coming back.",
-      "Solid breakfast cafe with a clear identity. The egg dishes are freshly made and the ambience is casual. A reliable choice for a healthy morning meal."
+      "Yolkshire is a decent breakfast spot with an interesting egg-focused menu. Food was consistent and fresh though nothing particularly stood out on this visit. Worth a try if you're in the area.",
+      "Had a fairly standard experience. The food came out well and the healthy high-protein concept is solid. Good option for a nutritious breakfast without too much fuss.",
+      "The concept is unique and the menu is creative though our visit was fairly straightforward. Reasonable prices and decent portions. Would consider coming back.",
+      "Solid breakfast cafe with a clear identity. The egg dishes are freshly made and the protein content is genuinely impressive. A reliable choice for a healthy morning meal."
     ],
     critical: [
-      "The food at Yolkshire is genuinely good but the wait was longer than expected on our visit. Once it arrived though, the egg dishes were fresh and well-made. Could work on the pace during busy hours.",
-      "Had a mixed experience — some dishes were excellent but others felt a bit underwhelming for the price. The concept is great and the place has potential, just needs more consistency.",
-      "Visited during a busy morning and the service felt a little stretched. The food quality was there but the experience could be smoother. The menu itself is creative and worth exploring.",
-      "Good food but our order had a small mix-up that took a while to sort. Staff were apologetic and the eventual dishes were fresh and tasty — just a few rough edges to iron out."
+      "The food at Yolkshire is genuinely good and the high-protein menu is a great idea but the wait was longer than expected on our visit. Could work on the pace during busy hours.",
+      "Had a mixed experience. Some dishes were excellent but others felt a bit underwhelming for the price. The healthy concept is great and the place has potential, just needs more consistency.",
+      "Visited during a busy morning and the service felt a little stretched. The food quality was there but the experience could be smoother. The protein-focused menu itself is creative and worth exploring.",
+      "Good food but our order had a small mix-up that took a while to sort. Staff were apologetic and the eventual dishes were fresh and protein-packed. Just a few rough edges to iron out."
     ]
   };
 
@@ -389,7 +385,7 @@
     }
 
     try {
-      const rules = `${SENTIMENT_RULES[currentSentiment]}\n- Sound like a real customer, not marketing copy\n- No hashtags\n- Do not start with "I visited" or "We visited"\n- Return ONLY the review text`;
+      const rules = `${SENTIMENT_RULES[currentSentiment]} Sound like a real customer, not marketing copy. No hashtags. Do not start with "I visited" or "We visited". Return ONLY the review text, nothing else.`;
       const res = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -465,7 +461,7 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  /* ── Burst animation — stars & eggs fall from the 5th star ── */
+  /* ── Burst animation ── */
   function runBurst() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const layer = document.getElementById('burst-layer');
@@ -478,38 +474,23 @@
     const vh = window.innerHeight;
 
     const items = [
-      { ch: '★', color: '#f5c800' },
-      { ch: '★', color: '#f5c800' },
-      { ch: '★', color: '#d4a800' },
-      { ch: '🍳', color: null },
-      { ch: '🍳', color: null },
-      { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },
-      { ch: '★', color: '#d4a800' },
-      { ch: '🍳', color: null },
-      { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },
-      { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },
-      { ch: '★', color: '#d4a800' },
-      { ch: '🍳', color: null },
-      { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },
-      { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },
-      { ch: '★', color: '#d4a800' },
+      { ch: '★', color: '#f5c800' }, { ch: '★', color: '#f5c800' },
+      { ch: '★', color: '#d4a800' }, { ch: '🍳', color: null },
+      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '🍳', color: null },     { ch: '★', color: '#d4a800' },
+      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '🍳', color: null },     { ch: '★', color: '#d4a800' },
+      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '🍳', color: null },     { ch: '★', color: '#d4a800' },
     ];
 
     const emitWindow = 1.0;
-
     items.forEach((item) => {
       const el = document.createElement('div');
       el.className = 'burst-item';
-
-      const size = Math.random() < 0.5
-        ? 9 + Math.random() * 8
-        : 20 + Math.random() * 16;
-
+      const size = Math.random() < 0.5 ? 9 + Math.random() * 8 : 20 + Math.random() * 16;
       const startX = originX + (Math.random() * 14 - 7);
       const startY = originY + (Math.random() * 5 - 2.5);
       const duration = 3 + Math.random() * 1;
@@ -539,11 +520,9 @@
       el.style.setProperty('--s2', s2);
       el.style.animationDuration = duration + 's';
       el.style.animationDelay = delay + 's';
-
       layer.appendChild(el);
       el.addEventListener('animationend', () => el.remove());
     });
-
     setTimeout(() => { layer.innerHTML = ''; }, (emitWindow + 4.5) * 1000);
   }
 
