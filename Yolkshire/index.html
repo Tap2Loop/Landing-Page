@@ -31,183 +31,58 @@
     }
     html, body { min-height: 100%; background: var(--off); font-family: var(--font-body); color: var(--text); -webkit-font-smoothing: antialiased; }
     .page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-bottom: 56px; }
-
-    /* ── Hero ── */
-    .hero {
-      width: 100%;
-      background: var(--green-dark);
-      padding: 18px 24px 16px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(245,200,0,.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-badge {
-      display: inline-block;
-      background: var(--yellow);
-      color: var(--green-dark);
-      font-family: var(--font-brand);
-      font-size: 10px;
-      letter-spacing: 1px;
-      padding: 2px 12px;
-      border-radius: 20px;
-      margin-bottom: 8px;
-    }
-    .hero-logo {
-      font-family: var(--font-brand);
-      font-size: 34px;
-      color: var(--white);
-      line-height: 1;
-      margin-bottom: 3px;
-      text-shadow: 0 2px 8px rgba(0,0,0,.25);
-    }
+    .hero { width: 100%; background: var(--green-dark); padding: 18px 24px 16px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(245,200,0,.12) 0%, transparent 70%); pointer-events: none; }
+    .hero-badge { display: inline-block; background: var(--yellow); color: var(--green-dark); font-family: var(--font-brand); font-size: 10px; letter-spacing: 1px; padding: 2px 12px; border-radius: 20px; margin-bottom: 8px; }
+    .hero-logo { font-family: var(--font-brand); font-size: 34px; color: var(--white); line-height: 1; margin-bottom: 3px; text-shadow: 0 2px 8px rgba(0,0,0,.25); }
     .hero-logo span { color: var(--yellow); }
-    .hero-tagline {
-      font-size: 11px;
-      color: rgba(255,255,255,.5);
-      letter-spacing: .5px;
-      margin-bottom: 10px;
-    }
+    .hero-tagline { font-size: 11px; color: rgba(255,255,255,.5); letter-spacing: .5px; margin-bottom: 10px; }
     .hero-stars { font-size: 17px; letter-spacing: 4px; color: var(--yellow); }
-
-    /* ── Body ── */
     .body { width: 100%; max-width: 420px; padding: 14px 16px 0; display: flex; flex-direction: column; gap: 14px; }
     .prompt { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.5; }
-
-    /* ── Sentiment box ── */
-    .sentiment-box {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 14px 14px;
-    }
-    .sentiment-title {
-      font-size: 11px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: .08em; color: var(--muted);
-      margin-bottom: 16px; text-align: center;
-    }
+    .sentiment-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 14px 14px; }
+    .sentiment-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 16px; text-align: center; }
     .slider-wrap { position: relative; padding: 0 4px; margin-bottom: 4px; }
-    .slider-track {
-      height: 6px; border-radius: 3px;
-      background: linear-gradient(to right, #3d7a25, #f5c800, #c0392b);
-      margin-bottom: 10px;
-    }
-    .slider-input {
-      position: absolute; top: 0; left: 0; width: 100%;
-      transform: translateY(-50%) translateY(3px);
-      -webkit-appearance: none; appearance: none;
-      background: transparent; cursor: pointer; margin: 0;
-    }
-    .slider-input::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 26px; height: 26px; border-radius: 50%;
-      background: var(--white);
-      border: 3px solid var(--green);
-      box-shadow: 0 1px 6px rgba(0,0,0,.2);
-      transition: border-color .2s;
-    }
-    .slider-input::-moz-range-thumb {
-      width: 26px; height: 26px; border-radius: 50%;
-      background: var(--white); border: 3px solid var(--green);
-      box-shadow: 0 1px 6px rgba(0,0,0,.2); cursor: pointer;
-    }
+    .slider-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, #3d7a25, #f5c800, #c0392b); margin-bottom: 10px; }
+    .slider-input { position: absolute; top: 0; left: 0; width: 100%; transform: translateY(-50%) translateY(3px); -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; margin: 0; }
+    .slider-input::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%; background: var(--white); border: 3px solid var(--green); box-shadow: 0 1px 6px rgba(0,0,0,.2); transition: border-color .2s; }
+    .slider-input::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--white); border: 3px solid var(--green); box-shadow: 0 1px 6px rgba(0,0,0,.2); cursor: pointer; }
     .slider-labels { display: flex; justify-content: space-between; margin-top: 12px; }
     .slider-labels span { font-size: 12px; color: var(--muted); }
     .sentiment-badge { text-align: center; margin-top: 10px; min-height: 24px; }
-    .sentiment-badge span {
-      display: inline-block; font-size: 12px; font-weight: 600;
-      padding: 3px 14px; border-radius: 20px;
-      transition: background .2s, color .2s;
-    }
-
-    /* ── AI box ── */
-    .ai-box {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    .ai-header {
-      display: flex; align-items: center; gap: 8px;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      background: var(--green-light);
-    }
+    .sentiment-badge span { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 14px; border-radius: 20px; transition: background .2s, color .2s; }
+    .ai-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .ai-header { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--green-light); }
     .ai-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; transition: background .3s; }
     .ai-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--green); }
     .ai-body { padding: 14px; }
     .ai-text { font-size: 14px; line-height: 1.7; color: var(--text); min-height: 64px; }
     .ai-text.loading { color: var(--muted); font-style: italic; }
     .ai-actions { display: flex; gap: 8px; margin-top: 12px; }
-    .btn-regen {
-      flex: 1; padding: 10px; border-radius: 10px;
-      border: 1.5px solid var(--border); background: var(--off);
-      color: var(--muted); font-family: var(--font-body); font-size: 13px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
-      -webkit-tap-highlight-color: transparent; transition: border-color .15s, color .15s;
-    }
+    .btn-regen { flex: 1; padding: 10px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--off); color: var(--muted); font-family: var(--font-body); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; -webkit-tap-highlight-color: transparent; transition: border-color .15s, color .15s; }
     .btn-regen:active { border-color: var(--green); color: var(--green); }
     .btn-regen:disabled { opacity: .4; cursor: not-allowed; }
-    .btn-copy-ai {
-      flex: 2; padding: 10px; border-radius: 10px;
-      border: 1.5px solid var(--green); background: var(--green-light);
-      color: var(--green-dark); font-family: var(--font-body); font-size: 13px; font-weight: 600;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
-      -webkit-tap-highlight-color: transparent; transition: background .15s, border-color .15s;
-    }
+    .btn-copy-ai { flex: 2; padding: 10px; border-radius: 10px; border: 1.5px solid var(--green); background: var(--green-light); color: var(--green-dark); font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; -webkit-tap-highlight-color: transparent; transition: background .15s, border-color .15s; }
     .btn-copy-ai:active { background: #d4edca; }
     .btn-copy-ai.copied { border-color: var(--success); color: var(--success); background: rgba(58,158,106,.1); }
-
-    /* ── Divider ── */
     .divider { display: flex; align-items: center; gap: 10px; }
     .divider-line { flex: 1; height: .5px; background: var(--border); }
     .divider-text { font-size: 11px; color: #b0c4a8; white-space: nowrap; }
-
-    /* ── Own review ── */
     .own-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
     .own-wrap { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color .15s; }
     .own-wrap:focus-within { border-color: var(--green); }
     .own-textarea { width: 100%; min-height: 40px; border: none; outline: none; resize: none; font-family: var(--font-body); font-size: 14px; line-height: 1.65; color: var(--text); background: transparent; padding: 8px 14px; }
     .own-textarea::placeholder { color: #b0c4a8; }
     .own-char { font-size: 11px; color: var(--muted); padding: 0 14px 10px; text-align: right; }
-
-    /* ── CTA ── */
-    .btn-google {
-      width: 100%; padding: 16px; border-radius: var(--radius);
-      border: none; background: var(--green);
-      font-family: var(--font-body); font-size: 15px; font-weight: 600;
-      color: var(--white); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 9px;
-      text-decoration: none; -webkit-tap-highlight-color: transparent;
-      transition: background .15s;
-      box-shadow: 0 2px 8px rgba(61,122,37,.3);
-    }
+    .btn-google { width: 100%; padding: 16px; border-radius: var(--radius); border: none; background: var(--green); font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: background .15s; box-shadow: 0 2px 8px rgba(61,122,37,.3); }
     .btn-google:active { background: var(--green-dark); }
     .g-svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-    /* ── Footer ── */
     .footer { margin-top: 8px; font-size: 12px; font-weight: 500; color: var(--green-dark); text-align: center; opacity: .85; }
     .footer-egg { font-size: 14px; }
-
-    /* ── Toast ── */
     .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--green-dark); color: var(--white); font-size: 13px; padding: 10px 20px; border-radius: 24px; white-space: nowrap; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 100; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    /* ── Burst layer ── */
     .burst-layer { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
-    .burst-item {
-      position: absolute;
-      opacity: 0;
-      will-change: transform, opacity;
-      animation-name: burstFall;
-      animation-timing-function: cubic-bezier(.33,.05,.4,1);
-      animation-fill-mode: forwards;
-    }
+    .burst-item { position: absolute; opacity: 0; will-change: transform, opacity; animation-name: burstFall; animation-timing-function: cubic-bezier(.33,.05,.4,1); animation-fill-mode: forwards; }
     @keyframes burstFall {
       0%   { transform: translate(0,0) scale(var(--s0)) rotate(0deg); opacity: 0; animation-timing-function: cubic-bezier(.34,1.35,.64,1); }
       10%  { transform: translate(var(--x1),var(--y1)) scale(var(--s1)) rotate(var(--spin1)); opacity: 1; animation-timing-function: cubic-bezier(.37,0,.63,1); }
@@ -220,18 +95,14 @@
 </head>
 <body>
 <div class="page">
-
-<div class="burst-layer" id="burst-layer" aria-hidden="true"></div>
-
+  <div class="burst-layer" id="burst-layer" aria-hidden="true"></div>
   <div class="hero">
     <div class="hero-badge">my eggular hangout · since 2010</div>
     <div class="hero-logo"><span>Y</span>olkshire</div>
     <div class="hero-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span id="last-star">★</span></div>
   </div>
-
   <div class="body">
     <p class="prompt">Hope you enjoyed your visit.<br>Tell us how it was — we'll write the review for you.</p>
-
     <div class="sentiment-box">
       <p class="sentiment-title">How was your egg-sperience?</p>
       <div class="slider-wrap">
@@ -248,7 +119,6 @@
       </div>
       <div class="sentiment-badge"><span id="sbadge"></span></div>
     </div>
-
     <div class="ai-box">
       <div class="ai-header">
         <div class="ai-dot" id="ai-dot"></div>
@@ -266,13 +136,11 @@
         </div>
       </div>
     </div>
-
     <div class="divider">
       <div class="divider-line"></div>
       <span class="divider-text">or write your own</span>
       <div class="divider-line"></div>
     </div>
-
     <span class="own-label">Write your own</span>
     <div class="own-wrap">
       <textarea class="own-textarea" id="own-review"
@@ -280,7 +148,6 @@
         maxlength="500" oninput="onOwnInput(this)"></textarea>
       <div class="own-char" id="char-count">0 / 500</div>
     </div>
-
     <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJN9euszy_wjsRlXF4rxXnmpo" target="_blank" rel="noopener">
       <svg class="g-svg" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57C21.36 18.01 22.56 15.36 22.56 12.25z" fill="#4285F4"/>
@@ -290,13 +157,10 @@
       </svg>
       Open Google Reviews
     </a>
-
-    <p class="footer"><span class="footer-egg">🍳</span> Powered by TapReview &nbsp;·&nbsp; takes 10 seconds<span class="footer-egg">🍳</span></p>
+    <p class="footer"><span class="footer-egg">🍳</span> Powered by Tap2Loop &nbsp;·&nbsp; takes 10 seconds<span class="footer-egg">🍳</span></p>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <script>
   const WORKER_URL = 'https://tap2loop-ai.jeezmanw.workers.dev';
 
@@ -347,8 +211,10 @@
     critical: { dot: '#c0392b', badge: 'rgba(192,57,43,.12)',  text: '#c0392b', label: '😞 Critical' }
   };
 
-  let currentText = '', currentSentiment = 'positive', genCount = 0, debounce = null;
-  const MAX_GEN = 8;
+  // ── Each sentiment gets its own independent generation counter ──
+  let currentText = '', currentSentiment = 'positive', debounce = null;
+  const genCounts = { positive: 0, neutral: 0, critical: 0 };
+  const MAX_GEN = 5;
 
   function getSentiment(v) { return v <= 33 ? 'positive' : v <= 66 ? 'neutral' : 'critical'; }
 
@@ -375,14 +241,10 @@
   });
 
   async function generateReview() {
-    if (genCount >= MAX_GEN) { useFallback(); return; }
-    genCount++;
+    // Each sentiment has its own counter — switching sentiment resets nothing
+    if (genCounts[currentSentiment] >= MAX_GEN) { useFallback(); return; }
+    genCounts[currentSentiment]++;
     setLoading(true);
-
-    if (!WORKER_URL || WORKER_URL === 'PASTE_YOUR_WORKER_URL_HERE') {
-      await new Promise(r => setTimeout(r, 800));
-      useFallback(); return;
-    }
 
     try {
       const rules = `${SENTIMENT_RULES[currentSentiment]} Sound like a real customer, not marketing copy. No hashtags. Do not start with "I visited" or "We visited". Return ONLY the review text, nothing else.`;
@@ -461,18 +323,15 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  /* ── Burst animation ── */
   function runBurst() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const layer = document.getElementById('burst-layer');
     const lastStar = document.getElementById('last-star');
     if (!layer || !lastStar) return;
-
     const rect = lastStar.getBoundingClientRect();
     const originX = rect.left + rect.width / 2;
     const originY = rect.top + rect.height * 0.5;
     const vh = window.innerHeight;
-
     const items = [
       { ch: '★', color: '#f5c800' }, { ch: '★', color: '#f5c800' },
       { ch: '★', color: '#d4a800' }, { ch: '🍳', color: null },
@@ -485,7 +344,6 @@
       { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
       { ch: '🍳', color: null },     { ch: '★', color: '#d4a800' },
     ];
-
     const emitWindow = 1.0;
     items.forEach((item) => {
       const el = document.createElement('div');
@@ -503,7 +361,6 @@
       const s0 = 0.15 + Math.random() * 0.1;
       const s1 = 1.05 + Math.random() * 0.15;
       const s2 = 0.8 + Math.random() * 0.15;
-
       el.textContent = item.ch;
       el.style.left = startX + 'px';
       el.style.top = startY + 'px';
