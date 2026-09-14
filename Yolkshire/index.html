@@ -214,7 +214,7 @@
   // ── Each sentiment gets its own independent generation counter ──
   let currentText = '', currentSentiment = 'positive', debounce = null;
   const genCounts = { positive: 0, neutral: 0, critical: 0 };
-  const MAX_GEN = 5;
+  const MAX_GEN = 20;
 
   function getSentiment(v) { return v <= 33 ? 'positive' : v <= 66 ? 'neutral' : 'critical'; }
 
