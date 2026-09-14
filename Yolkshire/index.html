@@ -164,44 +164,54 @@
 <script>
   const WORKER_URL = 'https://tap2loop-ai.jeezmanw.workers.dev';
 
+  // ── Short, focused context. Less input = less rambling output. ──
   const RESTAURANT_CONTEXT = `
-    Yolkshire — India's first egg specialty restaurant, Pune.
-    Established: 2010. Tagline: "my eggular hangout".
-    Type: Breakfast and brunch cafe specialising in creative egg dishes.
-    Known for: Innovative egg preparations, healthy high-protein ingredients, French-inspired recipes, affordable prices.
-    Vibe: Fun, casual, community-feel neighbourhood cafe. Young and friendly crowd.
-    Menu highlights: Variety of egg dishes — omelettes, egg bowls, egg benedicts, healthy high-protein egg breakfasts.
-    Also serves: Vegetarian options, chicken and non-veg dishes, all cooked separately.
-    Open: 7:30am to 11pm every day.
-    Values: Health-focused, high-protein meals, fresh ingredients, clean and hygienic, innovative.
-    Key selling point: Eggs are one of nature's best protein sources — Yolkshire makes eating healthy and high-protein genuinely enjoyable and delicious.
-    Tone note: Yolkshire loves egg puns — "egg-citing", "egg-sperience", "eggular" — light humour is welcome.
+    Yolkshire, Pune. An egg specialist cafe open since 2010, 7:30am to 11pm daily.
+    Menu: omelettes, egg bowls, benedicts, all-day egg breakfasts. Veg, chicken and non-veg options too.
+    Vibe: casual, young, friendly neighbourhood breakfast spot.
+    People come for: creative egg dishes and filling breakfasts at fair prices.
   `;
 
+  // ── One idea per rule. No feature checklists. ──
   const SENTIMENT_RULES = {
-    positive: `Write a genuinely positive review about the egg dishes and cafe experience. Emphasise the high protein content, healthy fresh ingredients, and how the food is both nutritious and delicious. Mention something specific like a dish, the freshness, the vibe, or the value. A light egg pun is welcome but not mandatory. Keep it enthusiastic but natural. 2-3 sentences. Do not use any dash or hyphen characters anywhere in the review.`,
-    neutral:  `Write a balanced review about the experience. Acknowledge the healthy food and protein rich egg menu but note what was just okay. Keep an honest measured tone. 2-3 sentences. Do not use any dash or hyphen characters anywhere in the review.`,
-    critical: `Write constructive critical feedback that is fair and not harsh. You can still acknowledge the healthy high-protein concept positively while pointing out a specific issue like wait time, portion size, or inconsistency. Keep it balanced. 2 or 3 sentences. Do not use any dash or hyphen characters anywhere in the review.`
+    positive: `Warm and genuinely positive. Pick ONE specific thing that stood out and say why it worked.`,
+    neutral:  `Balanced and honest. One thing landed, one thing was just okay. No gushing, no complaints.`,
+    critical: `Fair and constructive. Name ONE specific issue (wait time, portion, consistency) without being harsh.`
   };
+
+  // ── Random angle per generation — this is what kills the sameness. ──
+  const ANGLES = [
+    'the one dish you ordered',
+    'the vibe and the crowd',
+    'what you paid versus what you got',
+    'how quickly you were served',
+    'a weekday morning visit',
+    'why you keep coming back',
+    'bringing a friend who was unsure about an egg-only place',
+    'trying something you would not normally order'
+  ];
+
+  // ── Banned words: things that appear in every single review otherwise. ──
+  const BANNED = 'protein, high-protein, fresh ingredients, neighbourhood, hidden gem, must visit, egg-citing, egg-sperience';
 
   const FALLBACK = {
     positive: [
-      "Yolkshire is genuinely one of a kind. Egg dishes done with real creativity and the protein content keeps you full for hours. My go-to breakfast spot in Pune.",
-      "Had a wonderful brunch here. The egg preparations are inventive, everything tasted really fresh, and you can feel how much care goes into the ingredients. Great value too.",
-      "Eggactly what a neighbourhood breakfast cafe should be. Fresh high-protein food, friendly service, and a menu that keeps surprising you. Been coming here for a while and it never disappoints.",
-      "The variety at Yolkshire is impressive and everything is so wholesome. High protein, fresh ingredients, and genuinely tasty. Perfect way to start the day."
+      "The egg benedicts are the reason I keep coming back. Runny yolk, proper hollandaise, and I am full until lunch.",
+      "Ordered the egg bowl and it hit the spot. Came out hot, seasoned properly, and I left genuinely satisfied.",
+      "Great little breakfast spot. The omelette was properly made and the staff were easygoing. Worth the trip.",
+      "Food came out quick and tasted like someone actually cared. Perfect start to a slow Sunday."
     ],
     neutral: [
-      "Yolkshire is a decent breakfast spot with an interesting egg focused menu. Food was consistent and fresh though nothing particularly stood out on this visit. Worth a try if you're in the area.",
-      "Had a fairly standard experience. The food came out well and the healthy high-protein concept is solid. Good option for a nutritious breakfast without too much fuss.",
-      "The concept is unique and the menu is creative though our visit was fairly straightforward. Reasonable prices and decent portions. Would consider coming back.",
-      "Solid breakfast cafe with a clear identity. The egg dishes are freshly made and the protein content is genuinely impressive. A reliable choice for a healthy morning meal."
+      "Decent breakfast. The eggs were cooked well enough and prices were reasonable. Nothing stood out either way.",
+      "Solid option for a quick morning meal. Portions were fine, service was fine. Not much to report.",
+      "Food was okay. Arrived on time and tasted fresh enough. Would come back if I was in the area.",
+      "Fairly standard visit. Nothing wrong with it, nothing that made me want to rush back either."
     ],
     critical: [
-      "The food at Yolkshire is genuinely good and the high-protein menu is a great idea but the wait was longer than expected on our visit. Could work on the pace during busy hours.",
-      "Had a mixed experience. Some dishes were excellent but others felt a bit underwhelming for the price. The healthy concept is great and the place has potential, just needs more consistency.",
-      "Visited during a busy morning and the service felt a little stretched. The food quality was there but the experience could be smoother. The protein-focused menu itself is creative and worth exploring.",
-      "Good food but our order had a small mix-up that took a while to sort. Staff were apologetic and the eventual dishes were fresh and protein-packed. Just a few rough edges to iron out."
+      "Food was good but the wait ran long on a busy morning. Worth sorting out during peak hours.",
+      "Mixed visit. One dish was great, the other felt small for the price. Concept is solid, execution needs consistency.",
+      "Service felt stretched during the morning rush. Food quality held up but the whole thing could be smoother.",
+      "Our order got mixed up and took a while to fix. Staff were apologetic and the food was good in the end."
     ]
   };
 
@@ -211,10 +221,9 @@
     critical: { dot: '#c0392b', badge: 'rgba(192,57,43,.12)',  text: '#c0392b', label: '😞 Critical' }
   };
 
-  // ── Each sentiment gets its own independent generation counter ──
   let currentText = '', currentSentiment = 'positive', debounce = null;
   const genCounts = { positive: 0, neutral: 0, critical: 0 };
-  const MAX_GEN = 20; 
+  const MAX_GEN = 12; // 8 angles + a few repeats, then fallback
 
   function getSentiment(v) { return v <= 33 ? 'positive' : v <= 66 ? 'neutral' : 'critical'; }
 
@@ -240,14 +249,35 @@
     generateReview();
   });
 
+  // ── Safety trim: sentence cap + word cap, applied to every output. ──
+  function trimReview(t) {
+    let s = String(t || '').replace(/\s+/g, ' ').trim();
+    // strip wrapping quotes if the model added them
+    s = s.replace(/^["'“”‘’]|["'“”‘’]$/g, '').trim();
+    // keep at most 2 sentences
+    const sentences = s.match(/[^.!?]+[.!?]+/g);
+    if (sentences && sentences.length > 2) s = sentences.slice(0, 2).join(' ').trim();
+    // keep at most 45 words
+    const w = s.split(' ');
+    if (w.length > 45) s = w.slice(0, 45).join(' ').replace(/[,;:]$/, '') + '.';
+    return s;
+  }
+
   async function generateReview() {
-    // Each sentiment has its own counter — switching sentiment resets nothing
     if (genCounts[currentSentiment] >= MAX_GEN) { useFallback(); return; }
     genCounts[currentSentiment]++;
     setLoading(true);
 
     try {
-      const rules = `${SENTIMENT_RULES[currentSentiment]} Sound like a real customer, not marketing copy. No hashtags. Do not start with "I visited" or "We visited". Return ONLY the review text, nothing else.`;
+      const angle = ANGLES[Math.floor(Math.random() * ANGLES.length)];
+      const rules = `${SENTIMENT_RULES[currentSentiment]}
+Write about ONE thing only: ${angle}.
+Hard limit: 2 sentences, maximum 35 words.
+Use at most one detail from the restaurant description. Do not list features.
+Never use the words: ${BANNED}.
+Sound like a real person typing on a phone, not marketing copy.
+No hashtags. No dashes or hyphens. Return ONLY the review text.`;
+
       const res = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -256,15 +286,15 @@
       if (!res.ok) throw new Error();
       const data = await res.json();
       if (!data.review) throw new Error();
-      currentText = data.review;
-      setAIText(data.review);
+      currentText = trimReview(data.review);
+      setAIText(currentText);
     } catch(e) { useFallback(); }
     setLoading(false);
   }
 
   function useFallback() {
     const pool = FALLBACK[currentSentiment];
-    const t = pool[Math.floor(Math.random() * pool.length)];
+    const t = trimReview(pool[Math.floor(Math.random() * pool.length)]);
     currentText = t; setAIText(t); setLoading(false);
   }
 
