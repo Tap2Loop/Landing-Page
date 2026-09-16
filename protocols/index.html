@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leave a review · Yolkshire</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:#FFFBF5;color:#1A1614;-webkit-font-smoothing:antialiased;
+    line-height:1.5;padding:24px 16px 64px;
+  }
+  .wrap{max-width:480px;margin:0 auto}
+  [hidden]{display:none!important}
+
+  .head{margin-bottom:20px}
+  .head h1{font-size:20px;margin:0 0 2px;letter-spacing:-.01em}
+  .head p{margin:0;font-size:13px;color:#7A716B}
+
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#F0E9DF;
+       padding:4px;border-radius:12px;margin-bottom:10px}
+  .seg button{border:0;background:transparent;padding:10px 8px;border-radius:9px;
+       font:inherit;font-size:14px;font-weight:500;color:#7A716B;cursor:pointer;
+       transition:background .15s,color .15s,box-shadow .15s}
+  .seg button.is-on{background:#fff;color:#1A1614;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  .hint{font-size:12.5px;color:#8A7F76;line-height:1.45;margin:0 0 22px;min-height:36px}
+
+  .sec-head{display:flex;justify-content:space-between;align-items:baseline;
+       margin-bottom:12px;gap:12px}
+  .sec-head h2{font-size:14px;margin:0;font-weight:600}
+  .counter{font-size:12px;color:#8A7F76;white-space:nowrap}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+  .chip{border:1px solid #E4DACD;background:#fff;color:#3A322C;padding:9px 14px;
+       border-radius:999px;font:inherit;font-size:13.5px;cursor:pointer;
+       transition:all .15s;-webkit-tap-highlight-color:transparent}
+  .chip.is-on{background:#1A1614;border-color:#1A1614;color:#fff}
+  .chip.is-maxed{opacity:.4}
+
+  .actions{display:grid;gap:8px;margin-bottom:24px}
+  .btn{border:0;border-radius:12px;padding:15px 18px;font:inherit;font-size:15px;
+       font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s;
+       display:flex;align-items:center;justify-content:center;gap:8px;
+       -webkit-tap-highlight-color:transparent}
+  .btn:active:not(:disabled){transform:scale(.985)}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+  .btn-primary{background:#1A1614;color:#fff}
+  .btn-secondary{background:#F0E9DF;color:#1A1614}
+  .btn-block{width:100%;margin-top:12px}
+
+  .spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);
+       border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .panel{background:#fff;border:1px solid #EDE4D8;border-radius:16px;padding:16px}
+  .kw-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .kw-pill{font-size:12px;padding:5px 10px;border-radius:999px;background:#F5F0E8;
+       color:#8A7F76;border:1px solid transparent;transition:all .2s}
+  .kw-pill.is-present{background:#EAF6EE;color:#15803D;border-color:#CFE9D8}
+
+  textarea{width:100%;min-height:110px;border:1px solid #EDE4D8;border-radius:12px;
+       padding:12px;font:inherit;font-size:15px;line-height:1.55;resize:vertical;
+       background:#FFFDFA;color:#1A1614}
+  textarea:focus{outline:2px solid #1A1614;outline-offset:-1px;border-color:transparent}
+
+  .nudge{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#8A7F76;
+       background:#FFF8E8;border:1px solid #F2E4C4;border-radius:10px;
+       padding:9px 11px;margin-top:8px;flex-wrap:wrap}
+  .nudge button{border:0;background:#1A1614;color:#fff;font:inherit;font-size:12px;
+       font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer}
+
+  .meta{display:flex;justify-content:flex-end;font-size:11.5px;color:#A79C92;margin-top:6px}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);
+       background:#1A1614;color:#fff;font-size:13.5px;padding:11px 18px;
+       border-radius:999px;opacity:0;transition:opacity .2s,transform .25s;
+       pointer-events:none;z-index:50;max-width:calc(100vw - 32px);text-align:center}
+  .toast.is-on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <h1 id="bizName">Yolkshire</h1>
+    <p>Leave a review · takes 20 seconds</p>
+  </header>
+
+  <div class="seg" role="group" aria-label="How was it?">
+    <button type="button" data-sent="positive" class="is-on">Good</button>
+    <button type="button" data-sent="neutral">Okay</button>
+    <button type="button" data-sent="critical">Meh</button>
+  </div>
+  <p class="hint" id="hint"></p>
+
+  <div class="sec-head">
+    <h2>Tap what stood out</h2>
+    <span class="counter" id="chipCounter">Pick up to 3</span>
+  </div>
+  <div class="chips" id="chipGrid"></div>
+
+  <div class="actions">
+    <button class="btn btn-primary" id="genBtn" disabled>
+      <span id="genLabel">Write it for me</span>
+    </button>
+    <button class="btn btn-secondary" id="kwBtn" disabled>
+      Just give me keywords
+    </button>
+  </div>
+
+  <section class="panel" id="reviewPanel" hidden>
+    <div class="kw-row" id="kwPanel"></div>
+    <div id="nudgeArea"></div>
+    <textarea id="reviewText" maxlength="500"
+      placeholder="Your keywords are above — write them into a sentence, or tap Write it for me."></textarea>
+    <div class="meta"><span id="charCount">0/500</span></div>
+    <button class="btn btn-primary btn-block" id="copyBtn">
+      Copy &amp; open Google Reviews
+    </button>
+  </section>
+
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+
+// ─────────────────────────────────────────────────────────────
+// CONFIG — port to a new business by editing only this block
+// ─────────────────────────────────────────────────────────────
+const BUSINESS = {
+  name: 'Yolkshire',
+  placeId: 'ChIJN9euszy_wjsRlXF4rxXnmpo',
+  workerUrl: 'https://tap2loop-ai.jeezmanw.workers.dev',
+  context: `Yolkshire, Pune. Egg specialist cafe since 2010, 7:30am-11pm daily.
+Menu: omelettes, egg bowls, benedicts, all-day egg breakfasts. Veg, chicken, non-veg.
+Vibe: casual, young, friendly neighbourhood breakfast spot.`,
+};
+
+const KEYWORDS = {
+  dishes:     ['egg benedict','masala omelette','egg bowl','all-day breakfast','breakfast platter'],
+  attributes: ['egg specialist','freshly made','generous portions','value for money','vegetarian options'],
+  occasion:   ['weekday breakfast','post-gym meal','solo breakfast','brunch with friends','early morning'],
+  location:   ['Pune','near FC Road','Koregaon Park'],
+};
+
+const MAX = 3;
+const MAX_GEN = 12;
+
+const HINTS = {
+  positive: 'Name the dish and what made it work. Specific beats gushing.',
+  neutral:  'Name the dish, then one thing that was just okay. Honest reviews rank too.',
+  critical: 'Still name the dish you ordered — "the egg benedict took 25 minutes" is specific and useful.',
+};
+
+// Only synonyms that are safe to swap in-place. Keep this list small.
+const SYNONYMS = {
+  'value for money': ['cheap','affordable','budget','reasonable','good price','worth it'],
+  'egg benedict':    ['benedict','eggs benedict'],
+  'masala omelette': ['omelette','omelet'],
+  'egg specialist':  ['egg place','egg cafe'],
+  'generous portions':['big portions','large portions','filling'],
+};
+
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+const state = { sentiment:'positive', selected:[], shown:[], generating:false };
+const genCounts = { positive:0, neutral:0, critical:0 };
+
+// ─────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+
+function shuffle(a){ const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[b[i],b[j]]=[b[j],b[i]];} return b; }
+
+function listJoin(arr){
+  if(!arr.length) return '';
+  if(arr.length===1) return arr[0];
+  if(arr.length===2) return arr[0]+' and '+arr[1];
+  return arr[0]+', '+arr[1]+' and '+arr[2];
+}
+const rest = k => listJoin(k.slice(1));
+
+function trimReview(t){
+  let s = String(t||'').replace(/\s+/g,' ').trim();
+  s = s.replace(/^["'“”‘’]|["'“”‘’]$/g,'').trim();
+  const sentences = s.match(/[^.!?]+[.!?]+/g);
+  if(sentences && sentences.length>2) s = sentences.slice(0,2).join(' ').trim();
+  const w = s.split(' ');
+  if(w.length>45) s = w.slice(0,45).join(' ').replace(/[,;:]$/,'')+'.';
+  return s;
+}
+
+// ─────────────────────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg){
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('is-on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('is-on'), 2400);
+}
+
+// ─────────────────────────────────────────────────────────────
+// CHIPS
+// ─────────────────────────────────────────────────────────────
+function pickShownChips(){
+  const dishes = shuffle(KEYWORDS.dishes).slice(0,5);
+  const others = shuffle([
+    ...KEYWORDS.attributes,
+    ...KEYWORDS.occasion,
+    ...KEYWORDS.location,
+  ]).slice(0,3);
+  return shuffle([...dishes, ...others]);
+}
+
+function renderChips(){
+  const grid = $('chipGrid');
+  grid.innerHTML = '';
+  state.shown.forEach(kw => {
+    const on = state.selected.includes(kw);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip' + (on?' is-on':'') +
+      (!on && state.selected.length>=MAX ? ' is-maxed' : '');
+    btn.textContent = kw;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.addEventListener('click', ()=>toggleChip(kw));
+    grid.appendChild(btn);
+  });
+}
+
+function toggleChip(kw){
+  const i = state.selected.indexOf(kw);
+  if(i>=0){
+    state.selected.splice(i,1);
+  } else {
+    if(state.selected.length>=MAX){
+      toast('3 is the sweet spot — more reads like spam to Google');
+      return;
+    }
+    state.selected.push(kw);
+  }
+  renderChips();
+  renderCounter();
+  updateButtons();
+  renderKeywordPanel();
+  renderNudges();
+}
+
+function renderCounter(){
+  const n = state.selected.length;
+  const el = $('chipCounter');
+  if(n===0) el.textContent = 'Pick up to 3';
+  else if(n<MAX) el.textContent = n+' of 3 selected';
+  else el.textContent = '3 of 3 — that\u2019s the sweet spot';
+}
+
+function updateButtons(){
+  const has = state.selected.length>0;
+  $('genBtn').disabled = !has || state.generating;
+  $('kwBtn').disabled  = !has || state.generating;
+}
+
+// ─────────────────────────────────────────────────────────────
+// SENTIMENT
+// ─────────────────────────────────────────────────────────────
+function setSentiment(s){
+  state.sentiment = s;
+  document.querySelectorAll('.seg button').forEach(b => {
+    b.classList.toggle('is-on', b.dataset.sent === s);
+  });
+  $('hint').textContent = HINTS[s];
+}
+
+// ─────────────────────────────────────────────────────────────
+// KEYWORD PANEL + LIVE DETECTION
+// ─────────────────────────────────────────────────────────────
+function renderKeywordPanel(){
+  const wrap = $('kwPanel');
+  const text = $('reviewText').value.toLowerCase();
+  wrap.innerHTML = '';
+  if(!state.selected.length) return;
+  state.selected.forEach(kw => {
+    const present = text.includes(kw.toLowerCase());
+    const pill = document.createElement('span');
+    pill.className = 'kw-pill' + (present ? ' is-present' : '');
+    pill.textContent = kw;
+    wrap.appendChild(pill);
+  });
+}
+
+function renderNudges(){
+  const area = $('nudgeArea');
+  area.innerHTML = '';
+  const text = $('reviewText').value;
+  if(!text.trim()) return;
+  const lower = text.toLowerCase();
+
+  state.selected.forEach(kw => {
+    if(lower.includes(kw.toLowerCase())) return;      // exact match already there
+    const syns = SYNONYMS[kw] || [];
+    for(const s of syns){
+      const re = new RegExp('\\b'+escapeRe(s)+'\\b','i');
+      const m = text.match(re);
+      if(!m) continue;
+
+      const row = document.createElement('div');
+      row.className = 'nudge';
+      const label = document.createElement('span');
+      label.textContent = `You said "${m[0]}" — "${kw}" matches better on Google.`;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = 'Use it';
+      btn.addEventListener('click', ()=>applyNudge(m[0], kw));
+      row.appendChild(label);
+      row.appendChild(btn);
+      area.appendChild(row);
+      break;                                            // one nudge per keyword
+    }
+  });
+}
+
+function applyNudge(found, kw){
+  const ta = $('reviewText');
+  ta.value = ta.value.replace(new RegExp('\\b'+escapeRe(found)+'\\b','i'), kw);
+  updateCharCount();
+  renderKeywordPanel();
+  renderNudges();
+}
+
+// ─────────────────────────────────────────────────────────────
+// REVIEW TEXTAREA
+// ─────────────────────────────────────────────────────────────
+function updateCharCount(){
+  $('charCount').textContent = $('reviewText').value.length + '/500';
+}
+
+function openPanel(){
+  const panel = $('reviewPanel');
+  const wasHidden = panel.hidden;
+  panel.hidden = false;
+  renderKeywordPanel();
+  renderNudges();
+  updateCharCount();
+  if(wasHidden){
+    panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+}
+
+function setReview(text){
+  $('reviewText').value = text;
+  openPanel();
+  updateCharCount();
+  renderKeywordPanel();
+  renderNudges();
+}
+
+// ─────────────────────────────────────────────────────────────
+// FALLBACKS
+// ─────────────────────────────────────────────────────────────
+const FALLBACKS = {
+  positive: [
+    k => `Came for the ${k[0]} and it did not disappoint. ${k.length>1 ? cap(rest(k))+' on top of that.' : 'Would order it again.'}`,
+    k => `The ${k[0]} is why I keep coming back. ${k.length>1 ? cap(rest(k))+' too.' : 'Consistent every time.'}`,
+    k => `Solid ${k[0]}. ${k.length>1 ? cap(rest(k))+', and I left full.' : 'Left full and happy.'}`,
+  ],
+  neutral: [
+    k => `The ${k[0]} was good. ${k.length>1 ? cap(rest(k))+' was just fine.' : 'The rest was just fine.'}`,
+    k => `Tried the ${k[0]}. ${k.length>1 ? cap(rest(k))+' did not quite land.' : 'Decent, nothing standout.'}`,
+  ],
+  critical: [
+    k => `The ${k[0]} took longer than I expected. ${k.length>1 ? cap(rest(k))+' could be better too.' : 'Worth watching the timing.'}`,
+    k => `Wanted to like the ${k[0]}. ${k.length>1 ? cap(rest(k))+' was fine, but the wait was long.' : 'The wait was just too long.'}`,
+  ],
+};
+
+function fallbackReview(sentiment, keywords){
+  const pool = FALLBACKS[sentiment] || FALLBACKS.positive;
+  const tpl = pool[(Math.random()*pool.length)|0];
+  return trimReview(tpl(keywords));
+}
+
+// ─────────────────────────────────────────────────────────────
+// COPY
+// ─────────────────────────────────────────────────────────────
+async function copyText(text){
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  }catch(e){ /* fall through */ }
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try{ ok = document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+  return ok;
+}
+
+// ─────────────────────────────────────────────────────────────
+// GENERATE
+// ─────────────────────────────────────────────────────────────
+function setLoading(on){
+  const btn = $('genBtn');
+  const label = $('genLabel');
+  if(on){
+    btn.innerHTML = '<span class="spinner"></span><span>Writing…</span>';
+  } else {
+    btn.innerHTML = '<span id="genLabel">Write it for me</span>';
+  }
+}
+
+async function generate(){
+  if(state.generating) return;
+
+  // Per-sentiment cap → straight to fallback
+  if(genCounts[state.sentiment] >= MAX_GEN){
+    setReview(fallbackReview(state.sentiment, state.selected));
+    return;
+  }
+
+  state.generating = true;
+  updateButtons();
+  setLoading(true);
+
+  try{
+    const res = await fetch(BUSINESS.workerUrl, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        businessContext: BUSINESS.context,
+        keywords: state.selected.slice(),
+        sentiment: state.sentiment,
+      }),
+    });
+
+    if(!res.ok) throw new Error('worker '+res.status);
+    const data = await res.json();
+    const text = trimReview(data && data.review);
+    if(!text) throw new Error('empty response');
+
+    genCounts[state.sentiment]++;
+    setReview(text);
+
+  }catch(err){
+    // Silent fallback by design (good UX, bad for debugging).
+    // Watch DevTools → Network for a 500 here.
+    console.warn('[tap2loop] generation failed → fallback:', err);
+    setReview(fallbackReview(state.sentiment, state.selected));
+  }finally{
+    state.generating = false;
+    updateButtons();
+    setLoading(false);
+  }
+}
+
+function keywordsOnly(){
+  const text = state.selected.join(', ');
+  copyText(text);
+  toast('Copied — work each one into a sentence');
+  openPanel();
+  $('reviewText').focus();
+}
+
+function copyAndOpen(){
+  const ta = $('reviewText');
+  const text = ta.value.trim() || state.selected.join(', ');
+  copyText(text);                                    // don't await — keeps the user gesture
+  toast('Copied — opening Google Reviews');
+  window.open(
+    'https://search.google.com/local/writereview?placeid='+encodeURIComponent(BUSINESS.placeId),
+    '_blank','noopener'
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// WIRE UP
+// ─────────────────────────────────────────────────────────────
+function init(){
+  $('bizName').textContent = BUSINESS.name;
+
+  document.querySelectorAll('.seg button').forEach(b => {
+    b.addEventListener('click', ()=>setSentiment(b.dataset.sent));
+  });
+
+  $('reviewText').addEventListener('input', () => {
+    updateCharCount();
+    renderKeywordPanel();
+    renderNudges();
+  });
+
+  $('genBtn').addEventListener('click', generate);
+  $('kwBtn').addEventListener('click', keywordsOnly);
+  $('copyBtn').addEventListener('click', copyAndOpen);
+
+  state.shown = pickShownChips();
+  renderChips();
+  renderCounter();
+  updateButtons();
+  setSentiment('positive');
+}
+
+init();
+})();
+</script>
+</body>
+</html>
