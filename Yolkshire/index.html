@@ -166,19 +166,47 @@
 
   // ── Short, focused context. Less input = less rambling output. ──
   const RESTAURANT_CONTEXT = `
-    Yolkshire, Pune. An egg specialist cafe open since 2010, 7:30am to 11pm daily.
-    Menu: omelettes, egg bowls, benedicts, all-day egg breakfasts. Veg, chicken and non-veg options too.
-    Vibe: casual, young, friendly neighbourhood breakfast spot.
-    People come for: creative egg dishes and filling breakfasts at fair prices.
-  `;
+  Yolkshire — India's first egg specialty cafe, Pune. Est. 2010.
+  Tagline: "my eggular hangout". 8 outlets across Pune.
+  Open: 7:30am to 11pm daily. Uses 100% farm fresh eggs.
+  Price range: ₹30 to ₹350. Affordable, great value.
+
+  HEALTHY AND HIGH-PROTEIN dishes to emphasise:
+  - High Protein Millet Salad with Grilled Paneer (₹280)
+  - Low Calorie Grilled Chicken and Zucchini Salad (₹300)
+  - Low-Carb Chicken Stroganoff (₹320)
+  - Grilled Chicken Breast (₹200)
+  - Omelette Florentine with spinach (₹290)
+  - Boiled Egg Chaat (₹120)
+  - Green Smoothie with avocado, spinach, basil (₹250)
+  - Classic Cold Coffee with Whey Protein add-on
+  - Eggs Benedict (₹280)
+  - Shakshuka (₹290)
+  - Turkish Eggs (₹260)
+  - Make it Egg White option available on most dishes
+
+  SIGNATURE dishes:
+  - Yolkshire Special English Breakfast (₹310)
+  - Bacon and Eggs (₹340)
+  - Peri-Peri Omelette (₹310)
+  - Italian Reve Omelette (₹310)
+  - Mexican Fajita Scramble (₹220)
+  - Parsi Akuri (₹190)
+  - Swadeshi Breakfast (₹290)
+  - Yolkshire Eggwich (₹210)
+  - Burnt Basque Cheesecake (₹280)
+
+  VIBE: Casual, fun, neighbourhood feel. Young crowd, fitness-conscious professionals, families.
+  KEY MESSAGE: Eggs are nature's best protein source. Yolkshire makes healthy eating genuinely delicious.
+  TONE: Warm, fun, egg puns welcome — egg-citing, egg-sperience, eggular, eggsellent.
+`;
 
   // ── One idea per rule. No feature checklists. ──
   const SENTIMENT_RULES = {
-    positive: `Warm and genuinely positive. Pick ONE specific thing that stood out and say why it worked.`,
-    neutral:  `Balanced and honest. One thing landed, one thing was just okay. No gushing, no complaints.`,
-    critical: `Fair and constructive. Name ONE specific issue (wait time, portion, consistency) without being harsh.`
-  };
-
+  positive: `Write a genuinely positive review. Pick ONE specific dish or drink from the menu and mention it by name. Emphasise the protein content, freshness, healthy angle, or great value. A light egg pun is welcome. 2 sentences max. No dashes or hyphens.`,
+  neutral:  `Write a balanced review. Mention one specific dish by name. Acknowledge the healthy concept and protein-rich menu but note something that was just okay like service speed, portion size, or ambience. Honest and measured. 2 sentences max. No dashes or hyphens.`,
+  critical: `Write constructive critical feedback. Mention something specific. Acknowledge the healthy high-protein concept positively while pointing out one clear issue like wait time, portion size, or consistency. Fair and not harsh. 2 sentences max. No dashes or hyphens.`
+};
   // ── Random angle per generation — this is what kills the sameness. ──
   const ANGLES = [
     'the one dish you ordered',
