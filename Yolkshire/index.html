@@ -164,12 +164,11 @@
 <script>
   const WORKER_URL = 'https://tap2loop-ai.jeezmanw.workers.dev';
 
-  // ── Full menu context. Rich enough to give the model plenty of material. ──
+  // ── PUNS REMOVED. Context is factual, tone is neutral so the AI doesn't force jokes. ──
   const RESTAURANT_CONTEXT = `
     Yolkshire — India's first egg specialty cafe, Pune. Est. 2010.
-    Tagline: "my eggular hangout". 8 outlets across Pune.
-    Open: 7:30am to 11pm daily. Uses 100% farm fresh eggs.
-    Price range: ₹30 to ₹350. Affordable, great value.
+    8 outlets across Pune. Open 7:30am to 11pm daily.
+    Uses 100% farm fresh eggs. Price range: ₹30 to ₹350. Affordable, great value.
 
     HEALTHY AND HIGH-PROTEIN dishes:
     - High Protein Millet Salad with Grilled Paneer (₹280)
@@ -198,18 +197,15 @@
 
     VIBE: Casual, fun, neighbourhood feel. Young crowd, fitness-conscious professionals, families.
     KEY MESSAGE: Eggs are nature's best protein source. Yolkshire makes healthy eating genuinely delicious.
-    TONE: Warm, fun, egg puns welcome — egg-citing, egg-sperience, eggular, eggsellent.
   `;
 
-  // ── Your current (better) sentiment rules. Kept as-is. ──
+  // ── PUNS REMOVED from the rules. Tone is now purely about authenticity. ──
   const SENTIMENT_RULES = {
-    positive: `Write a genuinely positive review. Pick ONE specific dish or drink from the menu and mention it by name. Emphasise the protein content, freshness, healthy angle, or great value. A light egg pun is welcome. 2 sentences max. No dashes or hyphens.`,
+    positive: `Write a genuinely positive review. Pick ONE specific dish or drink from the menu and mention it by name. Emphasise the protein content, freshness, healthy angle, or great value. 2 sentences max. No dashes or hyphens.`,
     neutral:  `Write a balanced review. Mention one specific dish by name. Acknowledge the healthy concept and protein-rich menu but note something that was just okay like service speed, portion size, or ambience. Honest and measured. 2 sentences max. No dashes or hyphens.`,
     critical: `Write constructive critical feedback. Mention something specific. Acknowledge the healthy high-protein concept positively while pointing out one clear issue like wait time, portion size, or consistency. Fair and not harsh. 2 sentences max. No dashes or hyphens.`
   };
 
-  // ── Random dish focus. The code picks one per generation so the model
-  //    never leans on the same "famous" items every time. ──
   const FOCUS_DISHES = [
     'Yolkshire Special English Breakfast',
     'Bacon and Eggs',
@@ -233,10 +229,10 @@
     'Classic Cold Coffee with Whey Protein'
   ];
 
-  // ── Ban marketing phrases, NOT dish names or the subject matter itself. ──
-  const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey";
+  // ── ADDED the egg puns to the banned list so the model physically cannot output them. ──
+  const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, eggcellent, eggular, egg-citing, egg-sperience, eggsellent, egg pun";
 
-  // ── Fallbacks also mention specific dishes so they blend with AI output. ──
+  // ── Fallbacks updated to be pun-free and sound like real customers. ──
   const FALLBACK = {
     positive: [
       "The Parsi Akuri was rich and perfectly spiced, exactly what I needed before a long day. Great value at this price and I left feeling properly full.",
@@ -292,7 +288,6 @@
     generateReview();
   });
 
-  // ── Safety trim. Loosened to 50 words to fit longer dish names. ──
   function trimReview(t) {
     let s = String(t || '').replace(/\s+/g, ' ').trim();
     s = s.replace(/^["'“”‘’]|["'“”‘’]$/g, '').trim();
@@ -309,7 +304,6 @@
     setLoading(true);
 
     try {
-      // ── Pick a random dish for this generation. Invisible to the user. ──
       const focus = FOCUS_DISHES[Math.floor(Math.random() * FOCUS_DISHES.length)];
 
       const rules = `${SENTIMENT_RULES[currentSentiment]}
@@ -319,6 +313,7 @@ Use at most one other detail from the menu. Do not list multiple features.
 Do not quote exact prices.
 Never use these phrases: ${BANNED}.
 Sound like a real person typing on a phone, not marketing copy.
+Do not use egg puns or wordplay.
 No hashtags. Return ONLY the review text.`;
 
       const res = await fetch(WORKER_URL, {
