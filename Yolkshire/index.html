@@ -36,45 +36,45 @@
     .hero-badge { display: inline-block; background: var(--yellow); color: var(--green-dark); font-family: var(--font-brand); font-size: 10px; letter-spacing: 1px; padding: 2px 12px; border-radius: 20px; margin-bottom: 8px; }
     .hero-logo { font-family: var(--font-brand); font-size: 34px; color: var(--white); line-height: 1; margin-bottom: 3px; text-shadow: 0 2px 8px rgba(0,0,0,.25); }
     .hero-logo span { color: var(--yellow); }
-    .hero-tagline { font-size: 11px; color: rgba(255,255,255,.5); letter-spacing: .5px; margin-bottom: 10px; }
     .hero-stars { font-size: 17px; letter-spacing: 4px; color: var(--yellow); }
-    .body { width: 100%; max-width: 420px; padding: 14px 16px 0; display: flex; flex-direction: column; gap: 14px; }
-    .prompt { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.5; }
-    .sentiment-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 14px 14px; }
-    .sentiment-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 16px; text-align: center; }
-    .slider-wrap { position: relative; padding: 0 4px; margin-bottom: 4px; }
-    .slider-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, #3d7a25, #f5c800, #c0392b); margin-bottom: 10px; }
-    .slider-input { position: absolute; top: 0; left: 0; width: 100%; transform: translateY(-50%) translateY(3px); -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; margin: 0; }
-    .slider-input::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%; background: var(--white); border: 3px solid var(--green); box-shadow: 0 1px 6px rgba(0,0,0,.2); transition: border-color .2s; }
-    .slider-input::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--white); border: 3px solid var(--green); box-shadow: 0 1px 6px rgba(0,0,0,.2); cursor: pointer; }
-    .slider-labels { display: flex; justify-content: space-between; margin-top: 12px; }
-    .slider-labels span { font-size: 12px; color: var(--muted); }
-    .sentiment-badge { text-align: center; margin-top: 10px; min-height: 24px; }
-    .sentiment-badge span { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 14px; border-radius: 20px; transition: background .2s, color .2s; }
-    .ai-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-    .ai-header { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--green-light); }
-    .ai-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; transition: background .3s; }
-    .ai-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--green); }
-    .ai-body { padding: 14px; }
-    .ai-text { font-size: 14px; line-height: 1.7; color: var(--text); min-height: 64px; }
-    .ai-text.loading { color: var(--muted); font-style: italic; }
-    .ai-actions { display: flex; gap: 8px; margin-top: 12px; }
-    .btn-regen { flex: 1; padding: 10px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--off); color: var(--muted); font-family: var(--font-body); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; -webkit-tap-highlight-color: transparent; transition: border-color .15s, color .15s; }
-    .btn-regen:active { border-color: var(--green); color: var(--green); }
-    .btn-regen:disabled { opacity: .4; cursor: not-allowed; }
-    .btn-copy-ai { flex: 2; padding: 10px; border-radius: 10px; border: 1.5px solid var(--green); background: var(--green-light); color: var(--green-dark); font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; -webkit-tap-highlight-color: transparent; transition: background .15s, border-color .15s; }
-    .btn-copy-ai:active { background: #d4edca; }
-    .btn-copy-ai.copied { border-color: var(--success); color: var(--success); background: rgba(58,158,106,.1); }
-    .divider { display: flex; align-items: center; gap: 10px; }
-    .divider-line { flex: 1; height: .5px; background: var(--border); }
-    .divider-text { font-size: 11px; color: #b0c4a8; white-space: nowrap; }
-    .own-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-    .own-wrap { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color .15s; }
-    .own-wrap:focus-within { border-color: var(--green); }
-    .own-textarea { width: 100%; min-height: 40px; border: none; outline: none; resize: none; font-family: var(--font-body); font-size: 14px; line-height: 1.65; color: var(--text); background: transparent; padding: 8px 14px; }
-    .own-textarea::placeholder { color: #b0c4a8; }
-    .own-char { font-size: 11px; color: var(--muted); padding: 0 14px 10px; text-align: right; }
-    .btn-google { width: 100%; padding: 16px; border-radius: var(--radius); border: none; background: var(--green); font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: background .15s; box-shadow: 0 2px 8px rgba(61,122,37,.3); }
+    .body { width: 100%; max-width: 440px; padding: 16px 16px 0; display: flex; flex-direction: column; gap: 14px; }
+    .prompt { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.55; }
+    .prompt-time { display: inline-block; background: var(--yellow-pale); color: var(--yellow-deep); padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-top: 6px; }
+
+    .reviews { display: flex; flex-direction: column; gap: 10px; }
+
+    .review-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 14px 15px;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-body);
+      color: var(--text);
+      transition: border-color .15s, background .15s, transform .08s;
+      -webkit-tap-highlight-color: transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      width: 100%;
+    }
+    .review-card:active { transform: scale(.99); }
+    .review-card[data-sentiment="positive"] { border-left: 4px solid #3d7a25; }
+    .review-card[data-sentiment="neutral"]  { border-left: 4px solid #c9951a; }
+    .review-card[data-sentiment="critical"] { border-left: 4px solid #c0392b; }
+    .review-card.copied { border-color: var(--success); background: rgba(58,158,106,.06); }
+
+    .review-header { display: flex; align-items: center; gap: 8px; }
+    .review-emoji { font-size: 16px; line-height: 1; }
+    .review-label { flex: 1; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .review-hint { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); opacity: .75; transition: color .15s, opacity .15s; }
+    .review-card.copied .review-hint { color: var(--success); opacity: 1; }
+
+    .review-text { font-size: 14px; line-height: 1.6; color: var(--text); }
+    .review-text.loading { color: var(--muted); font-style: italic; }
+
+    .btn-google { width: 100%; padding: 16px; border-radius: var(--radius); border: none; background: var(--green); font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: background .15s; box-shadow: 0 2px 8px rgba(61,122,37,.3); margin-top: 4px; }
     .btn-google:active { background: var(--green-dark); }
     .g-svg { width: 18px; height: 18px; flex-shrink: 0; }
     .footer { margin-top: 8px; font-size: 12px; font-weight: 500; color: var(--green-dark); text-align: center; opacity: .85; }
@@ -88,8 +88,6 @@
       10%  { transform: translate(var(--x1),var(--y1)) scale(var(--s1)) rotate(var(--spin1)); opacity: 1; animation-timing-function: cubic-bezier(.37,0,.63,1); }
       100% { transform: translate(var(--x2),var(--fall-dist)) scale(var(--s2)) rotate(var(--spin2)); opacity: 0; }
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
   </style>
 </head>
@@ -102,52 +100,41 @@
     <div class="hero-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span id="last-star">★</span></div>
   </div>
   <div class="body">
-    <p class="prompt">Hope you enjoyed your visit.<br>Tell us how it was — we'll write the review for you.</p>
-    <div class="sentiment-box">
-      <p class="sentiment-title">How was your egg-sperience?</p>
-      <div class="slider-wrap">
-        <div class="slider-track"></div>
-        <input type="range" min="0" max="100" value="0" class="slider-input" id="sentiment-slider"
-          oninput="onSliderMove(this.value)"
-          onchange="onSliderSettle(this.value)"
-          aria-label="Sentiment from positive to critical" />
-      </div>
-      <div class="slider-labels">
-        <span>😊 Positive</span>
-        <span>😐 Neutral</span>
-        <span>😞 Critical</span>
-      </div>
-      <div class="sentiment-badge"><span id="sbadge"></span></div>
-    </div>
-    <div class="ai-box">
-      <div class="ai-header">
-        <div class="ai-dot" id="ai-dot"></div>
-        <span class="ai-label">Generated Review</span>
-      </div>
-      <div class="ai-body">
-        <div class="ai-text loading" id="ai-text">Cracking open your review…</div>
-        <div class="ai-actions">
-          <button class="btn-regen" id="regen-btn" onclick="generateReview()" disabled>
-            <span id="regen-icon">↻</span><span>New one</span>
-          </button>
-          <button class="btn-copy-ai" id="copy-ai-btn" onclick="copyAI()" disabled>
-            <span>Copy review</span>
-          </button>
+    <p class="prompt">
+      Hope you enjoyed your visit.<br>
+      Pick the review that fits and paste it on Google.
+      <span class="prompt-time">It only takes 7 seconds</span>
+    </p>
+
+    <div class="reviews">
+      <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy positive review">
+        <div class="review-header">
+          <span class="review-emoji">😊</span>
+          <span class="review-label">Loved it</span>
+          <span class="review-hint">Tap to copy</span>
         </div>
-      </div>
+        <p class="review-text loading" data-role="text">Writing…</p>
+      </button>
+
+      <button class="review-card" data-sentiment="neutral" onclick="copyCard(this)" aria-label="Copy neutral review">
+        <div class="review-header">
+          <span class="review-emoji">😐</span>
+          <span class="review-label">It was okay</span>
+          <span class="review-hint">Tap to copy</span>
+        </div>
+        <p class="review-text loading" data-role="text">Writing…</p>
+      </button>
+
+      <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy critical review">
+        <div class="review-header">
+          <span class="review-emoji">😞</span>
+          <span class="review-label">Could be better</span>
+          <span class="review-hint">Tap to copy</span>
+        </div>
+        <p class="review-text loading" data-role="text">Writing…</p>
+      </button>
     </div>
-    <div class="divider">
-      <div class="divider-line"></div>
-      <span class="divider-text">or write your own</span>
-      <div class="divider-line"></div>
-    </div>
-    <span class="own-label">Write your own</span>
-    <div class="own-wrap">
-      <textarea class="own-textarea" id="own-review"
-        placeholder="Tell us about your egg-sperience in your own words…"
-        maxlength="500" oninput="onOwnInput(this)"></textarea>
-      <div class="own-char" id="char-count">0 / 500</div>
-    </div>
+
     <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJN9euszy_wjsRlXF4rxXnmpo" target="_blank" rel="noopener">
       <svg class="g-svg" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57C21.36 18.01 22.56 15.36 22.56 12.25z" fill="#4285F4"/>
@@ -157,6 +144,7 @@
       </svg>
       Open Google Reviews
     </a>
+
     <p class="footer"><span class="footer-egg">🍳</span> Powered by Tap2Loop &nbsp;·&nbsp; takes 10 seconds<span class="footer-egg">🍳</span></p>
   </div>
 </div>
@@ -227,7 +215,6 @@
     'Classic Cold Coffee with Whey Protein'
   ];
 
-  // Kept as a prompt-level deterrent. The real enforcement is sanitizeReview() below.
   const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, eggcellent, eggular, egg-citing, egg-sperience, eggsellent, egg pun, legit, honestly, literally, basically, totally";
 
   const FALLBACK = {
@@ -251,48 +238,9 @@
     ]
   };
 
-  const COLORS = {
-    positive: { dot: '#3d7a25', badge: 'rgba(61,122,37,.12)', text: '#3d7a25', label: '😊 Positive' },
-    neutral:  { dot: '#c9951a', badge: 'rgba(201,149,26,.12)', text: '#b8860b', label: '😐 Neutral'  },
-    critical: { dot: '#c0392b', badge: 'rgba(192,57,43,.12)',  text: '#c0392b', label: '😞 Critical' }
-  };
-
-  let currentText = '', currentSentiment = 'positive', debounce = null;
-  const genCounts = { positive: 0, neutral: 0, critical: 0 };
-  const MAX_GEN = 12;
-
-  function getSentiment(v) { return v <= 33 ? 'positive' : v <= 66 ? 'neutral' : 'critical'; }
-
-  function onSliderMove(v) {
-    const s = getSentiment(v);
-    const c = COLORS[s];
-    const badge = document.getElementById('sbadge');
-    badge.textContent = c.label;
-    badge.style.cssText = `color:${c.text};background:${c.badge}`;
-    document.getElementById('ai-dot').style.background = c.dot;
-  }
-
-  function onSliderSettle(v) {
-    const s = getSentiment(v);
-    if (s === currentSentiment) return;
-    currentSentiment = s;
-    clearTimeout(debounce);
-    debounce = setTimeout(generateReview, 300);
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    onSliderMove(0);
-    generateReview();
-  });
-
-  // ── SANITIZER: runs on every review (AI or fallback). Deterministic. ──
-  //   1. Replace every spelling variant of egg puns with a plain word.
-  //   2. Strip casual filler words that leak from "sound like a real person".
-  //   3. Fix capitalization and stray spaces.
+  // ── Sanitizer: deterministic filter for puns and filler that leaks past the prompt. ──
   function sanitizeReview(text) {
     let s = String(text || '');
-
-    // Egg puns → plain English
     s = s.replace(/\begg[\s-]?cellent\b/gi, 'excellent');
     s = s.replace(/\begg[\s-]?sellent\b/gi, 'excellent');
     s = s.replace(/\begg[\s-]?celent\b/gi, 'excellent');
@@ -301,18 +249,12 @@
     s = s.replace(/\begg[\s-]?perience\b/gi, 'experience');
     s = s.replace(/\beggular\b/gi, 'great');
     s = s.replace(/\begg[\s-]?tastic\b/gi, 'fantastic');
-
-    // Casual filler — remove the word and any trailing space
     s = s.replace(/\b(legit|honestly|literally|basically|totally|lowkey|low-key|deadass)\b[\s,]*/gi, '');
-
-    // Cleanup: collapse spaces, remove space before punctuation, fix capitalization
     s = s.replace(/\s+/g, ' ').trim();
     s = s.replace(/\s+([.,!?])/g, '$1');
     s = s.replace(/([.,!?])\s*([.,!?])+/g, '$1');
     s = s.replace(/^\s*[,;:.]\s*/, '');
-    // Capitalize start of every sentence
     s = s.replace(/(^|[.!?]\s+)([a-z])/g, (m, p1, p2) => p1 + p2.toUpperCase());
-
     return s.trim();
   }
 
@@ -326,20 +268,14 @@
     return s;
   }
 
-  // Final pipeline: trim → sanitize → trim again (in case sanitize broke length)
   function processReview(raw) {
     return trimReview(sanitizeReview(trimReview(raw)));
   }
 
-  async function generateReview() {
-    if (genCounts[currentSentiment] >= MAX_GEN) { useFallback(); return; }
-    genCounts[currentSentiment]++;
-    setLoading(true);
-
-    try {
-      const focus = FOCUS_DISHES[Math.floor(Math.random() * FOCUS_DISHES.length)];
-
-      const rules = `${SENTIMENT_RULES[currentSentiment]}
+  // ── Fetch one review for a given sentiment. Returns text or throws. ──
+  async function fetchReview(sentiment) {
+    const focus = FOCUS_DISHES[Math.floor(Math.random() * FOCUS_DISHES.length)];
+    const rules = `${SENTIMENT_RULES[sentiment]}
 Write about this specific item: ${focus}.
 Hard limit: 2 sentences, maximum 45 words.
 Use at most one other detail from the menu. Do not list multiple features.
@@ -349,73 +285,76 @@ Use plain, specific language. No filler words, no slang.
 Do not use egg puns or wordplay.
 No hashtags. Return ONLY the review text.`;
 
-      const res = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules })
-      });
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      if (!data.review) throw new Error();
-      currentText = processReview(data.review);
-      setAIText(currentText);
-    } catch(e) { useFallback(); }
-    setLoading(false);
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules })
+    });
+    if (!res.ok) throw new Error('worker ' + res.status);
+    const data = await res.json();
+    if (!data.review) throw new Error('empty');
+    return processReview(data.review);
   }
 
-  function useFallback() {
-    const pool = FALLBACK[currentSentiment];
-    const t = processReview(pool[Math.floor(Math.random() * pool.length)]);
-    currentText = t; setAIText(t); setLoading(false);
+  function setCardText(sentiment, text) {
+    const card = document.querySelector(`.review-card[data-sentiment="${sentiment}"]`);
+    if (!card) return;
+    const el = card.querySelector('[data-role="text"]');
+    el.textContent = text;
+    el.classList.remove('loading');
   }
 
-  function setLoading(on) {
-    const el = document.getElementById('ai-text');
-    const rb = document.getElementById('regen-btn');
-    const cb = document.getElementById('copy-ai-btn');
-    if (on) {
-      el.textContent = 'Cracking open your review…';
-      el.classList.add('loading');
-      rb.disabled = true; cb.disabled = true;
-      const ic = document.getElementById('regen-icon');
-      if (ic) ic.outerHTML = '<span class="spinner" id="regen-icon"></span>';
-    } else {
-      el.classList.remove('loading');
-      rb.disabled = false; cb.disabled = false;
-      const ic = document.getElementById('regen-icon');
-      if (ic && ic.classList.contains('spinner')) ic.outerHTML = '<span id="regen-icon">↻</span>';
-    }
+  function getFallback(sentiment) {
+    const pool = FALLBACK[sentiment];
+    return processReview(pool[Math.floor(Math.random() * pool.length)]);
   }
 
-  function setAIText(t) {
-    const el = document.getElementById('ai-text');
-    el.textContent = t; el.classList.remove('loading');
+  // ── Generate all three in parallel. Each card resolves independently. ──
+  async function generateAll() {
+    const sentiments = ['positive', 'neutral', 'critical'];
+    await Promise.all(sentiments.map(async (s) => {
+      try {
+        const text = await fetchReview(s);
+        setCardText(s, text);
+      } catch (e) {
+        setCardText(s, getFallback(s));
+      }
+    }));
   }
 
-  function copyAI() {
-    const own = document.getElementById('own-review').value.trim();
-    copyText(own || currentText, document.getElementById('copy-ai-btn'));
-  }
+  // ── Tap-to-copy per card. ──
+  function copyCard(cardEl) {
+    const el = cardEl.querySelector('[data-role="text"]');
+    if (!el || el.classList.contains('loading')) return;
+    const text = el.textContent.trim();
+    if (!text || text === 'Writing…') return;
 
-  function onOwnInput(el) {
-    document.getElementById('char-count').textContent = el.value.length + ' / 500';
-  }
+    const hint = cardEl.querySelector('.review-hint');
+    const origHint = hint.textContent;
 
-  function copyText(text, btn) {
-    const orig = btn.innerHTML;
     const done = () => {
-      btn.classList.add('copied'); btn.innerHTML = '<span>Copied!</span>';
+      cardEl.classList.add('copied');
+      hint.textContent = '✓ Copied';
       showToast('Copied — tap Open Google Reviews and paste');
-      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 3000);
+      setTimeout(() => {
+        cardEl.classList.remove('copied');
+        hint.textContent = origHint;
+      }, 3000);
     };
-    navigator.clipboard ? navigator.clipboard.writeText(text).then(done).catch(() => fbCopy(text, done)) : fbCopy(text, done);
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fbCopy(text, done));
+    } else {
+      fbCopy(text, done);
+    }
   }
 
   function fbCopy(text, cb) {
     const ta = document.createElement('textarea');
     ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
     document.body.appendChild(ta); ta.focus(); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta); cb();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta); cb();
   }
 
   function showToast(msg) {
@@ -484,7 +423,10 @@ No hashtags. Return ONLY the review text.`;
     setTimeout(() => { layer.innerHTML = ''; }, (emitWindow + 4.5) * 1000);
   }
 
-  requestAnimationFrame(() => requestAnimationFrame(runBurst));
+  window.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(() => requestAnimationFrame(runBurst));
+    generateAll();
+  });
 </script>
 </body>
 </html>
