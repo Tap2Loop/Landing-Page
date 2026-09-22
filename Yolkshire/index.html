@@ -43,7 +43,6 @@
     }
 
     .prompt { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.55; }
-    .prompt-time { display: inline-block; background: var(--yellow-pale); color: var(--yellow-deep); padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-top: 6px; }
 
     .reviews { display: flex; flex-direction: column; gap: 10px; }
 
@@ -129,16 +128,13 @@
       <img id="hero-origin" src="../assets/yolk_shire_logo_cropped.png" alt="Yolkshire" />
     </div>
 
-    <p class="prompt">
-      Pick the review that fits and paste it on Google.
-      <span class="prompt-time">It only takes 7 seconds</span>
-    </p>
+    <p class="prompt">Pick the review that fits and paste it on Google.</p>
 
     <div class="reviews">
       <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy positive review">
         <div class="review-header">
           <span class="review-emoji">😊</span>
-          <span class="review-label">Positive</span>
+          <span class="review-label">Loved it</span>
           <span class="review-hint">Tap to copy</span>
         </div>
         <p class="review-text loading" data-role="text">Writing…</p>
@@ -147,7 +143,7 @@
       <button class="review-card" data-sentiment="neutral" onclick="copyCard(this)" aria-label="Copy neutral review">
         <div class="review-header">
           <span class="review-emoji">😐</span>
-          <span class="review-label">Balanced</span>
+          <span class="review-label">It was okay</span>
           <span class="review-hint">Tap to copy</span>
         </div>
         <p class="review-text loading" data-role="text">Writing…</p>
@@ -156,7 +152,7 @@
       <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy critical review">
         <div class="review-header">
           <span class="review-emoji">😞</span>
-          <span class="review-label">Critical</span>
+          <span class="review-label">Could be better</span>
           <span class="review-hint">Tap to copy</span>
         </div>
         <p class="review-text loading" data-role="text">Writing…</p>
@@ -178,7 +174,7 @@
       Open Google Reviews
     </a>
 
-    <p class="footer"><span class="footer-egg">🍳</span> Powered by Tap2Loop &nbsp;·&nbsp; takes 10 seconds<span class="footer-egg">🍳</span></p>
+    <p class="footer"><span class="footer-egg">🍳</span> Powered by Tap2Loop<span class="footer-egg">🍳</span></p>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -190,84 +186,56 @@
     8 outlets across Pune. Open 7:30am to 11pm daily.
     Uses 100% farm fresh eggs. Price range: ₹30 to ₹350. Affordable, great value.
 
-    HEALTHY AND HIGH-PROTEIN dishes:
-    - High Protein Millet Salad with Grilled Paneer (₹280)
-    - Low Calorie Grilled Chicken and Zucchini Salad (₹300)
-    - Low-Carb Chicken Stroganoff (₹320)
-    - Grilled Chicken Breast (₹200)
-    - Omelette Florentine with spinach (₹290)
-    - Boiled Egg Chaat (₹120)
-    - Green Smoothie with avocado, spinach, basil (₹250)
-    - Classic Cold Coffee with Whey Protein add-on
-    - Eggs Benedict (₹280)
-    - Shakshuka (₹290)
-    - Turkish Eggs (₹260)
-    - Make it Egg White option available on most dishes
-
-    SIGNATURE dishes:
-    - Yolkshire Special English Breakfast (₹310)
-    - Bacon and Eggs (₹340)
-    - Peri-Peri Omelette (₹310)
-    - Italian Reve Omelette (₹310)
-    - Mexican Fajita Scramble (₹220)
-    - Parsi Akuri (₹190)
-    - Swadeshi Breakfast (₹290)
-    - Yolkshire Eggwich (₹210)
-    - Burnt Basque Cheesecake (₹280)
+    Menu spans healthy high-protein dishes (salads, grilled chicken, egg-based breakfasts) and signature egg preparations.
+    Egg White option available on most dishes. Vegetarian options available.
 
     VIBE: Casual, fun, neighbourhood feel. Young crowd, fitness-conscious professionals, families.
     KEY MESSAGE: Eggs are nature's best protein source. Yolkshire makes healthy eating genuinely delicious.
   `;
 
   const SENTIMENT_RULES = {
-    positive: `Write a genuinely positive review. Pick ONE specific dish or drink from the menu and mention it by name. Emphasise the protein content, freshness, healthy angle, or great value. 2 sentences max. No dashes or hyphens.`,
-    neutral:  `Write a balanced review. Mention one specific dish by name. Acknowledge the healthy concept and protein-rich menu but note something that was just okay like service speed, portion size, or ambience. Honest and measured. 2 sentences max. No dashes or hyphens.`,
-    critical: `Write constructive critical feedback. Mention something specific. Acknowledge the healthy high-protein concept positively while pointing out one clear issue like wait time, portion size, or consistency. Fair and not harsh. 2 sentences max. No dashes or hyphens.`
+    positive: `Write a genuinely positive review. Focus on the quality of the food, freshness, healthy angle, portion size, or value. Sound enthusiastic and genuine. 2 sentences max. No dashes or hyphens.`,
+    neutral:  `Write a balanced review. Acknowledge what worked well (freshness, healthy concept, protein content) but note one thing that was just okay like service speed, portion size, or consistency. Honest and measured. 2 sentences max. No dashes or hyphens.`,
+    critical: `Write constructive critical feedback. Acknowledge the healthy concept and food quality positively while pointing out one clear issue like wait time, portion size, or inconsistency. Fair and not harsh. 2 sentences max. No dashes or hyphens.`
   };
 
-  const FOCUS_DISHES = [
-    'Yolkshire Special English Breakfast',
-    'Bacon and Eggs',
-    'Peri-Peri Omelette',
-    'Italian Reve Omelette',
-    'Mexican Fajita Scramble',
-    'Parsi Akuri',
-    'Swadeshi Breakfast',
-    'Yolkshire Eggwich',
-    'Burnt Basque Cheesecake',
-    'Eggs Benedict',
-    'Shakshuka',
-    'Turkish Eggs',
-    'Omelette Florentine',
-    'Boiled Egg Chaat',
-    'High Protein Millet Salad with Grilled Paneer',
-    'Low Calorie Grilled Chicken and Zucchini Salad',
-    'Low-Carb Chicken Stroganoff',
-    'Grilled Chicken Breast',
-    'Green Smoothie',
-    'Classic Cold Coffee with Whey Protein'
+  // ── Random aspect per generation. Same variety mechanism as before, but
+  //    shifted from "which dish" to "which quality of the experience." ──
+  const FOCUS_ASPECTS = [
+    'the plating and presentation',
+    'the portion size and quantity',
+    'how fresh the ingredients tasted',
+    'the protein content and how filling it was',
+    'the value for money',
+    'the speed of service',
+    'the balance of flavours',
+    'how the food was cooked',
+    'the healthy options available',
+    'the overall dining experience',
+    'how light yet filling the meal was',
+    'the quality of ingredients'
   ];
 
-  const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, eggcellent, eggular, egg-citing, egg-sperience, eggsellent, egg pun, legit, honestly, literally, basically, totally";
+  const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, eggcellent, eggular, egg-citing, egg-sperience, eggsellent, egg pun, legit, honestly, literally, basically, totally, Eggs Benedict, Shakshuka, Turkish Eggs, Parsi Akuri, Swadeshi Breakfast, Eggwich, Burnt Basque Cheesecake, Fajita Scramble, Peri-Peri Omelette, Florentine, Millet Salad, Stroganoff";
 
   const FALLBACK = {
     positive: [
-      "The Parsi Akuri was rich and perfectly spiced, exactly what I needed before a long day. Great value at this price and I left feeling properly full.",
-      "Tried the Turkish Eggs for the first time and it was a proper treat. Creamy yogurt, perfectly poached eggs, and I felt full without feeling heavy.",
-      "Yolkshire Special English Breakfast is worth every rupee. Big portion, fresh ingredients, and the eggs were cooked exactly right. My new weekend ritual.",
-      "The Burnt Basque Cheesecake is dangerously good. Rich, creamy, and the perfect way to end a solid breakfast. Will absolutely be back for this one."
+      "The food was really well made and you can tell they care about quality. High in protein, generous portions, and everything tasted fresh. Exactly what I needed.",
+      "Everything came out hot and well presented. Portions were generous and it kept me full through the afternoon. Great value for what you get.",
+      "Really enjoyed the meal. Fresh ingredients, solid protein content, and the plating showed real attention to detail. Will definitely be back.",
+      "A breakfast that actually tastes healthy without being boring. Generous portions, good protein, and clearly fresh ingredients. Perfect start to the day."
     ],
     neutral: [
-      "Ordered the Shakshuka and it was well made, though the portion felt a bit small for the price. The concept is solid and I would try other dishes next time.",
-      "The Eggs Benedict was fine, nothing exceptional but nothing wrong either. Service was friendly and the place has a nice casual feel.",
-      "Had the Peri-Peri Omelette. Flavours were good but it arrived slightly lukewarm. Decent breakfast overall, just not a standout visit.",
-      "Yolkshire Eggwich was tasty enough. Prices are fair and the vibe is relaxed. Good option for a quick morning bite."
+      "Food was decent but the portion felt a bit small for the price. The healthy concept is good and the ingredients seemed fresh. Nothing really stood out either way.",
+      "The meal was fine, nothing exceptional but nothing wrong either. Service was friendly and the place has a nice casual feel. Reasonable spot for a healthy breakfast.",
+      "Flavours were good but the food arrived slightly lukewarm. Decent overall, just not a standout visit. The protein focus is a nice touch though.",
+      "Decent meal with fair prices and a relaxed vibe. The healthy angle comes through but the experience was fairly standard for this price point."
     ],
     critical: [
-      "The Swadeshi Breakfast tasted good but took a while to arrive during a busy morning. Worth tightening up the service speed on weekends.",
-      "Ordered the Mexican Fajita Scramble and it was decent, though a bit under seasoned for my taste. The overall concept is great and the place has potential.",
-      "Our table waited longer than expected and the Omelette Florentine came out a little dry. Staff were apologetic and the rest of the meal was fine.",
-      "The Boiled Egg Chaat was nice but the wait was longer than I would like on a weekday morning. Food quality is there, service just needs to catch up."
+      "The food tasted good but took a while to arrive during a busy morning. Worth tightening up the service speed on weekends. The healthy concept itself is solid.",
+      "Portion sizes felt small for the price and one item came out under seasoned. The overall concept is great and the place has potential, just needs more consistency.",
+      "Our table waited longer than expected and one dish came out a little dry. Staff were apologetic and the rest of the meal was fine. Food quality is there, service needs to catch up.",
+      "The wait was longer than I would like on a weekday morning. Food quality is good and the healthy angle is real, but the experience could be smoother during peak hours."
     ]
   };
 
@@ -305,11 +273,11 @@
   }
 
   async function fetchReview(sentiment) {
-    const focus = FOCUS_DISHES[Math.floor(Math.random() * FOCUS_DISHES.length)];
+    const aspect = FOCUS_ASPECTS[Math.floor(Math.random() * FOCUS_ASPECTS.length)];
     const rules = `${SENTIMENT_RULES[sentiment]}
-Write about this specific item: ${focus}.
+Focus on this aspect of the experience: ${aspect}.
 Hard limit: 2 sentences, maximum 45 words.
-Use at most one other detail from the menu. Do not list multiple features.
+Do not mention any specific dish names from the menu. Refer to the food generically (for example "the food", "the meal", "the portions", "the plating").
 Do not quote exact prices.
 Never use these phrases: ${BANNED}.
 Use plain, specific language. No filler words, no slang.
