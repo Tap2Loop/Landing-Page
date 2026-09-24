@@ -47,7 +47,8 @@
     .reviews { display: flex; flex-direction: column; gap: 10px; }
 
     .review-card {
-      background: var(--white);
+      --card-bg: var(--white);
+      background: var(--card-bg);
       border: 1.5px solid var(--border);
       border-radius: var(--radius);
       padding: 14px 14px 15px;
@@ -63,10 +64,19 @@
       width: 100%;
     }
     .review-card:active { transform: scale(.99); }
-    .review-card[data-sentiment="positive"] { border-left: 4px solid #3d7a25; }
-    .review-card[data-sentiment="neutral"]  { border-left: 4px solid #c9951a; }
-    .review-card[data-sentiment="critical"] { border-left: 4px solid #c0392b; }
-    .review-card.copied { border-color: var(--success); background: rgba(58,158,106,.06); }
+
+    .review-card[data-sentiment="positive"] {
+      --card-bg: #f3faec;
+      border-left: 4px solid #3d7a25;
+    }
+    .review-card[data-sentiment="critical"] {
+      --card-bg: #fdf3f1;
+      border-left: 4px solid #c0392b;
+    }
+    .review-card.copied {
+      --card-bg: rgba(58,158,106,.13);
+      border-color: var(--success);
+    }
 
     .review-header { display: flex; align-items: center; gap: 8px; }
     .review-emoji { font-size: 16px; line-height: 1; }
@@ -140,15 +150,6 @@
         <p class="review-text loading" data-role="text">Writing…</p>
       </button>
 
-      <button class="review-card" data-sentiment="neutral" onclick="copyCard(this)" aria-label="Copy neutral review">
-        <div class="review-header">
-          <span class="review-emoji">😐</span>
-          <span class="review-label">Balanced</span>
-          <span class="review-hint">Tap to copy</span>
-        </div>
-        <p class="review-text loading" data-role="text">Writing…</p>
-      </button>
-
       <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy critical review">
         <div class="review-header">
           <span class="review-emoji">😞</span>
@@ -195,12 +196,10 @@
 
   const SENTIMENT_RULES = {
     positive: `Write a genuinely positive review. Focus on the quality of the food, freshness, healthy angle, portion size, or value. Sound enthusiastic and genuine. 2 sentences max. No dashes or hyphens.`,
-    neutral:  `Write a balanced review. Acknowledge what worked well (freshness, healthy concept, protein content) but note one thing that was just okay like service speed, portion size, or consistency. Honest and measured. 2 sentences max. No dashes or hyphens.`,
-    critical: `Write constructive critical feedback. Acknowledge the healthy concept and food quality positively while pointing out one clear issue like wait time, portion size, or inconsistency. Fair and not harsh. 2 sentences max. No dashes or hyphens.`
+
+    critical: `Write constructive critical feedback in two parts. Start with the issue or thing that fell short (wait time, portion size, consistency, etc.) and then close on a positive note acknowledging what works well (healthy concept, food quality, protein focus, freshness). The overall review should feel fair and not harsh. 2 sentences max. No dashes or hyphens.`
   };
 
-  // ── Random aspect per generation. Same variety mechanism as before, but
-  //    shifted from "which dish" to "which quality of the experience." ──
   const FOCUS_ASPECTS = [
     'the plating and presentation',
     'the portion size and quantity',
@@ -225,17 +224,11 @@
       "Really enjoyed the meal. Fresh ingredients, solid protein content, and the plating showed real attention to detail. Will definitely be back.",
       "A breakfast that actually tastes healthy without being boring. Generous portions, good protein, and clearly fresh ingredients. Perfect start to the day."
     ],
-    neutral: [
-      "Food was decent but the portion felt a bit small for the price. The healthy concept is good and the ingredients seemed fresh. Nothing really stood out either way.",
-      "The meal was fine, nothing exceptional but nothing wrong either. Service was friendly and the place has a nice casual feel. Reasonable spot for a healthy breakfast.",
-      "Flavours were good but the food arrived slightly lukewarm. Decent overall, just not a standout visit. The protein focus is a nice touch though.",
-      "Decent meal with fair prices and a relaxed vibe. The healthy angle comes through but the experience was fairly standard for this price point."
-    ],
     critical: [
-      "The food tasted good but took a while to arrive during a busy morning. Worth tightening up the service speed on weekends. The healthy concept itself is solid.",
-      "Portion sizes felt small for the price and one item came out under seasoned. The overall concept is great and the place has potential, just needs more consistency.",
-      "Our table waited longer than expected and one dish came out a little dry. Staff were apologetic and the rest of the meal was fine. Food quality is there, service needs to catch up.",
-      "The wait was longer than I would like on a weekday morning. Food quality is good and the healthy angle is real, but the experience could be smoother during peak hours."
+      "The wait during the morning rush was longer than I expected, and one dish came out a little dry. That said, the ingredients were clearly fresh and the healthy concept is genuinely solid.",
+      "Portion sizes felt a bit small for the price on this visit, and consistency could be better. Still, the protein focus is real and the food quality makes it worth another try.",
+      "Service was stretched on a busy weekend and our order took a while. The food itself was well made though, and the fresh, healthy angle really does come through.",
+      "One dish was slightly under seasoned and the plating felt rushed. The overall concept is strong though, and when it lands, the food is genuinely good and filling."
     ]
   };
 
@@ -326,7 +319,7 @@ No hashtags. Return ONLY the review text.`;
     isGenerating = true;
     setRegenBusy(true);
 
-    const sentiments = ['positive', 'neutral', 'critical'];
+    const sentiments = ['positive', 'critical'];
     await Promise.all(sentiments.map(async (s) => {
       try {
         const text = await fetchReview(s);
@@ -342,7 +335,7 @@ No hashtags. Return ONLY the review text.`;
 
   async function regenerateAll() {
     if (isGenerating) return;
-    ['positive', 'neutral', 'critical'].forEach(setCardLoading);
+    ['positive', 'critical'].forEach(setCardLoading);
     await generateAll();
   }
 
