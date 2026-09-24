@@ -336,11 +336,12 @@ No hashtags. Return ONLY the review text.`;
     const sentiments = ['positive', 'critical'];
     await Promise.all(sentiments.map(async (s) => {
       try {
-        const text = await fetchReview(s);
-        setCardText(s, text);
-      } catch (e) {
-        setCardText(s, getFallback(s));
-      }
+  const text = await fetchReview(s);
+  setCardText(s, text);
+} catch (e) {
+  console.error('Worker failed for', s, e.message);
+  setCardText(s, getFallback(s));
+}
     }));
 
     isGenerating = false;
