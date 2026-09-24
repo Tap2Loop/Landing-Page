@@ -43,6 +43,16 @@
     }
 
     .prompt { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.55; }
+    .prompt-time {
+      display: inline-block;
+      background: var(--yellow-pale);
+      color: var(--yellow-deep);
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
 
     .reviews { display: flex; flex-direction: column; gap: 10px; }
 
@@ -138,7 +148,11 @@
       <img id="hero-origin" src="../assets/yolk_shire_logo_cropped.png" alt="Yolkshire" />
     </div>
 
-    <p class="prompt">Pick the review that fits and paste it on Google.</p>
+    <p class="prompt">
+      Hope you enjoyed your visit.<br>
+      Pick the review that fits and paste it on Google.
+      <span class="prompt-time">It only takes 4 seconds</span>
+    </p>
 
     <div class="reviews">
       <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy positive review">
@@ -175,7 +189,7 @@
       Open Google Reviews
     </a>
 
-    <p class="footer"><span class="footer-egg">🍳</span> Powered by Tap2Loop <span class="footer-egg">🍳</span></p>
+    <p class="footer"><span class="footer-egg">🍳 </span> Powered by Tap2Loop <span class="footer-egg"> 🍳</span></p>
   </div>
 </div>
 <div class="toast" id="toast"></div>
