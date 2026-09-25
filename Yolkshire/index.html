@@ -189,7 +189,7 @@
       Open Google Reviews
     </a>
 
-    <p class="footer"><span class="footer-egg">🍳 </span> Powered by Tap2Loop <span class="footer-egg"> 🍳</span></p>
+    <p class="footer"><span class="footer-egg">🍳 ⚡️</span> Powered by Tap2Loop <span class="footer-egg">⚡️ 🍳</span></p>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -292,10 +292,10 @@ Do not use egg puns or wordplay.
 No hashtags. Return ONLY the review text.`;
 
     const res = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules })
-    });
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules, sentiment })
+});
     if (!res.ok) throw new Error('worker ' + res.status);
     const data = await res.json();
     if (!data.review) throw new Error('empty');
