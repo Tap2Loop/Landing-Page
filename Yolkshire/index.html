@@ -31,8 +31,9 @@
     }
     html, body { min-height: 100%; background: var(--off); font-family: var(--font-body); color: var(--text); -webkit-font-smoothing: antialiased; }
     .page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 18px 0 56px; }
+    .body { width: 100%; max-width: 440px; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
 
-    .brand-wrap { display: flex; justify-content: center; padding: 0 16px; margin-bottom: 16px; }
+    .brand-mark { display: flex; justify-content: center; margin-bottom: 2px; }
     .brand-mark img {
       width: 90px;
       height: 90px;
@@ -41,7 +42,7 @@
       display: block;
     }
 
-    /* Full-bleed prompt banner — no rounded corners, edge to edge */
+    /* Rounded header box — matches card shape but flat and non-clickable */
     .prompt {
       width: 100%;
       background: var(--green);
@@ -50,11 +51,10 @@
       font-weight: 500;
       text-align: center;
       line-height: 1.5;
-      padding: 14px 24px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
       letter-spacing: .01em;
     }
-
-    .body { width: 100%; max-width: 440px; padding: 16px 16px 0; display: flex; flex-direction: column; gap: 14px; }
 
     .reviews { display: flex; flex-direction: column; gap: 10px; }
 
@@ -128,7 +128,6 @@
     .btn-google:active { background: var(--green-dark); }
     .g-svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    /* Footer with horizontal lines on both sides */
     .footer {
       margin-top: 12px;
       font-size: 12px;
@@ -158,15 +157,13 @@
 <div class="page">
   <div class="burst-layer" id="burst-layer" aria-hidden="true"></div>
 
-  <div class="brand-wrap">
+  <div class="body">
     <div class="brand-mark">
       <img id="hero-origin" src="../assets/yolk_shire_logo_cropped.png" alt="Yolkshire" />
     </div>
-  </div>
 
-  <p class="prompt">Copy the review that matches your experience.</p>
+    <p class="prompt">Copy the review that matches your experience.</p>
 
-  <div class="body">
     <div class="reviews">
       <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy positive review">
         <div class="review-header">
