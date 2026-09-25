@@ -42,8 +42,6 @@
       display: block;
     }
 
-    /* Rounded green header box with yellow border.
-       Font size and padding tightened so the full line fits on one row. */
     .prompt {
       width: 100%;
       background: var(--green);
@@ -262,22 +260,44 @@
     'the pace of the meal from order to table'
   ];
 
+  // ── Random opening style. Prevents the AI defaulting to "The food..." ──
+  const OPENING_STYLES = [
+    'start with a specific action you took (like ordering, walking in, or trying something)',
+    'start with how you felt at the end of the meal',
+    'start with a small concrete moment that stood out',
+    'start with a recommendation or advice to a friend',
+    'start with a comparison to what you expected',
+    'start with what surprised you',
+    'start with the atmosphere or mood of the place',
+    'start with a specific detail you noticed',
+    'start with how the meal fit into your day',
+    'start with why you came back or would come back',
+    'start with what you would tell someone who has never been',
+    'start with a plain observation about something small'
+  ];
+
+  // Explicit ban on generic opener phrases. Comma-separated so it reads naturally.
+  const OPENING_BAN = `Do not start the review with any of these phrases: "The food", "The meal", "The quality", "The portion", "The plating", "The service", "The ambience", "Everything", "Really", "This place", "This spot", "I visited", "We visited", "I had", "We had", "I ordered", "We ordered", "Overall".`;
+
   const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, eggcellent, eggular, egg-citing, egg-sperience, eggsellent, egg pun, legit, honestly, literally, basically, totally, Eggs Benedict, Shakshuka, Turkish Eggs, Parsi Akuri, Swadeshi Breakfast, Eggwich, Burnt Basque Cheesecake, Fajita Scramble, Peri-Peri Omelette, Florentine, Millet Salad, Stroganoff";
 
+  // Fallback reviews rewritten to avoid the "The food..." opener pattern.
   const FALLBACK = {
     positive: [
-      "The food was really well made and you can tell they care about quality. High in protein, generous portions, and everything tasted fresh. Exactly what I needed.",
-      "Everything came out hot and well presented. Portions were generous and it kept me full through the afternoon. Great value for what you get.",
-      "Really enjoyed the meal. Fresh ingredients, solid protein content, and the plating showed real attention to detail. Will definitely be back.",
-      "A breakfast that actually tastes healthy without being boring. Generous portions, good protein, and clearly fresh ingredients. Perfect start to the day."
+      "Left feeling properly full and energetic, which is rare for a breakfast this size. Fresh ingredients, generous portion, and real value for money.",
+      "Took a friend who never eats eggs and they were genuinely impressed. Well cooked, well seasoned, and clearly made with fresh produce.",
+      "Came in for a quick bite and ended up staying longer because the food was that good. Solid protein hit without feeling heavy.",
+      "Simple things done properly here. Well cooked, generous, and the ingredients actually taste fresh. Worth the trip if you are in the area.",
+      "Hard to find a place that makes healthy food this satisfying. Generous portions, real flavour, and it kept me full well past lunch.",
+      "Stopped by on a weekday morning and it was a proper treat. Quick service, fresh food, and the portion size was more than fair."
     ],
     critical: [
-      "The portion size felt small for the price on this visit. Still, the ingredients were clearly fresh and the healthy concept is genuinely solid.",
-      "One dish came out a little under seasoned. That said, the food was well made overall and the protein focus is real.",
-      "The plating felt a bit rushed compared to my last visit. The flavours were still good though, and the fresh, healthy angle comes through.",
-      "The noise level made it hard to have a conversation. The food itself was well prepared and the healthy options are clearly a priority here.",
-      "The bill took a while to arrive after we finished. The meal itself was solid and the food quality is genuinely there.",
-      "The pace felt slow between ordering and eating. Worth tightening up, though the food quality and protein focus make it worth another try."
+      "Waited longer than expected during peak hours, though the food itself was fresh and well made. The healthy concept is genuinely there.",
+      "One dish came out under seasoned, but the rest of the meal was solid. Fresh ingredients and real protein focus are clearly priorities here.",
+      "The plating felt a bit rushed compared to my last visit, though the flavours were still good. Worth another try on a quieter day.",
+      "Noise level made it hard to have a conversation during brunch. Food was well prepared and the healthy options are clearly thought through.",
+      "Bill took a while to arrive after we finished eating. The meal itself was good though, and the food quality holds up.",
+      "Pace felt slow between ordering and eating on a busy morning. Worth tightening up, since the food quality and protein focus are real strengths."
     ]
   };
 
@@ -316,9 +336,12 @@
 
   async function fetchReview(sentiment) {
     const aspect = FOCUS_ASPECTS[Math.floor(Math.random() * FOCUS_ASPECTS.length)];
+    const opening = OPENING_STYLES[Math.floor(Math.random() * OPENING_STYLES.length)];
 
     let rules = `${SENTIMENT_RULES[sentiment]}
 Focus on this aspect of the experience: ${aspect}.
+For sentence structure: ${opening}.
+${OPENING_BAN}
 Hard limit: 2 sentences, maximum 45 words.
 Do not mention any specific dish names from the menu. Refer to the food generically (for example "the food", "the meal", "the portions", "the plating").
 Do not quote exact prices.
