@@ -211,7 +211,7 @@
   const SENTIMENT_RULES = {
     positive: `Write a genuinely positive review. Focus on the quality of the food, freshness, healthy angle, portion size, or value. Sound enthusiastic and genuine. 2 sentences max. No dashes or hyphens.`,
 
-    critical: `Write constructive critical feedback in two parts. Start with the issue or thing that fell short (wait time, portion size, consistency, etc.) and then close on a positive note acknowledging what works well (healthy concept, food quality, protein focus, freshness). The overall review should feel fair and not harsh. 2 sentences max. No dashes or hyphens.`
+    critical: `Write constructive critical feedback in two parts. Start with the issue or thing that fell short and then close on a positive note acknowledging what works well (healthy concept, food quality, protein focus, freshness). The overall review should feel fair and not harsh. 2 sentences max. No dashes or hyphens.`
   };
 
   const FOCUS_ASPECTS = [
@@ -229,6 +229,23 @@
     'the quality of ingredients'
   ];
 
+  // ── Random negative topic for critical reviews. Prevents the AI from
+  //    defaulting to "wait times" every single time. ──
+  const CRITICAL_ISSUES = [
+    'the portion size for the price',
+    'the seasoning on the food',
+    'the plating and presentation',
+    'the food temperature when it arrived',
+    'the consistency compared to the last visit',
+    'the noise level in the cafe',
+    'how long the bill took to arrive',
+    'the variety on the menu',
+    'the friendliness of service',
+    'the wait during peak hours',
+    'the pricing versus portion size',
+    'the pace of the meal from order to table'
+  ];
+
   const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, eggcellent, eggular, egg-citing, egg-sperience, eggsellent, egg pun, legit, honestly, literally, basically, totally, Eggs Benedict, Shakshuka, Turkish Eggs, Parsi Akuri, Swadeshi Breakfast, Eggwich, Burnt Basque Cheesecake, Fajita Scramble, Peri-Peri Omelette, Florentine, Millet Salad, Stroganoff";
 
   const FALLBACK = {
@@ -239,10 +256,12 @@
       "A breakfast that actually tastes healthy without being boring. Generous portions, good protein, and clearly fresh ingredients. Perfect start to the day."
     ],
     critical: [
-      "The wait during the morning rush was longer than I expected, and one dish came out a little dry. That said, the ingredients were clearly fresh and the healthy concept is genuinely solid.",
-      "Portion sizes felt a bit small for the price on this visit, and consistency could be better. Still, the protein focus is real and the food quality makes it worth another try.",
-      "Service was stretched on a busy weekend and our order took a while. The food itself was well made though, and the fresh, healthy angle really does come through.",
-      "One dish was slightly under seasoned and the plating felt rushed. The overall concept is strong though, and when it lands, the food is genuinely good and filling."
+      "The portion size felt small for the price on this visit. Still, the ingredients were clearly fresh and the healthy concept is genuinely solid.",
+      "One dish came out a little under seasoned. That said, the food was well made overall and the protein focus is real.",
+      "The plating felt a bit rushed compared to my last visit. The flavours were still good though, and the fresh, healthy angle comes through.",
+      "The noise level made it hard to have a conversation. The food itself was well prepared and the healthy options are clearly a priority here.",
+      "The bill took a while to arrive after we finished. The meal itself was solid and the food quality is genuinely there.",
+      "The pace felt slow between ordering and eating. Worth tightening up, though the food quality and protein focus make it worth another try."
     ]
   };
 
@@ -281,7 +300,8 @@
 
   async function fetchReview(sentiment) {
     const aspect = FOCUS_ASPECTS[Math.floor(Math.random() * FOCUS_ASPECTS.length)];
-    const rules = `${SENTIMENT_RULES[sentiment]}
+
+    let rules = `${SENTIMENT_RULES[sentiment]}
 Focus on this aspect of the experience: ${aspect}.
 Hard limit: 2 sentences, maximum 45 words.
 Do not mention any specific dish names from the menu. Refer to the food generically (for example "the food", "the meal", "the portions", "the plating").
@@ -291,11 +311,17 @@ Use plain, specific language. No filler words, no slang.
 Do not use egg puns or wordplay.
 No hashtags. Return ONLY the review text.`;
 
+    // For critical reviews, force a specific issue so we don't get "wait times" every time
+    if (sentiment === 'critical') {
+      const issue = CRITICAL_ISSUES[Math.floor(Math.random() * CRITICAL_ISSUES.length)];
+      rules += `\nImportant: open the review with this specific issue: ${issue}. Do not mention any other complaint.`;
+    }
+
     const res = await fetch(WORKER_URL, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules, sentiment })
-});
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules, sentiment })
+    });
     if (!res.ok) throw new Error('worker ' + res.status);
     const data = await res.json();
     if (!data.review) throw new Error('empty');
@@ -336,12 +362,12 @@ No hashtags. Return ONLY the review text.`;
     const sentiments = ['positive', 'critical'];
     await Promise.all(sentiments.map(async (s) => {
       try {
-  const text = await fetchReview(s);
-  setCardText(s, text);
-} catch (e) {
-  console.error('Worker failed for', s, e.message);
-  setCardText(s, getFallback(s));
-}
+        const text = await fetchReview(s);
+        setCardText(s, text);
+      } catch (e) {
+        console.error('Worker failed for', s, e.message);
+        setCardText(s, getFallback(s));
+      }
     }));
 
     isGenerating = false;
