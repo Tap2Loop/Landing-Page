@@ -225,79 +225,103 @@
   `;
 
   const SENTIMENT_RULES = {
-    positive: `Write a genuinely positive review. Focus on the quality of the food, freshness, healthy angle, portion size, or value. Sound enthusiastic and genuine. 2 sentences max. No dashes or hyphens.`,
+    positive: `Write a warm, positive review. Say why the visit worked for you. Focus on the food, freshness, portion, or value. Sound like a real customer, not a food critic.`,
 
-    critical: `Write constructive critical feedback in two parts. Start with the issue or thing that fell short and then close on a positive note acknowledging what works well (healthy concept, food quality, protein focus, freshness). The overall review should feel fair and not harsh. 2 sentences max. No dashes or hyphens.`
+    critical: `Write an honest review. Lead with one thing that didn't work, then close with something that did. Fair, not harsh. Sound like a real customer giving balanced feedback.`
   };
 
   const FOCUS_ASPECTS = [
     'the plating and presentation',
-    'the portion size and quantity',
-    'how fresh the ingredients tasted',
-    'the protein content and how filling it was',
+    'the portion size',
+    'how fresh the food tasted',
+    'how filling the meal was',
     'the value for money',
     'the speed of service',
     'the balance of flavours',
     'how the food was cooked',
-    'the healthy options available',
-    'the overall dining experience',
-    'how light yet filling the meal was',
+    'the healthy options',
+    'the overall visit',
+    'how light the meal felt',
     'the quality of ingredients'
   ];
 
   const CRITICAL_ISSUES = [
     'the portion size for the price',
     'the seasoning on the food',
-    'the plating and presentation',
-    'the food temperature when it arrived',
-    'the consistency compared to the last visit',
-    'the noise level in the cafe',
-    'how long the bill took to arrive',
-    'the variety on the menu',
-    'the friendliness of service',
+    'the plating',
+    'the food temperature',
+    'consistency compared to last visit',
+    'the noise level',
+    'how long the bill took',
+    'the menu variety',
+    'the service friendliness',
     'the wait during peak hours',
-    'the pricing versus portion size',
-    'the pace of the meal from order to table'
+    'the pricing versus portion',
+    'the pace of the meal'
   ];
 
-  // ── Random opening style. Prevents the AI defaulting to "The food..." ──
+  // ── Human opening framings ──
   const OPENING_STYLES = [
-    'start with a specific action you took (like ordering, walking in, or trying something)',
-    'start with how you felt at the end of the meal',
-    'start with a small concrete moment that stood out',
-    'start with a recommendation or advice to a friend',
-    'start with a comparison to what you expected',
-    'start with what surprised you',
-    'start with the atmosphere or mood of the place',
-    'start with a specific detail you noticed',
-    'start with how the meal fit into your day',
-    'start with why you came back or would come back',
-    'start with what you would tell someone who has never been',
-    'start with a plain observation about something small'
+    'what you were doing before you walked in',
+    'the moment you knew how you felt about the place',
+    'something small and specific you noticed',
+    'how you felt walking out',
+    'what you would tell a friend who asked about it',
+    'a simple fact about the visit',
+    'what you expected versus what you got',
+    'how the visit fit into your day',
+    'a passing observation about the room',
+    'whether you would come back',
+    'what you came in for',
+    'a small moment that stood out'
   ];
 
-  // Explicit ban on generic opener phrases. Comma-separated so it reads naturally.
-  const OPENING_BAN = `Do not start the review with any of these phrases: "The food", "The meal", "The quality", "The portion", "The plating", "The service", "The ambience", "Everything", "Really", "This place", "This spot", "I visited", "We visited", "I had", "We had", "I ordered", "We ordered", "Overall".`;
+  // ── Random target length so sentence rhythm varies ──
+  const TARGET_LENGTHS = [
+    'a single short sharp sentence',
+    'two short sentences',
+    'three short sentences, with the last one being the shortest',
+    'one longer sentence with a comma break in the middle',
+    'two sentences, the second noticeably shorter than the first',
+    'two short sentences with a brief pause between them'
+  ];
 
-  const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, eggcellent, eggular, egg-citing, egg-sperience, eggsellent, egg pun, legit, honestly, literally, basically, totally, Eggs Benedict, Shakshuka, Turkish Eggs, Parsi Akuri, Swadeshi Breakfast, Eggwich, Burnt Basque Cheesecake, Fajita Scramble, Peri-Peri Omelette, Florentine, Millet Salad, Stroganoff";
+  // ── Human tone mandate appended to every prompt ──
+  const HUMAN_RULES = `Write like a real person, not a copywriter or food critic.
+- Use contractions throughout (it's, didn't, we're, I've, wouldn't, can't).
+- Vary sentence length. Short punchy sentences are fine.
+- Sound like you're texting a friend, not writing a formal review.
+- One small specific observation beats three general claims.
+- It's okay to hedge a little ("pretty good", "not bad", "kind of quiet", "solid enough").
+- No exclamation marks. No emoji.`;
 
-  // Fallback reviews rewritten to avoid the "The food..." opener pattern.
+  // ── AI/marketing vocabulary banned ──
+  const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, eggcellent, eggular, egg-citing, egg-sperience, eggsellent, egg pun, legit, honestly, literally, basically, totally, fantastic, excellent, amazing, delightful, delicious, satisfying, flavorful, tantalizing, mouthwatering, impeccable, exceptional, outstanding, wonderful, superb, culinary, gastronomic, a must try, definitely, absolutely, incredibly, truly, Eggs Benedict, Shakshuka, Turkish Eggs, Parsi Akuri, Swadeshi Breakfast, Eggwich, Burnt Basque Cheesecake, Fajita Scramble, Peri-Peri Omelette, Florentine, Millet Salad, Stroganoff";
+
+  // Trimmed: kept formulaic openers, removed natural human ones
+  const OPENING_BAN = `Do not start the review with any of these phrases: "The food", "The meal", "The quality", "The portion", "The plating", "The service", "The ambience", "Everything", "Really", "This place", "This spot", "Overall".`;
+
+  // ── Fallbacks rewritten with human rhythm and casual phrasing ──
   const FALLBACK = {
     positive: [
-      "Left feeling properly full and energetic, which is rare for a breakfast this size. Fresh ingredients, generous portion, and real value for money.",
-      "Took a friend who never eats eggs and they were genuinely impressed. Well cooked, well seasoned, and clearly made with fresh produce.",
-      "Came in for a quick bite and ended up staying longer because the food was that good. Solid protein hit without feeling heavy.",
-      "Simple things done properly here. Well cooked, generous, and the ingredients actually taste fresh. Worth the trip if you are in the area.",
-      "Hard to find a place that makes healthy food this satisfying. Generous portions, real flavour, and it kept me full well past lunch.",
-      "Stopped by on a weekday morning and it was a proper treat. Quick service, fresh food, and the portion size was more than fair."
+      "Quick breakfast before work and left properly full. Nice change from the usual.",
+      "Everything came out hot and stayed hot. Portions were solid. No complaints.",
+      "Walked in hungry, walked out happy. Fresh food and a generous plate.",
+      "Didn't expect much from a healthy breakfast place but this surprised me.",
+      "Came for a catch-up with a friend and we both ordered seconds. Worth the trip.",
+      "Simple stuff, done well. Fresh, filling, good value. Will be back.",
+      "Solid food, quick service, no fuss. Exactly what I needed this morning.",
+      "Bit of a line when I walked in but the food made up for it. Fresh and filling."
     ],
     critical: [
-      "Waited longer than expected during peak hours, though the food itself was fresh and well made. The healthy concept is genuinely there.",
-      "One dish came out under seasoned, but the rest of the meal was solid. Fresh ingredients and real protein focus are clearly priorities here.",
-      "The plating felt a bit rushed compared to my last visit, though the flavours were still good. Worth another try on a quieter day.",
-      "Noise level made it hard to have a conversation during brunch. Food was well prepared and the healthy options are clearly thought through.",
-      "Bill took a while to arrive after we finished eating. The meal itself was good though, and the food quality holds up.",
-      "Pace felt slow between ordering and eating on a busy morning. Worth tightening up, since the food quality and protein focus are real strengths."
+      "Waited longer than I'd like during the morning rush. Food was fresh though and worth the wait.",
+      "One plate came out a bit under seasoned. The rest was good and clearly made with fresh stuff.",
+      "Plating felt rushed compared to my last visit. Flavours were still there, so I'll try again.",
+      "Got a bit noisy during brunch and hard to chat. Food itself was well cooked and filling.",
+      "Bill took a while to come after we finished. Meal was solid though, no other complaints.",
+      "Service was slow on a busy morning. Food quality held up, so I'll give it another shot.",
+      "Portion felt small for the price this time. Rest of the meal was fresh and well made.",
+      "Felt a bit rushed through the meal. Not a dealbreaker but worth tightening up."
     ]
   };
 
@@ -324,9 +348,9 @@
     let s = String(t || '').replace(/\s+/g, ' ').trim();
     s = s.replace(/^["'“”‘’]|["'“”‘’]$/g, '').trim();
     const sentences = s.match(/[^.!?]+[.!?]+/g);
-    if (sentences && sentences.length > 2) s = sentences.slice(0, 2).join(' ').trim();
+    if (sentences && sentences.length > 3) s = sentences.slice(0, 3).join(' ').trim();
     const w = s.split(' ');
-    if (w.length > 50) s = w.slice(0, 50).join(' ').replace(/[,;:]$/, '') + '.';
+    if (w.length > 55) s = w.slice(0, 55).join(' ').replace(/[,;:]$/, '') + '.';
     return s;
   }
 
@@ -337,22 +361,24 @@
   async function fetchReview(sentiment) {
     const aspect = FOCUS_ASPECTS[Math.floor(Math.random() * FOCUS_ASPECTS.length)];
     const opening = OPENING_STYLES[Math.floor(Math.random() * OPENING_STYLES.length)];
+    const length = TARGET_LENGTHS[Math.floor(Math.random() * TARGET_LENGTHS.length)];
 
     let rules = `${SENTIMENT_RULES[sentiment]}
-Focus on this aspect of the experience: ${aspect}.
-For sentence structure: ${opening}.
+
+${HUMAN_RULES}
+
+Focus on: ${aspect}.
+Opening frame: start with ${opening}.
+Target length: ${length}.
 ${OPENING_BAN}
-Hard limit: 2 sentences, maximum 45 words.
-Do not mention any specific dish names from the menu. Refer to the food generically (for example "the food", "the meal", "the portions", "the plating").
+Do not name any specific dish from the menu. Refer to food generically.
 Do not quote exact prices.
-Never use these phrases: ${BANNED}.
-Use plain, specific language. No filler words, no slang.
-Do not use egg puns or wordplay.
-No hashtags. Return ONLY the review text.`;
+Never use these words or phrases: ${BANNED}.
+Return ONLY the review text. No preamble, no labels, no quotes.`;
 
     if (sentiment === 'critical') {
       const issue = CRITICAL_ISSUES[Math.floor(Math.random() * CRITICAL_ISSUES.length)];
-      rules += `\nImportant: open the review with this specific issue: ${issue}. Do not mention any other complaint.`;
+      rules += `\nOpen with this specific issue: ${issue}. Do not mention any other complaint.`;
     }
 
     const res = await fetch(WORKER_URL, {
