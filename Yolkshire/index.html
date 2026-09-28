@@ -272,15 +272,15 @@
     'a small moment that stood out'
   ];
 
-  // ── Random target length so sentence rhythm varies ──
-  const TARGET_LENGTHS = [
-    'a single short sharp sentence',
-    'two short sentences',
-    'three short sentences, with the last one being the shortest',
-    'one longer sentence with a comma break in the middle',
-    'two sentences, the second noticeably shorter than the first',
-    'two short sentences with a brief pause between them'
-  ];
+  // ── Random target length. Kept short — real Google reviews are brief. ──
+const TARGET_LENGTHS = [
+  'a single short sentence, under 20 words',
+  'two short sentences, total under 30 words',
+  'two short sentences, the second one shorter',
+  'three very short sentences, total under 30 words',
+  'two short sentences with a comma break in one of them',
+  'two short sentences, total under 35 words'
+];
 
   // ── Human tone mandate appended to every prompt ──
   const HUMAN_RULES = `Write like a real person, not a copywriter or food critic.
