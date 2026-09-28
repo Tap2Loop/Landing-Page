@@ -341,14 +341,37 @@ const TARGET_LENGTHS = [
   }
 
   function trimReview(t) {
-    let s = String(t || '').replace(/\s+/g, ' ').trim();
-    s = s.replace(/^["'“”‘’]|["'“”‘’]$/g, '').trim();
-    const sentences = s.match(/[^.!?]+[.!?]+/g);
-    if (sentences && sentences.length > 3) s = sentences.slice(0, 3).join(' ').trim();
-    const w = s.split(' ');
-    if (w.length > 55) s = w.slice(0, 55).join(' ').replace(/[,;:]$/, '') + '.';
-    return s;
+  let s = String(t || '').replace(/\s+/g, ' ').trim();
+  s = s.replace(/^["'“”‘’]|["'“”‘’]$/g, '').trim();
+  if (!s) return s;
+
+  // Split into sentences on . ! ?
+  const raw = s.match(/[^.!?]+[.!?]+/g);
+  let sentences = raw ? raw.map(x => x.trim()).filter(Boolean) : [s];
+
+  // Hard cap at 3 sentences. If 3 and over 35 words, drop to 2.
+  if (sentences.length > 3) sentences = sentences.slice(0, 3);
+  let combined = sentences.join(' ').trim();
+  let words = combined.split(/\s+/).filter(Boolean);
+
+  if (sentences.length === 3 && words.length > 35) {
+    sentences = sentences.slice(0, 2);
+    combined = sentences.join(' ').trim();
+    words = combined.split(/\s+/).filter(Boolean);
   }
+
+  // Absolute cap: 45 words. Cut cleanly and re-punctuate.
+  if (words.length > 45) {
+    words = words.slice(0, 45);
+    let trimmed = words.join(' ').replace(/[,;:.\-–—]$/, '');
+    if (!/[.!?]$/.test(trimmed)) trimmed += '.';
+    return trimmed;
+  }
+
+  // Ensure the final sentence has punctuation
+  if (combined && !/[.!?]$/.test(combined)) combined += '.';
+  return combined;
+}
 
   function processReview(raw) {
     return trimReview(sanitizeReview(trimReview(raw)));
