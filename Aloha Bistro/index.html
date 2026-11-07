@@ -79,7 +79,6 @@
     }
     .review-card:active { transform: scale(.99); }
 
-    /* Both cards now have a green border */
     .review-card[data-sentiment] {
       --card-bg: #f3faec;
       border-left: 4px solid #3d7a25;
@@ -169,7 +168,6 @@
 
   <div class="body">
     <div class="brand-mark">
-      <!-- Ensure you upload the Aloha logo to this path -->
       <img id="hero-origin" src="../assets/aloha_logo_placeholder.png" alt="Aloha Bistro" onerror="this.style.display='none'" />
     </div>
 
@@ -231,7 +229,6 @@
     Menu spans vegetarian and non-vegetarian options.
   `;
 
-  // Both rules are now purely positive. Option 1 focuses on food, Option 2 focuses on experience.
   const SENTIMENT_RULES = {
     positive: `Write a genuinely positive review. Focus on the taste, quality of the food, sizzlers, pizzas, or pastas. Sound enthusiastic and genuine. 2 sentences max.`,
     
@@ -371,7 +368,8 @@ Return ONLY the review text. No preamble, no labels, no quotes.`;
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules, sentiment })
+      // THIS IS THE CRITICAL FIX: Passing clientId: 'aloha' so it doesn't share a cache with Yolkshire
+      body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules, sentiment, clientId: 'aloha' })
     });
     if (!res.ok) throw new Error('worker ' + res.status);
     const data = await res.json();
@@ -487,7 +485,6 @@ Return ONLY the review text. No preamble, no labels, no quotes.`;
     const originY = rect.top + rect.height * 0.5;
     const vh = window.innerHeight;
     
-    // Stars and sparkles only (no emojis)
     const items = [
       { ch: '★', color: '#f5c800' }, { ch: '★', color: '#f5c800' },
       { ch: '★', color: '#d4a800' }, { ch: '✨', color: null },
