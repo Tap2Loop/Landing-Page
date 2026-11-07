@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Rate your visit — Aloha Bistro</title>
+  <meta name="description" content="Enjoyed your meal? Leave a quick Google review for Aloha Bistro and Sizzlers, Pune." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-dark:  #2D693F;
+      --green:       #2d5a1b;
+      --green-mid:   #4e9a30;
+      --green-light: #eef6e8;
+      --yellow:      #f5c800;
+      --yellow-deep: #d4a800;
+      --yellow-pale: #fffbe6;
+      --white:       #ffffff;
+      --off:         #fdf9e7;
+      --border:      #d8edcc;
+      --muted:       #6b8c5a;
+      --text:        #1e3a10;
+      --success:     #3a9e6a;
+      --radius:      14px;
+      --font-body:   'Inter', -apple-system, sans-serif;
+      --font-brand:  'Lobster', cursive;
+    }
+    html, body { min-height: 100%; background: var(--off); font-family: var(--font-body); color: var(--text); -webkit-font-smoothing: antialiased; }
+    .page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 18px 0 56px; }
+    .body { width: 100%; max-width: 440px; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+
+    .brand-mark { display: flex; justify-content: center; margin-bottom: 2px; }
+    .brand-mark img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .prompt {
+      width: 100%;
+      background: var(--green);
+      color: var(--white);
+      font-size: 12.5px;
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.35;
+      padding: 13px 10px;
+      border-radius: var(--radius);
+      border: 2px solid var(--yellow);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .reviews { display: flex; flex-direction: column; gap: 10px; }
+
+    .review-card {
+      --card-bg: var(--white);
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 14px 15px;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-body);
+      color: var(--text);
+      transition: border-color .15s, background .15s, transform .08s;
+      -webkit-tap-highlight-color: transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      width: 100%;
+    }
+    .review-card:active { transform: scale(.99); }
+
+    .review-card[data-sentiment="positive"] {
+      --card-bg: #f3faec;
+      border-left: 4px solid #3d7a25;
+    }
+    .review-card[data-sentiment="critical"] {
+      --card-bg: #fdf3f1;
+      border-left: 4px solid #c9951a; /* Changed to amber for 'balanced' */
+    }
+    .review-card.copied {
+      --card-bg: rgba(58,158,106,.13);
+      border-color: var(--success);
+    }
+
+    .review-header { display: flex; align-items: center; gap: 8px; }
+    .review-emoji { font-size: 16px; line-height: 1; }
+    .review-label { flex: 1; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .review-hint { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); opacity: .75; transition: color .15s, opacity .15s; }
+    .review-card.copied .review-hint { color: var(--success); opacity: 1; }
+
+    .review-text { font-size: 14px; line-height: 1.6; color: var(--text); }
+    .review-text.loading { color: var(--muted); font-style: italic; }
+
+    .btn-regen-all {
+      width: 100%;
+      padding: 13px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--green-dark);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color .15s, background .15s, color .15s;
+      margin-top: 2px;
+    }
+    .btn-regen-all:active { background: var(--green-light); border-color: var(--green); }
+    .btn-regen-all:disabled { opacity: .55; cursor: not-allowed; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+
+    .btn-google { width: 100%; padding: 16px; border-radius: var(--radius); border: none; background: var(--green); font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: background .15s; box-shadow: 0 2px 8px rgba(61,122,37,.3); margin-top: 4px; }
+    .btn-google:active { background: var(--green-dark); }
+    .g-svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* "Write your own" link styling */
+    .own-review-link {
+      display: block;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: underline;
+      margin-top: 10px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: color .15s;
+    }
+    .own-review-link:active { color: var(--green-dark); }
+
+    .footer {
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--green-dark);
+      opacity: .75;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+    .footer-line { flex: 1; height: 1px; background: var(--green-dark); opacity: .35; }
+
+    .burst-layer { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+    .burst-item { position: absolute; opacity: 0; will-change: transform, opacity; animation-name: burstFall; animation-timing-function: cubic-bezier(.33,.05,.4,1); animation-fill-mode: forwards; }
+    @keyframes burstFall {
+      0%   { transform: translate(0,0) scale(var(--s0)) rotate(0deg); opacity: 0; animation-timing-function: cubic-bezier(.34,1.35,.64,1); }
+      10%  { transform: translate(var(--x1),var(--y1)) scale(var(--s1)) rotate(var(--spin1)); opacity: 1; animation-timing-function: cubic-bezier(.37,0,.63,1); }
+      100% { transform: translate(var(--x2),var(--fall-dist)) scale(var(--s2)) rotate(var(--spin2)); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="burst-layer" id="burst-layer" aria-hidden="true"></div>
+
+  <div class="body">
+    <div class="brand-mark">
+      <!-- Replace with Aloha Logo URL when you have it -->
+      <img id="hero-origin" src="../assets/aloha_logo_placeholder.png" alt="Aloha Bistro" onerror="this.style.display='none'" />
+    </div>
+
+    <p class="prompt">↓ Copy the review that matches your experience ↓</p>
+
+    <div class="reviews">
+      <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy positive review">
+        <div class="review-header">
+          <span class="review-emoji">😊</span>
+          <span class="review-label">Loved it</span>
+          <span class="review-hint">Tap to copy</span>
+        </div>
+        <p class="review-text loading" data-role="text">Writing…</p>
+      </button>
+
+      <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy balanced review">
+        <div class="review-header">
+          <span class="review-emoji">😐</span>
+          <span class="review-label">Balanced</span>
+          <span class="review-hint">Tap to copy</span>
+        </div>
+        <p class="review-text loading" data-role="text">Writing…</p>
+      </button>
+    </div>
+
+    <button class="btn-regen-all" id="regen-all" onclick="regenerateAll()">
+      <span id="regen-icon">↻</span>
+      <span>Get new options</span>
+    </button>
+
+    <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJq8Oq_8bIQTkRt3W1UB26l0k" target="_blank" rel="noopener">
+      <svg class="g-svg" viewBox="0 0 24 24">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57C21.36 18.01 22.56 15.36 22.56 12.25z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Paste it on Google Reviews
+    </a>
+
+    <a href="https://search.google.com/local/writereview?placeid=ChIJq8Oq_8bIQTkRt3W1UB26l0k" target="_blank" rel="noopener" class="own-review-link">
+      Prefer to write your own? Leave a review on Google.
+    </a>
+
+    <p class="footer">
+      <span class="footer-line"></span>
+      <span>Powered by Tap2Loop</span>
+      <span class="footer-line"></span>
+    </p>
+  </div>
+</div>
+<script>
+  // Reusing your existing Cloudflare Worker
+  const WORKER_URL = 'https://tap2loop-ai.jeezmanw.workers.dev';
+
+  const RESTAURANT_CONTEXT = `
+    Aloha Bistro and Sizzlers — Wakad, Pune.
+    A vibrant neighbourhood dining destination serving Continental, Italian, North Indian, and fusion dishes.
+    Known for: Sizzlers, Pizzas, Pastas, Sandwiches (Paneer Pepper Pesto, Hummus & Mushroom), Bruschetta, and creative presentations.
+    Vibe: Casual, vibrant bistro, great for groups and casual dining.
+    Price range: ₹400 to ₹1000 for two. Good value for the variety.
+    Menu spans vegetarian and non-vegetarian options.
+  `;
+
+  const SENTIMENT_RULES = {
+    positive: `Write a genuinely positive review. Focus on the sizzlers, pizzas, pastas, or the overall dining experience. Sound enthusiastic and genuine. 2 sentences max. No dashes or hyphens.`,
+    
+    // Adjusted so "Critical" is just a balanced but still 4-5 star review
+    critical: `Write a balanced review that starts with a small, mild critique (like wait time on a busy weekend, or noise level), but immediately closes on a highly positive note about the food quality (sizzlers, pasta) or value. The overall review must be 4 or 5 stars. 2 sentences max. No dashes or hyphens.`
+  };
+
+  const FOCUS_ASPECTS = [
+    'the sizzlers and presentation',
+    'the portion size',
+    'how fresh the food tasted',
+    'the variety on the menu',
+    'the value for money',
+    'the speed of service',
+    'the balance of flavours',
+    'the vibe of the place',
+    'the options for both veg and non-veg',
+    'the overall dining experience',
+    'the pasta and pizza',
+    'the quality of ingredients'
+  ];
+
+  // Mild issues for the balanced card
+  const CRITICAL_ISSUES = [
+    'the wait time on a busy weekend',
+    'the noise level when it gets crowded',
+    'finding parking in the area',
+    'the wait for the table',
+    'the music volume',
+    'how long the bill took to arrive',
+    'the seating space during peak hours'
+  ];
+
+  const OPENING_STYLES = [
+    'what you were doing before you walked in',
+    'the moment you knew how you felt about the place',
+    'something small and specific you noticed',
+    'how you felt walking out',
+    'what you would tell a friend who asked about it',
+    'a simple fact about the visit',
+    'what you expected versus what you got',
+    'how the visit fit into your day',
+    'a passing observation about the room',
+    'whether you would come back',
+    'what you came in for',
+    'a small moment that stood out'
+  ];
+
+  const TARGET_LENGTHS = [
+    'a single short sentence, under 20 words',
+    'two short sentences, total under 28 words',
+    'two short sentences, the second one shorter',
+    'two short sentences with a comma break in one of them',
+    'two short sentences, total under 35 words'
+  ];
+
+  const HUMAN_RULES = `Write like a real person, not a copywriter or food critic.
+- Use contractions throughout (it's, didn't, we're, I've, wouldn't, can't).
+- Vary sentence length. Short punchy sentences are fine.
+- Sound like you're texting a friend, not writing a formal review.
+- One small specific observation beats three general claims.
+- It's okay to hedge a little ("pretty good", "not bad", "kind of quiet", "solid enough").
+- No exclamation marks. No emoji.`;
+
+  const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, legit, honestly, literally, basically, totally, fantastic, excellent, amazing, delightful, delicious, satisfying, flavorful, tantalizing, mouthwatering, impeccable, exceptional, outstanding, wonderful, superb, culinary, gastronomic, a must try, definitely, absolutely, incredibly, truly";
+
+  const OPENING_BAN = `Do not start the review with any of these phrases: "The food", "The meal", "The quality", "The portion", "The plating", "The service", "The ambience", "Everything", "Really", "This place", "This spot", "Overall".`;
+
+  const FALLBACK = {
+    positive: [
+      "The sizzlers here are top notch. Huge portions, great flavour, and they bring it out sizzling hot. Will definitely be back.",
+      "Great vibe for a weekend dinner. We ordered a mix of pasta and starters and everything was fresh and well made.",
+      "Walked in hungry, walked out happy. Good variety on the menu, solid portions, and the pricing is fair for the quality.",
+      "Honestly a solid spot in Wakad. The pizzas were well loaded and the service was quick despite the crowd.",
+      "Came here with a big group and everyone found something they liked. Generous portions and really good flavours.",
+      "Simple stuff, done well. Fresh ingredients, good vibe, and the sizzlers are worth the hype."
+    ],
+    critical: [
+      "Waited a bit for a table on a Saturday night, but the food made up for it. The sizzlers were fresh and packed with flavour.",
+      "Got a bit loud inside when the dinner rush hit. Food was great though and the portions were more than fair for the price.",
+      "The wait for the food was slightly longer than expected, but the pastas were well cooked. Worth the trip.",
+      "Parking can be a bit of a headache in this area, but once inside the food and service were solid.",
+      "Bill took a few minutes to arrive at the end, but the sizzlers were excellent. Will come back on a quieter weekday."
+    ]
+  };
+
+  function sanitizeReview(text) {
+    let s = String(text || '');
+    s = s.replace(/\b(legit|honestly|literally|basically|totally|lowkey|low-key|deadass)\b[\s,]*/gi, '');
+    s = s.replace(/\s+/g, ' ').trim();
+    s = s.replace(/\s+([.,!?])/g, '$1');
+    s = s.replace(/([.,!?])\s*([.,!?])+/g, '$1');
+    s = s.replace(/^\s*[,;:.]\s*/, '');
+    s = s.replace(/(^|[.!?]\s+)([a-z])/g, (m, p1, p2) => p1 + p2.toUpperCase());
+    return s.trim();
+  }
+
+  function trimReview(t) {
+    let s = String(t || '').replace(/\s+/g, ' ').trim();
+    s = s.replace(/^["'“”‘’]|["'“”‘’]$/g, '').trim();
+    if (!s) return s;
+
+    const raw = s.match(/[^.!?]+[.!?]+/g);
+    let sentences = raw ? raw.map(x => x.trim()).filter(Boolean) : [s];
+
+    if (sentences.length > 3) sentences = sentences.slice(0, 3);
+    let combined = sentences.join(' ').trim();
+    let words = combined.split(/\s+/).filter(Boolean);
+
+    if (sentences.length === 3 && words.length > 35) {
+      sentences = sentences.slice(0, 2);
+      combined = sentences.join(' ').trim();
+      words = combined.split(/\s+/).filter(Boolean);
+    }
+
+    if (words.length > 45) {
+      words = words.slice(0, 45);
+      let trimmed = words.join(' ').replace(/[,;:.\-–—]$/, '');
+      if (!/[.!?]$/.test(trimmed)) trimmed += '.';
+      return trimmed;
+    }
+
+    if (combined && !/[.!?]$/.test(combined)) combined += '.';
+    return combined;
+  }
+
+  function processReview(raw) {
+    return trimReview(sanitizeReview(trimReview(raw)));
+  }
+
+  async function fetchReview(sentiment) {
+    const aspect = FOCUS_ASPECTS[Math.floor(Math.random() * FOCUS_ASPECTS.length)];
+    const opening = OPENING_STYLES[Math.floor(Math.random() * OPENING_STYLES.length)];
+    const length = TARGET_LENGTHS[Math.floor(Math.random() * TARGET_LENGTHS.length)];
+
+    let rules = `${SENTIMENT_RULES[sentiment]}
+
+${HUMAN_RULES}
+
+Focus on: ${aspect}.
+Opening frame: start with ${opening}.
+Target length: ${length}.
+${OPENING_BAN}
+Do not name any specific dish from the menu. Refer to food generically.
+Do not quote exact prices.
+Never use these words or phrases: ${BANNED}.
+Return ONLY the review text. No preamble, no labels, no quotes.`;
+
+    if (sentiment === 'critical') {
+      const issue = CRITICAL_ISSUES[Math.floor(Math.random() * CRITICAL_ISSUES.length)];
+      rules += `\nOpen with this specific mild issue: ${issue}. Do not mention any other complaint. Immediately pivot to a positive note.`;
+    }
+
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules, sentiment })
+    });
+    if (!res.ok) throw new Error('worker ' + res.status);
+    const data = await res.json();
+    if (!data.review) throw new Error('empty');
+    return processReview(data.review);
+  }
+
+  function setCardText(sentiment, text) {
+    const card = document.querySelector(`.review-card[data-sentiment="${sentiment}"]`);
+    if (!card) return;
+    const el = card.querySelector('[data-role="text"]');
+    el.textContent = text;
+    el.classList.remove('loading');
+  }
+
+  function setCardLoading(sentiment) {
+    const card = document.querySelector(`.review-card[data-sentiment="${sentiment}"]`);
+    if (!card) return;
+    card.classList.remove('copied');
+    const hint = card.querySelector('.review-hint');
+    if (hint) hint.textContent = 'Tap to copy';
+    const el = card.querySelector('[data-role="text"]');
+    el.textContent = 'Writing…';
+    el.classList.add('loading');
+  }
+
+  function getFallback(sentiment) {
+    const pool = FALLBACK[sentiment];
+    return processReview(pool[Math.floor(Math.random() * pool.length)]);
+  }
+
+  let isGenerating = false;
+
+  async function generateAll() {
+    if (isGenerating) return;
+    isGenerating = true;
+    setRegenBusy(true);
+
+    const sentiments = ['positive', 'critical'];
+    await Promise.all(sentiments.map(async (s) => {
+      try {
+        const text = await fetchReview(s);
+        setCardText(s, text);
+      } catch (e) {
+        console.error('Worker failed for', s, e.message);
+        setCardText(s, getFallback(s));
+      }
+    }));
+
+    isGenerating = false;
+    setRegenBusy(false);
+  }
+
+  async function regenerateAll() {
+    if (isGenerating) return;
+    ['positive', 'critical'].forEach(setCardLoading);
+    await generateAll();
+  }
+
+  function setRegenBusy(busy) {
+    const btn = document.getElementById('regen-all');
+    const ic = document.getElementById('regen-icon');
+    if (!btn) return;
+    btn.disabled = busy;
+    if (busy) {
+      if (ic) ic.outerHTML = '<span class="spinner" id="regen-icon"></span>';
+    } else {
+      const cur = document.getElementById('regen-icon');
+      if (cur && cur.classList.contains('spinner')) cur.outerHTML = '<span id="regen-icon">↻</span>';
+    }
+  }
+
+  function copyCard(cardEl) {
+    const el = cardEl.querySelector('[data-role="text"]');
+    if (!el || el.classList.contains('loading')) return;
+    const text = el.textContent.trim();
+    if (!text || text === 'Writing…') return;
+
+    const hint = cardEl.querySelector('.review-hint');
+    const origHint = hint.textContent;
+
+    const done = () => {
+      cardEl.classList.add('copied');
+      hint.textContent = '✓ Copied';
+      setTimeout(() => {
+        cardEl.classList.remove('copied');
+        hint.textContent = origHint;
+      }, 3000);
+    };
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fbCopy(text, done));
+    } else {
+      fbCopy(text, done);
+    }
+  }
+
+  function fbCopy(text, cb) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta); cb();
+  }
+
+  function runBurst() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const layer = document.getElementById('burst-layer');
+    const originEl = document.getElementById('hero-origin');
+    if (!layer || !originEl) return;
+    const rect = originEl.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height * 0.5;
+    const vh = window.innerHeight;
+    // Confetti mix of stars and generic shapes
+    const items = [
+      { ch: '★', color: '#f5c800' }, { ch: '★', color: '#f5c800' },
+      { ch: '★', color: '#d4a800' }, { ch: '✨', color: null },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#d4a800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#d4a800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#d4a800' },
+    ];
+    const emitWindow = 1.0;
+    items.forEach((item) => {
+      const el = document.createElement('div');
+      el.className = 'burst-item';
+      const size = Math.random() < 0.5 ? 9 + Math.random() * 8 : 20 + Math.random() * 16;
+      const startX = originX + (Math.random() * 14 - 7);
+      const startY = originY + (Math.random() * 5 - 2.5);
+      const duration = 3 + Math.random() * 1;
+      const delay = Math.random() * emitWindow;
+      const x1 = Math.random() * 70 - 35;
+      const x2 = x1 + (Math.random() * 170 - 70);
+      const fallDist = (vh - startY) + 40 + Math.random() * 60;
+      const spin1 = Math.random() * 40 - 20;
+      const spin2 = spin1 + (Math.random() * 140 - 70);
+      const s0 = 0.15 + Math.random() * 0.1;
+      const s1 = 1.05 + Math.random() * 0.15;
+      const s2 = 0.8 + Math.random() * 0.15;
+      el.textContent = item.ch;
+      el.style.left = startX + 'px';
+      el.style.top = startY + 'px';
+      el.style.fontSize = size + 'px';
+      if (item.color) el.style.color = item.color;
+      el.style.setProperty('--x1', x1 + 'px');
+      el.style.setProperty('--x2', x2 + 'px');
+      el.style.setProperty('--y1', (16 + Math.random() * 12) + 'px');
+      el.style.setProperty('--fall-dist', fallDist + 'px');
+      el.style.setProperty('--spin1', spin1 + 'deg');
+      el.style.setProperty('--spin2', spin2 + 'deg');
+      el.style.setProperty('--s0', s0);
+      el.style.setProperty('--s1', s1);
+      el.style.setProperty('--s2', s2);
+      el.style.animationDuration = duration + 's';
+      el.style.animationDelay = delay + 's';
+      layer.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    });
+    setTimeout(() => { layer.innerHTML = ''; }, (emitWindow + 4.5) * 1000);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(() => requestAnimationFrame(runBurst));
+    generateAll();
+  });
+</script>
+</body>
+</html>
