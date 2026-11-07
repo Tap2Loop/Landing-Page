@@ -79,13 +79,10 @@
     }
     .review-card:active { transform: scale(.99); }
 
-    .review-card[data-sentiment="positive"] {
+    /* Both cards now have a green border */
+    .review-card[data-sentiment] {
       --card-bg: #f3faec;
       border-left: 4px solid #3d7a25;
-    }
-    .review-card[data-sentiment="critical"] {
-      --card-bg: #fdf3f1;
-      border-left: 4px solid #c9951a; /* Changed to amber for 'balanced' */
     }
     .review-card.copied {
       --card-bg: rgba(58,158,106,.13);
@@ -93,7 +90,6 @@
     }
 
     .review-header { display: flex; align-items: center; gap: 8px; }
-    .review-emoji { font-size: 16px; line-height: 1; }
     .review-label { flex: 1; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
     .review-hint { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); opacity: .75; transition: color .15s, opacity .15s; }
     .review-card.copied .review-hint { color: var(--success); opacity: 1; }
@@ -130,7 +126,6 @@
     .btn-google:active { background: var(--green-dark); }
     .g-svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    /* "Write your own" link styling */
     .own-review-link {
       display: block;
       text-align: center;
@@ -174,26 +169,24 @@
 
   <div class="body">
     <div class="brand-mark">
-      <!-- Replace with Aloha Logo URL when you have it -->
+      <!-- Ensure you upload the Aloha logo to this path -->
       <img id="hero-origin" src="../assets/aloha_logo_placeholder.png" alt="Aloha Bistro" onerror="this.style.display='none'" />
     </div>
 
     <p class="prompt">↓ Copy the review that matches your experience ↓</p>
 
     <div class="reviews">
-      <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy positive review">
+      <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy review option 1">
         <div class="review-header">
-          <span class="review-emoji">😊</span>
-          <span class="review-label">Loved it</span>
+          <span class="review-label">Option 1</span>
           <span class="review-hint">Tap to copy</span>
         </div>
         <p class="review-text loading" data-role="text">Writing…</p>
       </button>
 
-      <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy balanced review">
+      <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy review option 2">
         <div class="review-header">
-          <span class="review-emoji">😐</span>
-          <span class="review-label">Balanced</span>
+          <span class="review-label">Option 2</span>
           <span class="review-hint">Tap to copy</span>
         </div>
         <p class="review-text loading" data-role="text">Writing…</p>
@@ -205,7 +198,7 @@
       <span>Get new options</span>
     </button>
 
-    <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJq8Oq_8bIQTkRt3W1UB26l0k" target="_blank" rel="noopener">
+    <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJqzP4OAC5wjsRt3WyUB29l5Q" target="_blank" rel="noopener">
       <svg class="g-svg" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57C21.36 18.01 22.56 15.36 22.56 12.25z" fill="#4285F4"/>
         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -215,7 +208,7 @@
       Paste it on Google Reviews
     </a>
 
-    <a href="https://search.google.com/local/writereview?placeid=ChIJq8Oq_8bIQTkRt3W1UB26l0k" target="_blank" rel="noopener" class="own-review-link">
+    <a href="https://search.google.com/local/writereview?placeid=ChIJqzP4OAC5wjsRt3WyUB29l5Q" target="_blank" rel="noopener" class="own-review-link">
       Prefer to write your own? Leave a review on Google.
     </a>
 
@@ -227,7 +220,6 @@
   </div>
 </div>
 <script>
-  // Reusing your existing Cloudflare Worker
   const WORKER_URL = 'https://tap2loop-ai.jeezmanw.workers.dev';
 
   const RESTAURANT_CONTEXT = `
@@ -239,11 +231,11 @@
     Menu spans vegetarian and non-vegetarian options.
   `;
 
+  // Both rules are now purely positive. Option 1 focuses on food, Option 2 focuses on experience.
   const SENTIMENT_RULES = {
-    positive: `Write a genuinely positive review. Focus on the sizzlers, pizzas, pastas, or the overall dining experience. Sound enthusiastic and genuine. 2 sentences max. No dashes or hyphens.`,
+    positive: `Write a genuinely positive review. Focus on the taste, quality of the food, sizzlers, pizzas, or pastas. Sound enthusiastic and genuine. 2 sentences max.`,
     
-    // Adjusted so "Critical" is just a balanced but still 4-5 star review
-    critical: `Write a balanced review that starts with a small, mild critique (like wait time on a busy weekend, or noise level), but immediately closes on a highly positive note about the food quality (sizzlers, pasta) or value. The overall review must be 4 or 5 stars. 2 sentences max. No dashes or hyphens.`
+    critical: `Write a genuinely positive review. Focus on the vibe, the service, the portion sizes, or the overall dining experience. Sound like a very happy customer. 2 sentences max.`
   };
 
   const FOCUS_ASPECTS = [
@@ -259,17 +251,6 @@
     'the overall dining experience',
     'the pasta and pizza',
     'the quality of ingredients'
-  ];
-
-  // Mild issues for the balanced card
-  const CRITICAL_ISSUES = [
-    'the wait time on a busy weekend',
-    'the noise level when it gets crowded',
-    'finding parking in the area',
-    'the wait for the table',
-    'the music volume',
-    'how long the bill took to arrive',
-    'the seating space during peak hours'
   ];
 
   const OPENING_STYLES = [
@@ -317,11 +298,11 @@
       "Simple stuff, done well. Fresh ingredients, good vibe, and the sizzlers are worth the hype."
     ],
     critical: [
-      "Waited a bit for a table on a Saturday night, but the food made up for it. The sizzlers were fresh and packed with flavour.",
-      "Got a bit loud inside when the dinner rush hit. Food was great though and the portions were more than fair for the price.",
-      "The wait for the food was slightly longer than expected, but the pastas were well cooked. Worth the trip.",
-      "Parking can be a bit of a headache in this area, but once inside the food and service were solid.",
-      "Bill took a few minutes to arrive at the end, but the sizzlers were excellent. Will come back on a quieter weekday."
+      "Loved the ambience here, perfect for a relaxed dinner. The service was super attentive and the portions were massive.",
+      "Great place to catch up with friends. The music wasn't too loud and the staff made sure we were looked after.",
+      "Really enjoyed the overall experience. The food came out quickly and the manager checked in on us to make sure everything was good.",
+      "The vibe of this place is brilliant. Really good for a casual weekend lunch, and the value for money is spot on.",
+      "Beautiful presentation on all the dishes. The staff were really friendly and made some great recommendations."
     ]
   };
 
@@ -386,11 +367,6 @@ Do not name any specific dish from the menu. Refer to food generically.
 Do not quote exact prices.
 Never use these words or phrases: ${BANNED}.
 Return ONLY the review text. No preamble, no labels, no quotes.`;
-
-    if (sentiment === 'critical') {
-      const issue = CRITICAL_ISSUES[Math.floor(Math.random() * CRITICAL_ISSUES.length)];
-      rules += `\nOpen with this specific mild issue: ${issue}. Do not mention any other complaint. Immediately pivot to a positive note.`;
-    }
 
     const res = await fetch(WORKER_URL, {
       method: 'POST',
@@ -510,7 +486,8 @@ Return ONLY the review text. No preamble, no labels, no quotes.`;
     const originX = rect.left + rect.width / 2;
     const originY = rect.top + rect.height * 0.5;
     const vh = window.innerHeight;
-    // Confetti mix of stars and generic shapes
+    
+    // Stars and sparkles only (no emojis)
     const items = [
       { ch: '★', color: '#f5c800' }, { ch: '★', color: '#f5c800' },
       { ch: '★', color: '#d4a800' }, { ch: '✨', color: null },
