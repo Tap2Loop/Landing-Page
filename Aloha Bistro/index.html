@@ -8,51 +8,52 @@
   <meta name="robots" content="noindex, nofollow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --green-dark:  #2D693F;
-      --green:       #2d5a1b;
-      --green-mid:   #4e9a30;
-      --green-light: #eef6e8;
-      --yellow:      #f5c800;
-      --yellow-deep: #d4a800;
-      --yellow-pale: #fffbe6;
-      --white:       #ffffff;
-      --off:         #fdf9e7;
-      --border:      #d8edcc;
-      --muted:       #6b8c5a;
-      --text:        #1e3a10;
-      --success:     #3a9e6a;
-      --radius:      14px;
-      --font-body:   'Inter', -apple-system, sans-serif;
-      --font-brand:  'Lobster', cursive;
+      /* Aloha Brand Colors */
+      --brand-terracotta: #E27161;
+      --brand-maroon:     #3F171F;
+      --brand-peach:      #FAC8A3;
+      
+      /* UI Colors */
+      --bg-color:         #faf6f4; /* Very light warm off-white */
+      --card-bg:          #ffffff;
+      --border:           #e8d5d0;
+      --text-main:        #3F171F;
+      --text-muted:       #7a5c62;
+      
+      --radius:           14px;
+      --font-heading:     'Playfair Display', serif;
+      --font-body:        'Poppins', sans-serif;
     }
-    html, body { min-height: 100%; background: var(--off); font-family: var(--font-body); color: var(--text); -webkit-font-smoothing: antialiased; }
+    
+    html, body { min-height: 100%; background: var(--bg-color); font-family: var(--font-body); color: var(--text-main); -webkit-font-smoothing: antialiased; }
     .page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 18px 0 56px; }
-    .body { width: 100%; max-width: 440px; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+    .body-wrapper { width: 100%; max-width: 440px; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
 
     .brand-mark { display: flex; justify-content: center; margin-bottom: 2px; }
     .brand-mark img {
-      width: 90px;
-      height: 90px;
+      width: 110px;
+      height: 110px;
       object-fit: contain;
-      border-radius: 50%;
       display: block;
     }
 
     .prompt {
       width: 100%;
-      background: var(--green);
-      color: var(--white);
-      font-size: 12.5px;
-      font-weight: 500;
+      background: var(--brand-maroon);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-style: italic;
+      font-weight: 400;
       text-align: center;
       line-height: 1.35;
-      padding: 13px 10px;
+      padding: 14px 10px;
       border-radius: var(--radius);
-      border: 2px solid var(--yellow);
+      border: 2px solid var(--brand-peach);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -61,48 +62,47 @@
     .reviews { display: flex; flex-direction: column; gap: 10px; }
 
     .review-card {
-      --card-bg: var(--white);
       background: var(--card-bg);
-      border: 1.5px solid var(--border);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px 14px 15px;
+      padding: 16px 16px 18px;
       text-align: left;
       cursor: pointer;
       font-family: var(--font-body);
-      color: var(--text);
+      color: var(--text-main);
       transition: border-color .15s, background .15s, transform .08s;
       -webkit-tap-highlight-color: transparent;
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 10px;
       width: 100%;
+      box-shadow: 0 4px 12px rgba(63, 23, 31, 0.04);
     }
     .review-card:active { transform: scale(.99); }
 
     .review-card[data-sentiment] {
-      --card-bg: #f3faec;
-      border-left: 4px solid #3d7a25;
+      border-left: 4px solid var(--brand-terracotta);
     }
     .review-card.copied {
-      --card-bg: rgba(58,158,106,.13);
-      border-color: var(--success);
+      background: var(--brand-peach);
+      border-color: var(--brand-terracotta);
     }
 
     .review-header { display: flex; align-items: center; gap: 8px; }
-    .review-label { flex: 1; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-    .review-hint { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); opacity: .75; transition: color .15s, opacity .15s; }
-    .review-card.copied .review-hint { color: var(--success); opacity: 1; }
+    .review-label { flex: 1; font-family: var(--font-heading); font-size: 12px; font-weight: 600; letter-spacing: .02em; color: var(--brand-maroon); }
+    .review-hint { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); transition: color .15s; }
+    .review-card.copied .review-hint { color: var(--brand-maroon); font-weight: 600; }
 
-    .review-text { font-size: 14px; line-height: 1.6; color: var(--text); }
-    .review-text.loading { color: var(--muted); font-style: italic; }
+    .review-text { font-size: 14px; line-height: 1.6; color: var(--text-main); }
+    .review-text.loading { color: var(--text-muted); font-style: italic; }
 
     .btn-regen-all {
       width: 100%;
-      padding: 13px;
+      padding: 14px;
       border-radius: var(--radius);
-      border: 1.5px solid var(--border);
-      background: var(--white);
-      color: var(--green-dark);
+      border: 1.5px solid var(--brand-terracotta);
+      background: transparent;
+      color: var(--brand-terracotta);
       font-family: var(--font-body);
       font-size: 14px;
       font-weight: 600;
@@ -112,45 +112,44 @@
       justify-content: center;
       gap: 8px;
       -webkit-tap-highlight-color: transparent;
-      transition: border-color .15s, background .15s, color .15s;
+      transition: all .15s;
       margin-top: 2px;
     }
-    .btn-regen-all:active { background: var(--green-light); border-color: var(--green); }
+    .btn-regen-all:active { background: var(--brand-terracotta); color: #fff; }
     .btn-regen-all:disabled { opacity: .55; cursor: not-allowed; }
 
     @keyframes spin { to { transform: rotate(360deg); } }
-    .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+    .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--brand-terracotta); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
 
-    .btn-google { width: 100%; padding: 16px; border-radius: var(--radius); border: none; background: var(--green); font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: background .15s; box-shadow: 0 2px 8px rgba(61,122,37,.3); margin-top: 4px; }
-    .btn-google:active { background: var(--green-dark); }
-    .g-svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .btn-google { width: 100%; padding: 17px; border-radius: var(--radius); border: none; background: var(--brand-terracotta); font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: background .15s; box-shadow: 0 4px 12px rgba(226, 113, 97, 0.3); margin-top: 4px; }
+    .btn-google:active { background: #c95d4e; }
+    .g-svg { width: 18px; height: 18px; flex-shrink: 0; fill: #fff; }
 
     .own-review-link {
       display: block;
       text-align: center;
       font-size: 12px;
       font-weight: 500;
-      color: var(--muted);
+      color: var(--text-muted);
       text-decoration: underline;
-      margin-top: 10px;
+      margin-top: 12px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       transition: color .15s;
     }
-    .own-review-link:active { color: var(--green-dark); }
+    .own-review-link:active { color: var(--brand-maroon); }
 
     .footer {
-      margin-top: 16px;
+      margin-top: 20px;
       font-size: 12px;
       font-weight: 500;
-      color: var(--green-dark);
-      opacity: .75;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
       gap: 10px;
       width: 100%;
     }
-    .footer-line { flex: 1; height: 1px; background: var(--green-dark); opacity: .35; }
+    .footer-line { flex: 1; height: 1px; background: var(--border); }
 
     .burst-layer { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
     .burst-item { position: absolute; opacity: 0; will-change: transform, opacity; animation-name: burstFall; animation-timing-function: cubic-bezier(.33,.05,.4,1); animation-fill-mode: forwards; }
@@ -166,8 +165,9 @@
 <div class="page">
   <div class="burst-layer" id="burst-layer" aria-hidden="true"></div>
 
-  <div class="body">
+  <div class="body-wrapper">
     <div class="brand-mark">
+      <!-- Replace with actual Aloha logo URL -->
       <img id="hero-origin" src="../assets/aloha_logo_placeholder.png" alt="Aloha Bistro" onerror="this.style.display='none'" />
     </div>
 
@@ -196,17 +196,17 @@
       <span>Get new options</span>
     </button>
 
-    <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJqzP4OAC5wjsRt3WyUB29l5Q" target="_blank" rel="noopener">
+    <a class="btn-google" href="https://search.google.com/local/writereview?placeid=ChIJq8Oq_8bIQTkRt3W1UB26l0k" target="_blank" rel="noopener">
       <svg class="g-svg" viewBox="0 0 24 24">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57C21.36 18.01 22.56 15.36 22.56 12.25z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57C21.36 18.01 22.56 15.36 22.56 12.25z" fill="#fff"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#fff"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fff"/>
       </svg>
       Paste it on Google Reviews
     </a>
 
-    <a href="https://search.google.com/local/writereview?placeid=ChIJqzP4OAC5wjsRt3WyUB29l5Q" target="_blank" rel="noopener" class="own-review-link">
+    <a href="https://search.google.com/local/writereview?placeid=ChIJq8Oq_8bIQTkRt3W1UB26l0k" target="_blank" rel="noopener" class="own-review-link">
       Prefer to write your own? Leave a review on Google.
     </a>
 
@@ -223,30 +223,54 @@
   const RESTAURANT_CONTEXT = `
     Aloha Bistro and Sizzlers — Wakad, Pune.
     A vibrant neighbourhood dining destination serving Continental, Italian, North Indian, and fusion dishes.
-    Known for: Sizzlers, Pizzas, Pastas, Sandwiches (Paneer Pepper Pesto, Hummus & Mushroom), Bruschetta, and creative presentations.
-    Vibe: Casual, vibrant bistro, great for groups and casual dining.
+    Known for: Sizzlers, Pizzas, Pastas, Sandwiches, Bruschettas, and creative presentations.
+    Vibe: Casual, vibrant bistro, great for groups and casual dining. Warm, welcoming, fire-inspired.
     Price range: ₹400 to ₹1000 for two. Good value for the variety.
     Menu spans vegetarian and non-vegetarian options.
   `;
 
+  // Brought back the dish randomizer for Aloha
+  const FOCUS_DISHES = [
+    'Smoky Harissa Chicken Sizzler',
+    'Veg Italian Sizzler',
+    'Paw Bhaji Sizzler',
+    'Grilled Chicken Steak With Deviled Sauce',
+    'Oriental BBQ Chicken',
+    'Satay Chicken Cheese',
+    'Red Thai Prawns Curry',
+    'Exotica Pizza',
+    'Achari Paneer Pizza',
+    'Pulled Spicy BBQ Chicken Pizza',
+    'Penne Alfredo',
+    'Rose Pasta',
+    'Avacado Chaat',
+    'Paneer Tikka Toast',
+    'Mushroom Pesto Bruschetta',
+    'Peri Peri Taco',
+    'Loaded Nachos',
+    'Tiramisu Live',
+    'Hot Sizzling Brownie',
+    'Hibiscus Rose Cooler',
+    'Peach Iced Tea'
+  ];
+
   const SENTIMENT_RULES = {
-    positive: `Write a genuinely positive review. Focus on the taste, quality of the food, sizzlers, pizzas, or pastas. Sound enthusiastic and genuine. 2 sentences max.`,
+    positive: `Write a genuinely positive review. You MUST mention the specific dish provided in the prompt. Sound enthusiastic and genuine about the food and the overall experience. 2 sentences max.`,
     
-    critical: `Write a genuinely positive review. Focus on the vibe, the service, the portion sizes, or the overall dining experience. Sound like a very happy customer. 2 sentences max.`
+    critical: `Write a genuinely positive review. You MUST mention the specific dish provided in the prompt. Focus on the vibe, the service, or the portion sizes, while highlighting the dish. Sound like a very happy customer. 2 sentences max.`
   };
 
   const FOCUS_ASPECTS = [
-    'the sizzlers and presentation',
+    'the sizzling presentation',
     'the portion size',
-    'how fresh the food tasted',
+    'how fresh and hot the food was',
     'the variety on the menu',
     'the value for money',
     'the speed of service',
     'the balance of flavours',
-    'the vibe of the place',
+    'the warm vibe of the place',
     'the options for both veg and non-veg',
     'the overall dining experience',
-    'the pasta and pizza',
     'the quality of ingredients'
   ];
 
@@ -287,19 +311,19 @@
 
   const FALLBACK = {
     positive: [
-      "The sizzlers here are top notch. Huge portions, great flavour, and they bring it out sizzling hot. Will definitely be back.",
-      "Great vibe for a weekend dinner. We ordered a mix of pasta and starters and everything was fresh and well made.",
-      "Walked in hungry, walked out happy. Good variety on the menu, solid portions, and the pricing is fair for the quality.",
-      "Honestly a solid spot in Wakad. The pizzas were well loaded and the service was quick despite the crowd.",
-      "Came here with a big group and everyone found something they liked. Generous portions and really good flavours.",
-      "Simple stuff, done well. Fresh ingredients, good vibe, and the sizzlers are worth the hype."
+      "The Smoky Harissa Chicken Sizzler was incredible. Huge portion, amazing sizzle, and the flavour was spot on. Will definitely be back.",
+      "Great vibe for a weekend dinner. We ordered the Rose Pasta and a few starters and everything was fresh and well made.",
+      "Walked in hungry, walked out happy. The Veg Italian Sizzler was a highlight. Good variety and fair pricing.",
+      "Honestly a solid spot in Wakad. The Pulled Spicy BBQ Chicken Pizza was well loaded and the service was quick despite the crowd.",
+      "Came here with a big group and everyone loved the Paw Bhaji Sizzler. Generous portions and really good flavours.",
+      "Simple stuff, done well. The Avacado Chaat was fresh and the vibe is great. Definitely worth the hype."
     ],
     critical: [
-      "Loved the ambience here, perfect for a relaxed dinner. The service was super attentive and the portions were massive.",
-      "Great place to catch up with friends. The music wasn't too loud and the staff made sure we were looked after.",
-      "Really enjoyed the overall experience. The food came out quickly and the manager checked in on us to make sure everything was good.",
-      "The vibe of this place is brilliant. Really good for a casual weekend lunch, and the value for money is spot on.",
-      "Beautiful presentation on all the dishes. The staff were really friendly and made some great recommendations."
+      "Loved the ambience here, perfect for a relaxed dinner. The Smoky Harissa Chicken Sizzler was massive and super flavourful.",
+      "Great place to catch up with friends. The music wasn't too loud and the Penne Alfredo was cooked perfectly.",
+      "Really enjoyed the overall experience. The Hot Sizzling Brownie was a great finish, and the manager checked in on us.",
+      "The vibe of this place is brilliant. Really good for a casual weekend lunch, and the Peri Peri Taco was spot on.",
+      "Beautiful presentation on the Avacado Toast. The staff were really friendly and made some great recommendations."
     ]
   };
 
@@ -351,16 +375,19 @@
     const aspect = FOCUS_ASPECTS[Math.floor(Math.random() * FOCUS_ASPECTS.length)];
     const opening = OPENING_STYLES[Math.floor(Math.random() * OPENING_STYLES.length)];
     const length = TARGET_LENGTHS[Math.floor(Math.random() * TARGET_LENGTHS.length)];
+    
+    // Pick a random dish to feature
+    const dish = FOCUS_DISHES[Math.floor(Math.random() * FOCUS_DISHES.length)];
 
     let rules = `${SENTIMENT_RULES[sentiment]}
 
 ${HUMAN_RULES}
 
 Focus on: ${aspect}.
+You MUST specifically mention this dish by name: "${dish}".
 Opening frame: start with ${opening}.
 Target length: ${length}.
 ${OPENING_BAN}
-Do not name any specific dish from the menu. Refer to food generically.
 Do not quote exact prices.
 Never use these words or phrases: ${BANNED}.
 Return ONLY the review text. No preamble, no labels, no quotes.`;
@@ -368,7 +395,6 @@ Return ONLY the review text. No preamble, no labels, no quotes.`;
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      // THIS IS THE CRITICAL FIX: Passing clientId: 'aloha' so it doesn't share a cache with Yolkshire
       body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules, sentiment, clientId: 'aloha' })
     });
     if (!res.ok) throw new Error('worker ' + res.status);
@@ -485,17 +511,18 @@ Return ONLY the review text. No preamble, no labels, no quotes.`;
     const originY = rect.top + rect.height * 0.5;
     const vh = window.innerHeight;
     
+    // Aloha themed confetti (terracotta and peach sparks)
     const items = [
-      { ch: '★', color: '#f5c800' }, { ch: '★', color: '#f5c800' },
-      { ch: '★', color: '#d4a800' }, { ch: '✨', color: null },
-      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '✨', color: null },     { ch: '★', color: '#d4a800' },
-      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '✨', color: null },     { ch: '★', color: '#d4a800' },
-      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '✨', color: null },     { ch: '★', color: '#d4a800' },
+      { ch: '★', color: '#E27161' }, { ch: '★', color: '#E27161' },
+      { ch: '★', color: '#FAC8A3' }, { ch: '✨', color: null },
+      { ch: '✨', color: null },     { ch: '★', color: '#E27161' },
+      { ch: '✨', color: null },     { ch: '★', color: '#FAC8A3' },
+      { ch: '✨', color: null },     { ch: '★', color: '#E27161' },
+      { ch: '✨', color: null },     { ch: '★', color: '#E27161' },
+      { ch: '✨', color: null },     { ch: '★', color: '#FAC8A3' },
+      { ch: '✨', color: null },     { ch: '★', color: '#E27161' },
+      { ch: '✨', color: null },     { ch: '★', color: '#E27161' },
+      { ch: '✨', color: null },     { ch: '★', color: '#FAC8A3' },
     ];
     const emitWindow = 1.0;
     items.forEach((item) => {
