@@ -34,11 +34,12 @@
     .body-wrapper { width: 100%; max-width: 440px; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
 
     .brand-mark { display: flex; justify-content: center; margin-bottom: 2px; }
-    .brand-mark img {
-      width: 110px;
-      height: 110px;
+        .brand-mark img {
+      width: 180px;       /* Make it wider to fit the wordmark */
+      height: auto;       /* Let the height scale naturally */
       object-fit: contain;
       display: block;
+      border-radius: 4px; /* Optional: slightly rounds the corners of the image box */
     }
 
     .prompt {
