@@ -12,12 +12,10 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      /* Aloha Brand Colors */
       --brand-terracotta: #E27161;
       --brand-maroon:     #3F171F;
       --brand-peach:      #FAC8A3;
       
-      /* UI Colors */
       --bg-color:         #3F171F;
       --card-bg:          #ffffff;
       --border:           #e8d5d0;
@@ -34,12 +32,7 @@
     .body-wrapper { width: 100%; max-width: 440px; padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
 
     .brand-mark { display: flex; justify-content: center; margin-bottom: 0px; }
-    .brand-mark img {
-      width: 260px;
-      height: auto;
-      object-fit: contain;
-      display: block;
-    }
+    .brand-mark img { width: 260px; height: auto; object-fit: contain; display: block; }
 
     .prompt {
       width: 100%;
@@ -80,14 +73,8 @@
       box-shadow: 0 6px 16px rgba(0,0,0,0.15);
     }
     .review-card:active { transform: scale(.99); }
-
-    .review-card[data-sentiment] {
-      border-left: 4px solid var(--brand-terracotta);
-    }
-    .review-card.copied {
-      background: var(--brand-peach);
-      border-left: 4px solid var(--brand-maroon);
-    }
+    .review-card[data-sentiment] { border-left: 4px solid var(--brand-terracotta); }
+    .review-card.copied { background: var(--brand-peach); border-left: 4px solid var(--brand-maroon); }
 
     .review-header { display: flex; align-items: center; gap: 8px; }
     .review-label { flex: 1; font-family: var(--font-heading); font-size: 12px; font-weight: 600; letter-spacing: .02em; color: var(--brand-maroon); }
@@ -97,7 +84,6 @@
     .review-text { font-size: 14px; line-height: 1.6; color: var(--text-main); }
     .review-text.loading { color: var(--text-muted); font-style: italic; }
 
-    /* Adjusted margins for the new position */
     .own-review-link {
       display: block;
       text-align: center;
@@ -194,7 +180,6 @@
       </button>
     </div>
 
-    <!-- Moved "Write your own" link here -->
     <a href="https://search.google.com/local/writereview?placeid=ChIJq8Oq_8bIQTkRt3W1UB26l0k" target="_blank" rel="noopener" class="own-review-link">
       Prefer to write your own? Leave a review on Google.
     </a>
@@ -257,46 +242,32 @@
     'Peach Iced Tea'
   ];
 
+  // Both rules are strictly positive and SEO-focused
   const SENTIMENT_RULES = {
-    positive: `Write a genuinely positive review. Sound enthusiastic and genuine about the food and the overall experience. 2 sentences max.`,
+    positive: `Write a genuinely positive, 5-star review. Focus heavily on the food quality, taste, and presentation. Sound enthusiastic and genuine. 2 sentences max.`,
     
-    critical: `Write a genuinely positive review. Focus on the vibe, the service, or the portion sizes, while highlighting the food. Sound like a very happy customer. 2 sentences max.`
+    critical: `Write a genuinely positive, 5-star review. Focus on the vibe, the service, the portion sizes, and the overall dining experience. Sound like a very happy customer. 2 sentences max.`
   };
 
   const FOCUS_ASPECTS = [
-    'the sizzling presentation',
-    'the portion size',
-    'how fresh and hot the food was',
-    'the variety on the menu',
-    'the value for money',
-    'the speed of service',
-    'the balance of flavours',
-    'the warm vibe of the place',
-    'the options for both veg and non-veg',
-    'the overall dining experience',
-    'the quality of ingredients'
+    'the sizzling presentation', 'the portion size', 'how fresh and hot the food was',
+    'the variety on the menu', 'the value for money', 'the speed of service',
+    'the balance of flavours', 'the warm vibe of the place', 'the options for both veg and non-veg',
+    'the overall dining experience', 'the quality of ingredients'
   ];
 
   const OPENING_STYLES = [
-    'what you were doing before you walked in',
-    'the moment you knew how you felt about the place',
-    'something small and specific you noticed',
-    'how you felt walking out',
-    'what you would tell a friend who asked about it',
-    'a simple fact about the visit',
-    'what you expected versus what you got',
-    'how the visit fit into your day',
-    'a passing observation about the room',
-    'whether you would come back',
-    'what you came in for',
-    'a small moment that stood out'
+    'what you were doing before you walked in', 'the moment you knew how you felt about the place',
+    'something small and specific you noticed', 'how you felt walking out',
+    'what you would tell a friend who asked about it', 'a simple fact about the visit',
+    'what you expected versus what you got', 'how the visit fit into your day',
+    'a passing observation about the room', 'whether you would come back',
+    'what you came in for', 'a small moment that stood out'
   ];
 
   const TARGET_LENGTHS = [
-    'a single short sentence, under 20 words',
-    'two short sentences, total under 28 words',
-    'two short sentences, the second one shorter',
-    'two short sentences with a comma break in one of them',
+    'a single short sentence, under 20 words', 'two short sentences, total under 28 words',
+    'two short sentences, the second one shorter', 'two short sentences with a comma break in one of them',
     'two short sentences, total under 35 words'
   ];
 
@@ -305,7 +276,6 @@
 - Vary sentence length. Short punchy sentences are fine.
 - Sound like you're texting a friend, not writing a formal review.
 - One small specific observation beats three general claims.
-- It's okay to hedge a little ("pretty good", "not bad", "kind of quiet", "solid enough").
 - No exclamation marks. No emoji.`;
 
   const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, legit, honestly, literally, basically, totally, fantastic, excellent, amazing, delightful, delicious, satisfying, flavorful, tantalizing, mouthwatering, impeccable, exceptional, outstanding, wonderful, superb, culinary, gastronomic, a must try, definitely, absolutely, incredibly, truly";
@@ -314,21 +284,25 @@
 
   const FALLBACK = {
     positive: [
-      "The Smoky Harissa Chicken Sizzler was incredible. Huge portion, amazing sizzle, and the flavour was spot on. Will definitely be back.",
-      "Great vibe for a weekend dinner. We ordered the Rose Pasta and a few starters and everything was fresh and well made.",
-      "Walked in hungry, walked out happy. The Veg Italian Sizzler was a highlight. Good variety and fair pricing.",
-      "Honestly a solid spot in Wakad. The Pulled Spicy BBQ Chicken Pizza was well loaded and the service was quick despite the crowd.",
-      "Came here with a big group and everyone loved the Paw Bhaji Sizzler. Generous portions and really good flavours.",
-      "Simple stuff, done well. The Avacado Chaat was fresh and the vibe is great. Definitely worth the hype."
+      "The Smoky Harissa Chicken Sizzler at Aloha Bistro was incredible. Huge portion, amazing sizzle, and the flavour was spot on. Best sizzlers in Wakad!",
+      "Great vibe for a weekend dinner in Pune. We ordered the Rose Pasta and a few starters and everything was fresh and well made.",
+      "Walked in hungry, walked out happy. The Veg Italian Sizzler was a highlight. Good variety and fair pricing at Aloha in Wakad.",
+      "Honestly a solid spot in Pune. The Pulled Spicy BBQ Chicken Pizza was well loaded and the service was quick despite the crowd.",
+      "Came here with a big group and everyone loved the Paw Bhaji Sizzler. Generous portions and really good flavours at Aloha Bistro."
     ],
     critical: [
-      "Loved the ambience here, perfect for a relaxed dinner. The Smoky Harissa Chicken Sizzler was massive and super flavourful.",
-      "Great place to catch up with friends. The music wasn't too loud and the Penne Alfredo was cooked perfectly.",
-      "Really enjoyed the overall experience. The Hot Sizzling Brownie was a great finish, and the manager checked in on us.",
-      "The vibe of this place is brilliant. Really good for a casual weekend lunch, and the Peri Peri Taco was spot on.",
-      "Beautiful presentation on the Avacado Toast. The staff were really friendly and made some great recommendations."
+      "Loved the ambience here, perfect for a relaxed dinner in Wakad. The Penne Alfredo was super creamy and filling.",
+      "Great place to catch up with friends. The music wasn't too loud and the Avacado Chaat at Aloha Bistro was surprisingly good.",
+      "Really enjoyed the overall experience. The Hot Sizzling Brownie was a great finish, and the staff were attentive.",
+      "The vibe of this place is brilliant. Really good for a casual weekend lunch in Pune, and the Peri Peri Taco was spot on.",
+      "Beautiful presentation on the Paneer Tikka Toast. The staff at Aloha Bistro were really friendly and made great recommendations."
     ]
   };
+
+  function getRandomSubset(arr, size) {
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, size);
+  }
 
   function sanitizeReview(text) {
     let s = String(text || '');
@@ -379,12 +353,19 @@
     const opening = OPENING_STYLES[Math.floor(Math.random() * OPENING_STYLES.length)];
     const length = TARGET_LENGTHS[Math.floor(Math.random() * TARGET_LENGTHS.length)];
 
+    // Split the menu so Option 1 and Option 2 never pick the same dish
+    const dishSubset = getRandomSubset(FOCUS_DISHES, 8);
+
+    // Injecting SEO keywords directly into the prompt
     let rules = `${SENTIMENT_RULES[sentiment]}
 
 ${HUMAN_RULES}
 
 Focus on: ${aspect}.
-You MUST specifically mention a DIFFERENT dish by name in EACH review from this list: ${FOCUS_DISHES.join(', ')}.
+You MUST specifically mention a DIFFERENT dish by name in EACH review from this exact list: ${dishSubset.join(', ')}. Do not reuse a dish within the batch.
+
+CRITICAL SEO INSTRUCTION: You must naturally weave in the exact brand name "Aloha Bistro", the neighbourhood "Wakad", and the city "Pune" into the review text so it ranks on Google Maps.
+
 Opening frame: start with ${opening}.
 Target length: ${length}.
 ${OPENING_BAN}
