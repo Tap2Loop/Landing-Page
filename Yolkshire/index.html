@@ -175,7 +175,7 @@
       </button>
     </div>
 
-    <!-- Made bigger and placed here -->
+    <!-- Moved here and made bigger -->
     <a href="https://search.google.com/local/writereview?placeid=ChIJN9euszy_wjsRlXF4rxXnmpo" target="_blank" rel="noopener" class="own-review-link">
       Prefer to write your own review? Leave a review on Google!
     </a>
@@ -215,40 +215,45 @@
     KEY MESSAGE: Eggs are nature's best protein source. Yolkshire makes healthy eating genuinely delicious.
   `;
 
-  // Scenario Injection to prevent repetition
+  // Added more fitness/health-focused scenarios
   const SCENARIOS = [
-    'a quick weekday breakfast before work',
-    'a lazy weekend brunch with friends',
     'a post-workout protein hit',
-    'a casual coffee meetup that turned into lunch',
-    'bringing a friend who had never tried an egg-specialist place',
-    'a solo meal while reading a book',
-    'taking your parents out for a healthy meal',
-    'grabbing a quick bite between meetings',
-    'a catch-up with an old friend',
-    'a rainy day comfort meal'
+    'a quick weekday breakfast before the gym',
+    'a lazy weekend brunch looking for healthy options',
+    'a casual coffee meetup that turned into a healthy lunch',
+    'taking a fitness-conscious friend who had never tried an egg-specialist place',
+    'a meal prep cheat day that still felt healthy',
+    'a morning meal to fuel a long day',
+    'a catch-up with a friend who loves clean eating',
+    'grabbing a quick, high-protein bite between meetings',
+    'a solo meal focused on hitting your protein goals'
   ];
 
-  // RESTORED: The original Yolkshire rules
   const SENTIMENT_RULES = {
-    positive: `Write a genuinely positive review. Focus on the quality of the food, freshness, healthy angle, portion size, or value. Sound enthusiastic and genuine. 2 sentences max. No dashes or hyphens.`,
-    critical: `Write constructive critical feedback in two parts. Start with the issue or thing that fell short and then close on a positive note acknowledging what works well (healthy concept, food quality, protein focus, freshness). The overall review should feel fair and not harsh. 2 sentences max. No dashes or hyphens.`
+    positive: `Write a genuinely positive review. Focus heavily on the high-protein content, healthy ingredients, freshness, or how filling the meal was. Sound like a fitness-conscious customer or someone who values clean eating. 2 sentences max.`,
+    critical: `Write constructive critical feedback. Start with the issue (like wait time or portion size), but make sure to close on a positive note specifically highlighting the high-protein, healthy, or fresh egg-based food. 2 sentences max.`
   };
 
+  // Shifted away from generic stuff to health/protein
   const FOCUS_ASPECTS = [
-    'the plating and presentation', 'the portion size', 'how fresh the ingredients tasted',
-    'the protein content and how filling it was', 'the value for money', 'the speed of service',
-    'the balance of flavours', 'how the food was cooked', 'the healthy options available',
-    'the overall dining experience', 'how light yet filling the meal was', 'the quality of ingredients'
+    'the protein content and how filling it was', 
+    'how light yet energetic it made you feel', 
+    'the fresh, high-quality ingredients',
+    'the healthy options available (like egg whites)', 
+    'the value for a high-protein meal', 
+    'the taste of the fresh eggs',
+    'how it fueled your day',
+    'the balance of healthy and tasty'
   ];
 
-  // RESTORED: The specific issues for the Negative card
   const CRITICAL_ISSUES = [
-    'the portion size for the price', 'the seasoning on the food', 'the plating and presentation',
-    'the food temperature when it arrived', 'the consistency compared to the last visit',
-    'the noise level in the cafe', 'how long the bill took to arrive', 'the variety on the menu',
-    'the friendliness of service', 'the wait during peak hours', 'the pricing versus portion size',
-    'the pace of the meal from order to table'
+    'the portion size for the price', 
+    'the seasoning on the food', 
+    'the food temperature when it arrived', 
+    'the consistency compared to the last visit',
+    'the noise level in the cafe', 
+    'how long the bill took to arrive', 
+    'the wait during peak hours'
   ];
 
   const TARGET_LENGTHS = [
@@ -261,28 +266,28 @@
 - Use contractions throughout (it's, didn't, we're, I've, wouldn't, can't).
 - Vary sentence length. Short punchy sentences are fine.
 - Sound like you're texting a friend, not writing a formal review.
-- One small specific observation beats three general claims.
 - No exclamation marks. No emoji.`;
 
   const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, legit, honestly, literally, basically, totally, fantastic, excellent, amazing, delightful, delicious, satisfying, flavorful, tantalizing, mouthwatering, impeccable, exceptional, outstanding, wonderful, superb, culinary, gastronomic, a must try, definitely, absolutely, incredibly, truly";
 
   const OPENING_BAN = `Do not start the review with any of these phrases: "The food", "The meal", "The quality", "The portion", "The plating", "The service", "The ambience", "Everything", "Really", "This place", "This spot", "Overall".`;
 
+  // Fallbacks updated to emphasize protein/health
   const FALLBACK = {
     positive: [
-      "My morning coffee arrived just as I sat down at the window. The high-protein bowl was incredibly fresh and kept me full all morning.",
-      "Perfect spot for a weekend brunch. We ordered a mix of egg dishes and everything came out hot and well seasoned.",
-      "Walked in hungry, walked out happy. Fresh ingredients, generous portions, and the pricing is fair for the quality you get.",
-      "Honestly a solid spot in Pune. The healthy options are actually tasty and not just an afterthought.",
-      "Came here with a big group and everyone found something they liked. Generous portions and really good flavours.",
-      "Simple stuff, done well. Fresh ingredients, good vibe, and the protein focus is exactly what I needed post-gym."
+      "The high-protein bowl was incredibly fresh and kept me full all morning. Great place for clean eating.",
+      "Perfect spot for a post-workout meal. The egg dishes are packed with protein and taste amazing.",
+      "Walked in hungry, walked out energized. Fresh ingredients and the protein focus is exactly what I needed.",
+      "Honestly the best healthy breakfast in Pune. The options are tasty and actually fuel your body.",
+      "Came here with a group and everyone loved the high-protein options. Generous portions and great quality.",
+      "Simple stuff, done well. Fresh ingredients, good vibe, and the egg whites are a great healthy touch."
     ],
     critical: [
-      "Waited a bit longer for a table during the morning rush, but the food was fresh and packed with flavour. Worth the wait.",
-      "The noise level got pretty high when the cafe filled up, but the high-protein food was well worth it.",
-      "Service was slightly slow on a busy weekend, though the eggs were cooked perfectly and the staff were apologetic.",
-      "Portion size felt a little small for the price on this visit, but the quality of the ingredients really stood out.",
-      "The bill took a few minutes to arrive at the end, but the overall healthy concept and food quality make it a solid spot."
+      "Waited a bit for a table during the rush, but the high-protein food was fresh and worth it.",
+      "The noise level got high when it filled up, but the healthy, protein-packed meal made up for it.",
+      "Service was slightly slow on a weekend, though the eggs were cooked perfectly and packed with protein.",
+      "Portion felt a little small for the price, but the clean ingredients and high protein really stood out.",
+      "The bill took a few minutes, but the overall healthy concept and fresh eggs make it a solid spot."
     ]
   };
 
@@ -334,7 +339,6 @@
     const aspect = FOCUS_ASPECTS[Math.floor(Math.random() * FOCUS_ASPECTS.length)];
     const length = TARGET_LENGTHS[Math.floor(Math.random() * TARGET_LENGTHS.length)];
     
-    // Pick a random scenario list to pass to the AI
     const scenarioSubset = [...SCENARIOS].sort(() => 0.5 - Math.random()).slice(0, 5);
 
     let rules = `${SENTIMENT_RULES[sentiment]}
@@ -343,6 +347,7 @@ ${HUMAN_RULES}
 
 Focus on: ${aspect}.
 You MUST base EACH review in this batch on a DIFFERENT scenario from this list: ${scenarioSubset.join(', ')}. Do not reuse a scenario.
+You MUST naturally use the words "protein", "healthy", or "fresh" in every review.
 
 Opening frame: Do not start with the same word for every review.
 Target length: ${length}.
@@ -351,7 +356,6 @@ Do not quote exact prices.
 Never use these words or phrases: ${BANNED}.
 Return ONLY the review text. No preamble, no labels, no quotes.`;
 
-    // RESTORED: The logic for the Critical card
     if (sentiment === 'critical') {
       const issue = CRITICAL_ISSUES[Math.floor(Math.random() * CRITICAL_ISSUES.length)];
       rules += `\nImportant: open the review with this specific issue: ${issue}. Do not mention any other complaint.`;
