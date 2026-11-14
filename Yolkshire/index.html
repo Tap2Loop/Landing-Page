@@ -34,13 +34,7 @@
     .body { width: 100%; max-width: 440px; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
 
     .brand-mark { display: flex; justify-content: center; margin-bottom: 2px; }
-    .brand-mark img {
-      width: 90px;
-      height: 90px;
-      object-fit: contain;
-      border-radius: 50%;
-      display: block;
-    }
+    .brand-mark img { width: 90px; height: 90px; object-fit: contain; border-radius: 50%; display: block; }
 
     .prompt {
       width: 100%;
@@ -79,27 +73,32 @@
     }
     .review-card:active { transform: scale(.99); }
 
-    .review-card[data-sentiment="positive"] {
-      --card-bg: #f3faec;
-      border-left: 4px solid #3d7a25;
-    }
-    .review-card[data-sentiment="critical"] {
-      --card-bg: #fdf3f1;
-      border-left: 4px solid #c0392b;
-    }
-    .review-card.copied {
-      --card-bg: rgba(58,158,106,.13);
-      border-color: var(--success);
-    }
+    .review-card[data-sentiment] { --card-bg: #f3faec; border-left: 4px solid #3d7a25; }
+    .review-card.copied { --card-bg: rgba(58,158,106,.13); border-color: var(--success); }
 
     .review-header { display: flex; align-items: center; gap: 8px; }
-    .review-emoji { font-size: 16px; line-height: 1; }
     .review-label { flex: 1; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
     .review-hint { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); opacity: .75; transition: color .15s, opacity .15s; }
     .review-card.copied .review-hint { color: var(--success); opacity: 1; }
 
     .review-text { font-size: 14px; line-height: 1.6; color: var(--text); }
     .review-text.loading { color: var(--muted); font-style: italic; }
+
+    /* Made bigger, bolder, and dark green */
+    .own-review-link { 
+      display: block; 
+      text-align: center; 
+      font-size: 13.5px; 
+      font-weight: 600; 
+      color: var(--green-dark); 
+      text-decoration: underline; 
+      margin-top: 4px; 
+      margin-bottom: 8px;
+      cursor: pointer; 
+      -webkit-tap-highlight-color: transparent; 
+      transition: color .15s; 
+    }
+    .own-review-link:active { color: var(--green); }
 
     .btn-regen-all {
       width: 100%;
@@ -130,18 +129,9 @@
     .btn-google:active { background: var(--green-dark); }
     .g-svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    .footer {
-      margin-top: 12px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--green-dark);
-      opacity: .75;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-    }
+    .footer { margin-top: 12px; font-size: 12px; font-weight: 500; color: var(--green-dark); opacity: .75; display: flex; align-items: center; gap: 10px; width: 100%; }
     .footer-line { flex: 1; height: 1px; background: var(--green-dark); opacity: .35; }
+
     .burst-layer { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
     .burst-item { position: absolute; opacity: 0; will-change: transform, opacity; animation-name: burstFall; animation-timing-function: cubic-bezier(.33,.05,.4,1); animation-fill-mode: forwards; }
     @keyframes burstFall {
@@ -161,27 +151,30 @@
       <img id="hero-origin" src="../assets/yolk_shire_logo_cropped.png" alt="Yolkshire" />
     </div>
 
-    <p class="prompt">↓ COPY the review that matches your experience ↓</p>
+    <p class="prompt">↓ Copy the review that matches your experience ↓</p>
 
     <div class="reviews">
-      <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy positive review">
+      <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy review option 1">
         <div class="review-header">
-          <span class="review-emoji">😊</span>
-          <span class="review-label">Positive</span>
+          <span class="review-label">Option 1</span>
           <span class="review-hint">Tap to copy</span>
         </div>
         <p class="review-text loading" data-role="text">Writing…</p>
       </button>
 
-      <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy critical review">
+      <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy review option 2">
         <div class="review-header">
-          <span class="review-emoji">😞</span>
-          <span class="review-label">Negative</span>
+          <span class="review-label">Option 2</span>
           <span class="review-hint">Tap to copy</span>
         </div>
         <p class="review-text loading" data-role="text">Writing…</p>
       </button>
     </div>
+
+    <!-- Moved here and made bigger -->
+    <a href="https://search.google.com/local/writereview?placeid=ChIJN9euszy_wjsRlXF4rxXnmpo" target="_blank" rel="noopener" class="own-review-link">
+      Prefer to write your own review? Leave a review on Google!
+    </a>
 
     <button class="btn-regen-all" id="regen-all" onclick="regenerateAll()">
       <span id="regen-icon">↻</span>
@@ -195,7 +188,7 @@
         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
         <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
       </svg>
-      PASTE it on Google Reviews
+      Paste it on Google Reviews
     </a>
 
     <p class="footer">
@@ -212,124 +205,75 @@
     Yolkshire — India's first egg specialty cafe, Pune. Est. 2010.
     8 outlets across Pune. Open 7:30am to 11pm daily.
     Uses 100% farm fresh eggs. Price range: ₹30 to ₹350. Affordable, great value.
-
     Menu spans healthy high-protein dishes (salads, grilled chicken, egg-based breakfasts) and signature egg preparations.
     Egg White option available on most dishes. Vegetarian options available.
-
     VIBE: Casual, fun, neighbourhood feel. Young crowd, fitness-conscious professionals, families.
     KEY MESSAGE: Eggs are nature's best protein source. Yolkshire makes healthy eating genuinely delicious.
   `;
 
-  const SENTIMENT_RULES = {
-    positive: `Write a warm, positive review. Say why the visit worked for you. Focus on the food, freshness, portion, or value. Sound like a real customer, not a food critic.`,
+  // Scenario Injection to prevent repetition
+  const SCENARIOS = [
+    'a quick weekday breakfast before work',
+    'a lazy weekend brunch with friends',
+    'a post-workout protein hit',
+    'a casual coffee meetup that turned into lunch',
+    'bringing a friend who had never tried an egg-specialist place',
+    'a solo meal while reading a book',
+    'taking your parents out for a healthy meal',
+    'grabbing a quick bite between meetings',
+    'a catch-up with an old friend',
+    'a rainy day comfort meal'
+  ];
 
-    critical: `Write an honest review. Lead with one thing that didn't work, then close with something that did. Fair, not harsh. Sound like a real customer giving balanced feedback.`
+  const SENTIMENT_RULES = {
+    positive: `Write a genuinely positive, 5-star review. Focus heavily on the food quality, freshness, healthy angle, and taste. Sound enthusiastic and genuine. 2 sentences max.`,
+    critical: `Write a genuinely positive, 5-star review. Focus on the vibe, the service, the portion sizes, and the overall experience. Sound like a very happy customer. 2 sentences max.`
   };
 
   const FOCUS_ASPECTS = [
-    'the plating and presentation',
-    'the portion size',
-    'how fresh the food tasted',
-    'how filling the meal was',
-    'the value for money',
-    'the speed of service',
-    'the balance of flavours',
-    'how the food was cooked',
-    'the healthy options',
-    'the overall visit',
-    'how light the meal felt',
-    'the quality of ingredients'
+    'the plating and presentation', 'the portion size', 'how fresh the ingredients tasted',
+    'the protein content and how filling it was', 'the value for money', 'the speed of service',
+    'the balance of flavours', 'how the food was cooked', 'the healthy options available',
+    'the overall dining experience', 'how light yet filling the meal was', 'the quality of ingredients'
   ];
 
-  const CRITICAL_ISSUES = [
-    'the portion size for the price',
-    'the seasoning on the food',
-    'the plating',
-    'the food temperature',
-    'consistency compared to last visit',
-    'the noise level',
-    'how long the bill took',
-    'the menu variety',
-    'the service friendliness',
-    'the wait during peak hours',
-    'the pricing versus portion',
-    'the pace of the meal'
-  ];
-
-  // ── Human opening framings ──
-  const OPENING_STYLES = [
-    'what you were doing before you walked in',
-    'the moment you knew how you felt about the place',
-    'something small and specific you noticed',
-    'how you felt walking out',
-    'what you would tell a friend who asked about it',
-    'a simple fact about the visit',
-    'what you expected versus what you got',
-    'how the visit fit into your day',
-    'a passing observation about the room',
-    'whether you would come back',
-    'what you came in for',
-    'a small moment that stood out'
-  ];
-
-  // ── Random target length. Kept short — real Google reviews are brief. ──
   const TARGET_LENGTHS = [
-    'two short sentences, total under 30 words',
-    'two short sentences, the second one slightly longer',
-    'two short sentences with a comma break in one of them',
-    'two sentences, total under 35 words',
-    'three very short sentences, total under 35 words'
+    'a single short sentence, under 20 words', 'two short sentences, total under 28 words',
+    'two short sentences, the second one shorter', 'two short sentences with a comma break in one of them',
+    'two short sentences, total under 35 words'
   ];
 
-  // ── Human tone mandate appended to every prompt ──
   const HUMAN_RULES = `Write like a real person, not a copywriter or food critic.
 - Use contractions throughout (it's, didn't, we're, I've, wouldn't, can't).
 - Vary sentence length. Short punchy sentences are fine.
 - Sound like you're texting a friend, not writing a formal review.
 - One small specific observation beats three general claims.
-- It's okay to hedge a little ("pretty good", "not bad", "kind of quiet", "solid enough").
 - No exclamation marks. No emoji.`;
 
-  // ── AI/marketing vocabulary banned ──
-  const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, eggcellent, eggular, egg-citing, egg-sperience, eggsellent, egg pun, legit, honestly, literally, basically, totally, fantastic, excellent, amazing, delightful, delicious, satisfying, flavorful, tantalizing, mouthwatering, impeccable, exceptional, outstanding, wonderful, superb, culinary, gastronomic, a must try, definitely, absolutely, incredibly, truly, Eggs Benedict, Shakshuka, Turkish Eggs, Parsi Akuri, Swadeshi Breakfast, Eggwich, Burnt Basque Cheesecake, Fajita Scramble, Peri-Peri Omelette, Florentine, Millet Salad, Stroganoff";
+  const BANNED = "India's first, farm fresh, nature's best, hidden gem, must visit, perfect for, one of the best, highly recommend, mouth watering, culinary journey, legit, honestly, literally, basically, totally, fantastic, excellent, amazing, delightful, delicious, satisfying, flavorful, tantalizing, mouthwatering, impeccable, exceptional, outstanding, wonderful, superb, culinary, gastronomic, a must try, definitely, absolutely, incredibly, truly";
 
-  // Trimmed: kept formulaic openers, removed natural human ones
   const OPENING_BAN = `Do not start the review with any of these phrases: "The food", "The meal", "The quality", "The portion", "The plating", "The service", "The ambience", "Everything", "Really", "This place", "This spot", "Overall".`;
 
-  // ── Fallbacks rewritten with human rhythm and casual phrasing ──
   const FALLBACK = {
     positive: [
-      "Quick breakfast before work and left properly full. Nice change from the usual.",
-      "Everything came out hot and stayed hot. Portions were solid. No complaints.",
-      "Walked in hungry, walked out happy. Fresh food and a generous plate.",
-      "Didn't expect much from a healthy breakfast place but this surprised me.",
-      "Came for a catch-up with a friend and we both ordered seconds. Worth the trip.",
-      "Simple stuff, done well. Fresh, filling, good value. Will be back.",
-      "Solid food, quick service, no fuss. Exactly what I needed this morning.",
-      "Bit of a line when I walked in but the food made up for it. Fresh and filling."
+      "My morning coffee arrived just as I sat down at the window. The high-protein bowl was incredibly fresh and kept me full all morning.",
+      "Perfect spot for a weekend brunch. We ordered a mix of egg dishes and everything came out hot and well seasoned.",
+      "Walked in hungry, walked out happy. Fresh ingredients, generous portions, and the pricing is fair for the quality you get.",
+      "Honestly a solid spot in Pune. The healthy options are actually tasty and not just an afterthought.",
+      "Came here with a big group and everyone found something they liked. Generous portions and really good flavours.",
+      "Simple stuff, done well. Fresh ingredients, good vibe, and the protein focus is exactly what I needed post-gym."
     ],
     critical: [
-      "Waited longer than I'd like during the morning rush. Food was fresh though and worth the wait.",
-      "One plate came out a bit under seasoned. The rest was good and clearly made with fresh stuff.",
-      "Plating felt rushed compared to my last visit. Flavours were still there, so I'll try again.",
-      "Got a bit noisy during brunch and hard to chat. Food itself was well cooked and filling.",
-      "Bill took a while to come after we finished. Meal was solid though, no other complaints.",
-      "Service was slow on a busy morning. Food quality held up, so I'll give it another shot.",
-      "Portion felt small for the price this time. Rest of the meal was fresh and well made.",
-      "Felt a bit rushed through the meal. Not a dealbreaker but worth tightening up."
+      "Loved the ambience here, perfect for a relaxed breakfast. The service was super attentive and the portions were massive.",
+      "Great place to catch up with friends. The music wasn't too loud and the staff made sure our coffee was topped up.",
+      "Really enjoyed the overall experience. The food came out quickly and the manager checked in to make sure everything was good.",
+      "The vibe of this place is brilliant. Really good for a casual weekend lunch, and the value for money is spot on.",
+      "Beautiful presentation on all the dishes. The staff were really friendly and made some great recommendations."
     ]
   };
 
   function sanitizeReview(text) {
     let s = String(text || '');
-    s = s.replace(/\begg[\s-]?cellent\b/gi, 'excellent');
-    s = s.replace(/\begg[\s-]?sellent\b/gi, 'excellent');
-    s = s.replace(/\begg[\s-]?celent\b/gi, 'excellent');
-    s = s.replace(/\begg[\s-]?citing\b/gi, 'exciting');
-    s = s.replace(/\begg[\s-]?sperience\b/gi, 'experience');
-    s = s.replace(/\begg[\s-]?perience\b/gi, 'experience');
-    s = s.replace(/\beggular\b/gi, 'great');
-    s = s.replace(/\begg[\s-]?tastic\b/gi, 'fantastic');
     s = s.replace(/\b(legit|honestly|literally|basically|totally|lowkey|low-key|deadass)\b[\s,]*/gi, '');
     s = s.replace(/\s+/g, ' ').trim();
     s = s.replace(/\s+([.,!?])/g, '$1');
@@ -340,37 +284,33 @@
   }
 
   function trimReview(t) {
-  let s = String(t || '').replace(/\s+/g, ' ').trim();
-  s = s.replace(/^["'“”‘’]|["'“”‘’]$/g, '').trim();
-  if (!s) return s;
+    let s = String(t || '').replace(/\s+/g, ' ').trim();
+    s = s.replace(/^["'“”‘’]|["'“”‘’]$/g, '').trim();
+    if (!s) return s;
 
-  // Split into sentences on . ! ?
-  const raw = s.match(/[^.!?]+[.!?]+/g);
-  let sentences = raw ? raw.map(x => x.trim()).filter(Boolean) : [s];
+    const raw = s.match(/[^.!?]+[.!?]+/g);
+    let sentences = raw ? raw.map(x => x.trim()).filter(Boolean) : [s];
 
-  // Hard cap at 3 sentences. If 3 and over 35 words, drop to 2.
-  if (sentences.length > 3) sentences = sentences.slice(0, 3);
-  let combined = sentences.join(' ').trim();
-  let words = combined.split(/\s+/).filter(Boolean);
+    if (sentences.length > 3) sentences = sentences.slice(0, 3);
+    let combined = sentences.join(' ').trim();
+    let words = combined.split(/\s+/).filter(Boolean);
 
-  if (sentences.length === 3 && words.length > 35) {
-    sentences = sentences.slice(0, 2);
-    combined = sentences.join(' ').trim();
-    words = combined.split(/\s+/).filter(Boolean);
+    if (sentences.length === 3 && words.length > 35) {
+      sentences = sentences.slice(0, 2);
+      combined = sentences.join(' ').trim();
+      words = combined.split(/\s+/).filter(Boolean);
+    }
+
+    if (words.length > 45) {
+      words = words.slice(0, 45);
+      let trimmed = words.join(' ').replace(/[,;:.\-–—]$/, '');
+      if (!/[.!?]$/.test(trimmed)) trimmed += '.';
+      return trimmed;
+    }
+
+    if (combined && !/[.!?]$/.test(combined)) combined += '.';
+    return combined;
   }
-
-  // Absolute cap: 45 words. Cut cleanly and re-punctuate.
-  if (words.length > 45) {
-    words = words.slice(0, 45);
-    let trimmed = words.join(' ').replace(/[,;:.\-–—]$/, '');
-    if (!/[.!?]$/.test(trimmed)) trimmed += '.';
-    return trimmed;
-  }
-
-  // Ensure the final sentence has punctuation
-  if (combined && !/[.!?]$/.test(combined)) combined += '.';
-  return combined;
-}
 
   function processReview(raw) {
     return trimReview(sanitizeReview(trimReview(raw)));
@@ -378,31 +318,29 @@
 
   async function fetchReview(sentiment) {
     const aspect = FOCUS_ASPECTS[Math.floor(Math.random() * FOCUS_ASPECTS.length)];
-    const opening = OPENING_STYLES[Math.floor(Math.random() * OPENING_STYLES.length)];
     const length = TARGET_LENGTHS[Math.floor(Math.random() * TARGET_LENGTHS.length)];
+    
+    // Pick a random scenario list to pass to the AI
+    const scenarioSubset = [...SCENARIOS].sort(() => 0.5 - Math.random()).slice(0, 5);
 
     let rules = `${SENTIMENT_RULES[sentiment]}
 
 ${HUMAN_RULES}
 
 Focus on: ${aspect}.
-Opening frame: start with ${opening}.
+You MUST base EACH review in this batch on a DIFFERENT scenario from this list: ${scenarioSubset.join(', ')}. Do not reuse a scenario.
+
+Opening frame: Do not start with the same word for every review.
 Target length: ${length}.
 ${OPENING_BAN}
-Do not name any specific dish from the menu. Refer to food generically.
 Do not quote exact prices.
 Never use these words or phrases: ${BANNED}.
 Return ONLY the review text. No preamble, no labels, no quotes.`;
 
-    if (sentiment === 'critical') {
-      const issue = CRITICAL_ISSUES[Math.floor(Math.random() * CRITICAL_ISSUES.length)];
-      rules += `\nOpen with this specific issue: ${issue}. Do not mention any other complaint.`;
-    }
-
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules, sentiment })
+      body: JSON.stringify({ restaurantContext: RESTAURANT_CONTEXT, rules, sentiment, clientId: 'yolkshire' })
     });
     if (!res.ok) throw new Error('worker ' + res.status);
     const data = await res.json();
@@ -517,17 +455,18 @@ Return ONLY the review text. No preamble, no labels, no quotes.`;
     const originX = rect.left + rect.width / 2;
     const originY = rect.top + rect.height * 0.5;
     const vh = window.innerHeight;
+    
     const items = [
       { ch: '★', color: '#f5c800' }, { ch: '★', color: '#f5c800' },
-      { ch: '★', color: '#d4a800' }, { ch: '🍳', color: null },
-      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },     { ch: '★', color: '#d4a800' },
-      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },     { ch: '★', color: '#d4a800' },
-      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },     { ch: '★', color: '#f5c800' },
-      { ch: '🍳', color: null },     { ch: '★', color: '#d4a800' },
+      { ch: '★', color: '#d4a800' }, { ch: '✨', color: null },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#d4a800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#d4a800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#f5c800' },
+      { ch: '✨', color: null },     { ch: '★', color: '#d4a800' },
     ];
     const emitWindow = 1.0;
     items.forEach((item) => {
