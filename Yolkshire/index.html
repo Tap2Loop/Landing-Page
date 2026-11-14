@@ -73,7 +73,9 @@
     }
     .review-card:active { transform: scale(.99); }
 
-    .review-card[data-sentiment] { --card-bg: #f3faec; border-left: 4px solid #3d7a25; }
+    /* RESTORED: Green for Positive, Red for Negative */
+    .review-card[data-sentiment="positive"] { --card-bg: #f3faec; border-left: 4px solid #3d7a25; }
+    .review-card[data-sentiment="critical"] { --card-bg: #fdf3f1; border-left: 4px solid #c0392b; }
     .review-card.copied { --card-bg: rgba(58,158,106,.13); border-color: var(--success); }
 
     .review-header { display: flex; align-items: center; gap: 8px; }
@@ -154,24 +156,26 @@
     <p class="prompt">↓ Copy the review that matches your experience ↓</p>
 
     <div class="reviews">
-      <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy review option 1">
+      <button class="review-card" data-sentiment="positive" onclick="copyCard(this)" aria-label="Copy positive review">
         <div class="review-header">
-          <span class="review-label">Option 1</span>
+          <span class="review-emoji">😊</span>
+          <span class="review-label">Positive</span>
           <span class="review-hint">Tap to copy</span>
         </div>
         <p class="review-text loading" data-role="text">Writing…</p>
       </button>
 
-      <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy review option 2">
+      <button class="review-card" data-sentiment="critical" onclick="copyCard(this)" aria-label="Copy negative review">
         <div class="review-header">
-          <span class="review-label">Option 2</span>
+          <span class="review-emoji">😞</span>
+          <span class="review-label">Negative</span>
           <span class="review-hint">Tap to copy</span>
         </div>
         <p class="review-text loading" data-role="text">Writing…</p>
       </button>
     </div>
 
-    <!-- Moved here and made bigger -->
+    <!-- Made bigger and placed here -->
     <a href="https://search.google.com/local/writereview?placeid=ChIJN9euszy_wjsRlXF4rxXnmpo" target="_blank" rel="noopener" class="own-review-link">
       Prefer to write your own review? Leave a review on Google!
     </a>
@@ -225,9 +229,10 @@
     'a rainy day comfort meal'
   ];
 
+  // RESTORED: The original Yolkshire rules
   const SENTIMENT_RULES = {
-    positive: `Write a genuinely positive, 5-star review. Focus heavily on the food quality, freshness, healthy angle, and taste. Sound enthusiastic and genuine. 2 sentences max.`,
-    critical: `Write a genuinely positive, 5-star review. Focus on the vibe, the service, the portion sizes, and the overall experience. Sound like a very happy customer. 2 sentences max.`
+    positive: `Write a genuinely positive review. Focus on the quality of the food, freshness, healthy angle, portion size, or value. Sound enthusiastic and genuine. 2 sentences max. No dashes or hyphens.`,
+    critical: `Write constructive critical feedback in two parts. Start with the issue or thing that fell short and then close on a positive note acknowledging what works well (healthy concept, food quality, protein focus, freshness). The overall review should feel fair and not harsh. 2 sentences max. No dashes or hyphens.`
   };
 
   const FOCUS_ASPECTS = [
@@ -235,6 +240,15 @@
     'the protein content and how filling it was', 'the value for money', 'the speed of service',
     'the balance of flavours', 'how the food was cooked', 'the healthy options available',
     'the overall dining experience', 'how light yet filling the meal was', 'the quality of ingredients'
+  ];
+
+  // RESTORED: The specific issues for the Negative card
+  const CRITICAL_ISSUES = [
+    'the portion size for the price', 'the seasoning on the food', 'the plating and presentation',
+    'the food temperature when it arrived', 'the consistency compared to the last visit',
+    'the noise level in the cafe', 'how long the bill took to arrive', 'the variety on the menu',
+    'the friendliness of service', 'the wait during peak hours', 'the pricing versus portion size',
+    'the pace of the meal from order to table'
   ];
 
   const TARGET_LENGTHS = [
@@ -264,11 +278,11 @@
       "Simple stuff, done well. Fresh ingredients, good vibe, and the protein focus is exactly what I needed post-gym."
     ],
     critical: [
-      "Loved the ambience here, perfect for a relaxed breakfast. The service was super attentive and the portions were massive.",
-      "Great place to catch up with friends. The music wasn't too loud and the staff made sure our coffee was topped up.",
-      "Really enjoyed the overall experience. The food came out quickly and the manager checked in to make sure everything was good.",
-      "The vibe of this place is brilliant. Really good for a casual weekend lunch, and the value for money is spot on.",
-      "Beautiful presentation on all the dishes. The staff were really friendly and made some great recommendations."
+      "Waited a bit longer for a table during the morning rush, but the food was fresh and packed with flavour. Worth the wait.",
+      "The noise level got pretty high when the cafe filled up, but the high-protein food was well worth it.",
+      "Service was slightly slow on a busy weekend, though the eggs were cooked perfectly and the staff were apologetic.",
+      "Portion size felt a little small for the price on this visit, but the quality of the ingredients really stood out.",
+      "The bill took a few minutes to arrive at the end, but the overall healthy concept and food quality make it a solid spot."
     ]
   };
 
@@ -336,6 +350,12 @@ ${OPENING_BAN}
 Do not quote exact prices.
 Never use these words or phrases: ${BANNED}.
 Return ONLY the review text. No preamble, no labels, no quotes.`;
+
+    // RESTORED: The logic for the Critical card
+    if (sentiment === 'critical') {
+      const issue = CRITICAL_ISSUES[Math.floor(Math.random() * CRITICAL_ISSUES.length)];
+      rules += `\nImportant: open the review with this specific issue: ${issue}. Do not mention any other complaint.`;
+    }
 
     const res = await fetch(WORKER_URL, {
       method: 'POST',
